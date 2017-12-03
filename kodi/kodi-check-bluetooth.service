@@ -1,0 +1,13 @@
+[Unit]
+Description=Kodi BlueTooth check service
+
+[Service]
+Type=simple
+EnvironmentFile=/storage/bin/kodi-check-bluetooth.conf
+ExecStart=/storage/bin/kodi-check-bluetooth.sh
+Restart=always
+RestartSec=15
+
+[Install]
+WantedBy=kodi.target
+
