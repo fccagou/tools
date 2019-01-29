@@ -59,20 +59,20 @@
                       xkkkkkxkxxkdl;'';cdoc:lol:,:ol:clollcloddxxxxxxddollllc:c:::;,,,,,,,.  
 
 
-make-iso.sh is a tool to make a custom "centos" installation iso file.
+make-iso.sh is a tool to make a custom [centos](http://www.centos.org) installation iso file.
 
-- ks : contains a sample kickstart file. You can do your own one.
+* ks: contains a sample kickstart file. You can do your own one.
 
 For help, run `m̀ake-iso.sh`
 
 As a test, run :
 
-  ./make-iso.sh CAGOU \
-                http://mirror.in2p3.fr/linux/CentOS/7.6.1810/isos/x86_64/CentOS-7-x86_64-Minimal-1810.iso \
-                "" \
-				$(pwd)/ks/cagou-vm.cfg \
-				$(pwd)/tmp  \
-				$(pwd)/cagou.png
+    ./make-iso.sh CAGOU \
+                  http://mirror.in2p3.fr/linux/CentOS/7.6.1810/isos/x86_64/CentOS-7-x86_64-Minimal-1810.iso \
+                  "" \
+                  $(pwd)/ks/cagou-vm.cfg \
+                  $(pwd)/tmp  \
+                  $(pwd)/cagou.png
 
 Enjoy !
 
