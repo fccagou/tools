@@ -373,30 +373,3 @@ action "Make test"
 info "Run  next cmd for test\n\n"
 info "  qemu-system-x86_64 -cdrom ${ISO_DST} -m 512\n\n" 
 
-                                                                      
-                                                                                                                                                           
-                                                                                                                                                           
-                                                                                                                                                           
-                                                                                                                                                           
-                                                                                                                                                           
-                                                                                                                                                           
-                                                                                                                                                           
-                                                                                                                                                           
-                                                                                                                                                           
-                                                                                                                                                           
-                                                                                                                                                           
-                                                                                                                                                           
-                                                                                                                                                           
-                                                                                                                                                           
-                                                                                                                                                           
-                                                                                                                                                           
-                                                                                                                                                           
-                                                                                                                                                           
-                                                                                                                                                           
-                                                                                                                                                           
-                                                                                                                                                           
-                                                                                                                                                           
-                                                                                                                                                           
-                                                                                                                                                           
-                                                                                                                                                           
-                                                                                                                                                           
