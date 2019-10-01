@@ -1,0 +1,35 @@
+#! /bin/sh
+
+# This file is part of mydashboard
+# Copyright 2019 fccagou <fccagou@gmail.com>
+#
+# PYAP is free software: you can redistribute it and/or modify it
+# under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# mydashboard is distributed in the hope that it will be useful, but WITHOUT
+# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+# or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public
+# License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with PYAP. If not, see <http://www.gnu.org/licenses/>.
+
+RELEASE=1
+DISTRIB=${DISTRIB:=el$(sed 's/.* \([0-9\.]\+\) .*/\1/g' /etc/redhat-release | cut -d\. -f1)}
+VERSION=$(grep 'version=' setup-${DISTRIB}.py | sed "s#.* version='## ; s#'.*##")
+
+case ${DISTRIB} in
+	el6)
+		requires=""
+		;;
+	el7)
+		requires=""
+esac
+
+cd ${0%\/*}
+
+python setup-${DISTRIB}.py -v bdist_rpm --release=$RELEASE --distribution-name=$DISTRIB --obsoletes=pynotif ${requires}
+
+mv dist/mydashboard-$VERSION-$RELEASE.noarch.rpm dist/mydashboard-$VERSION-$RELEASE-$DISTRIB.noarch.rpm
