@@ -83,17 +83,30 @@ body {font-family: "Lato", sans-serif;}
 
             $.getJSON('/ts/list', function ( data ) {
                var items = [];
-                $.each( data , function (centre, val) {
-                    items.push('<div class="col"><h3>' + centre + '</h3><div class="btn-group-vertical">');
-                    $.each( val , function(c,t ) {
-                        var url = '/ts/' + centre + '/' + c;
-                        items.push('<a href="' + url +'" class="btn btn-' + c + '" role="button" data-toggle="tooltip" data-placement="top" title=" Connexion à '+centre+'">Zone'+c+'</span> <span class="badge badge-pill badge-secondary">'+t.length+'</span></a>');
-                //<span class="badge badge-secondary">'+t+'</span></a>');
+
+                $.each( data , function (domain) {
+		    // TODO: ajouter un div pour le DOMAIN
+                    $.each( data[domain] , function (centre, val) {
+
+                        items.push('<div class="col"><h3>' + centre + '</h3><div class="btn-group-vertical">');
+
+                        $.each( val , function(c,t ) {
+
+                            $.each(t, function(h) {
+                                tsname=t[h]
+                                    var url = '/ts/' + domain + '/' + c + '/' + tsname;
+                                    items.push('<a href="' + url +'" class="btn btn-' + c + '" role="button" data-toggle="tooltip" data-placement="top" title=" Connexion à '+centre+'">'+tsname+'</span></a>');
+                              //<span class="badge badge-secondary">'+t+'</span></a>');
+                            });
+
+                        });
+
+                        items.push('</div></div>');
+
                     });
-                    items.push('</div></div>');
                 });
                 $("#ts").html(items.join(""));
-            });
+	    });
         }
 
         $(document).ready(function(){

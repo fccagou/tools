@@ -1,12 +1,12 @@
 #!/usr/bin/env python
-#
+# -*- encoding: utf-8 -*-
 """
 Local Dashboard for easy configuration.
 
 The aim is to give access for some tools from webbrowser
 
 - Read commande list from config files
-  
+
   - system config
   - user config
 
@@ -27,11 +27,13 @@ import sys
 import json
 import time
 import signal
+import logging
 import mimetypes
 import subprocess
 import wsgiref.simple_server as server
 
 from threading import Thread
+
 
 # -----------------------------------------------------------------
 #  python wrapper
@@ -50,8 +52,6 @@ def wsgi_to_bytes(str2convert):
     Because of https://www.python.org/dev/peps/pep-3333/#unicode-issues
     """
     return str2convert.encode('iso-8859-1')
-    
-    
 
 
 # -----------------------------------------------------------------
@@ -68,6 +68,22 @@ document_root = '/etc/mydashboard/html'
 
 # ssl context for unverified site.
 ssl_default_ctx = None
+
+# Script used for rdp connection
+ts_connection_script = 'data/ts_connection.sh'
+
+# Default ts_list for demo
+tslist_conf = 'data/ts.json'
+
+# debug flag
+debuging = False
+
+# default debug file
+debug_filename = 'data/mydash.log'
+
+# COnfiguration file
+conf_file=None
+
 
 # -----------------------------------------------------------------
 # Informational functions.
@@ -100,19 +116,35 @@ def error(msg):
     else:
         pass
 
-
+def debug(msg):
+    global debuging
+    if debuging:
+        logging.debug(msg)
 
 # -----------------------------------------------------------------
 # HTTP: default page showing all notifiers status.
 # -----------------------------------------------------------------
-def static_page(start_response, filename):
+
+def page(start_response, output, ctype='text/plain', status="200 OK" ):
+    global ssl_default_ctx
+
+    response_headers = [('Content-type', ctype),
+                        ('Content-Length', str(len(output)))]
+    start_response(status, response_headers)
+    return [output]
+
+
+def static_page(start_response, filename, fullpath=False):
     global ssl_default_ctx
     global document_root
 
     status = "200 OK"
 
     try:
-        real_file_path = os.path.join(document_root,filename)
+        if fullpath:
+            real_file_path = os.path.abspath(filename)
+        else:
+            real_file_path = os.path.join(document_root,filename)
         output = open(real_file_path, 'rb').read()
         ctype = mimetypes.guess_type(real_file_path)[0]
     except:
@@ -125,10 +157,8 @@ def static_page(start_response, filename):
         output = "The code seems to have an internal error :("
         ctype = 'text/plain; charset=UTF-8'
 
-    response_headers = [('Content-type', ctype),
-                        ('Content-Length', str(len(output)))]
-    start_response(status, response_headers)
-    return [output]
+    return page(start_response, output, ctype=ctype, status=status)
+
 
 def jsonapi(start_response, data):
     global ssl_default_ctx
@@ -138,7 +168,7 @@ def jsonapi(start_response, data):
     try:
         import json
         output = json.dumps(data)
-        ctype='application/json; charset=UTF-8'        
+        ctype='application/json; charset=UTF-8'
     except:
         status = "500 INTERNAL ERROR"
         import traceback
@@ -149,38 +179,107 @@ def jsonapi(start_response, data):
         output = "The code seems to have an internal error :("
         ctype = 'text/plain; charset=UTF-8'
 
-    response_headers = [('Content-type', ctype),
-                        ('Content-Length', str(len(output)))]
-    start_response(status, response_headers)
-    return [wsgi_to_bytes(output)]
+    return page(start_response, wsgi_to_bytes(output), ctype=ctype, status=status)
+
+def doc(start_response):
+
+    global LISTENING_PORT
+    service_user_dir = os.path.sep.join((
+        os.path.expanduser('~'),
+        '.config/systemd/user' ))
+
+    service_name = os.path.sep.join((service_user_dir, 'mydashboard.service'))
+
+    output = """
+
+Liste des actions possibles
+===========================
+
+/ui : Lance firefox et se connect au microservice
+
+/ts/list : Liste de machines accessibles via rdp  (json)
+
+/systemd/service : Genere le script de service a mettre en userland
+
+  Exemple d'utilisation
+
+      mkdir -p %s
+      curl --silent http://localhost:%s/systemd/service -o %s
+      systemctl --user enable mydashboard
+      systemctl --user start mydashboard
+
+""" % (service_user_dir, LISTENING_PORT, service_name )
+    return page(start_response, wsgi_to_bytes(output), ctype='text/plain', status='200 OK')
+
+
+
+
+
+def systemd_service_display(start_response):
+
+    global conf_file
+
+    if conf_file is None:
+        dash_option = ""
+    else:
+        dash_option = "--conf %s" % conf_file
+
+    prg_name = os.path.abspath(sys.argv[0])
+
+    status = '200 OK'
+    output = """[Unit]
+Description=My dashboard MicroService
+
+[Service]
+ExecStart=%s -d -v --fg --nopid  %s
+
+[Install]
+WantedBy=default.target
+           """ % (prg_name, dash_option)
+
+    return page(start_response, wsgi_to_bytes(output), ctype='text/plain', status='200 OK')
+
+
+
+
 
 def notfound(start_response, url):
 
     status = '404 NOT FOUND'
     output = "%s not found\n" % url
-    response_headers = [('Content-type', 'text/plain'),
-                        ('Content-Length', str(len(output)))]
-    start_response(status, response_headers)
-    return [wsgi_to_bytes(output)]
+    return page(start_response, wsgi_to_bytes(output), ctype='text/plain', status=status)
+
 
 
 def run_cmd(cmd_set):
     pid = os.fork()
     if pid == 0:
-        subprocess.run(("/usr/bin/xterm -e %s" % cmd_set[0] ), shell=True)
+        #subprocess.run(("/usr/bin/gnome-terminal -- %s" % cmd_set[0] ), shell=True)
+        # PYTHON3 subprocess.run(("/usr/bin/gnome-terminal"), shell=True)
+        debug("CMD : %s\n" % (cmd_set))
+        p=subprocess.Popen(cmd_set, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        out, err = p.communicate()
         # Decouple from parent environment
         os.setsid()
         # TODO os.umask()
         # Redirect the standard I/O file descriptors to /dev/null
         if hasattr(os, "devnull"):
-            REDIRECT_TO = os.devnull
+             REDIRECT_TO = os.devnull
         else:
-            REDIRECT_TO = "/dev/null"
+             REDIRECT_TO = "/dev/null"
 
         fd = os.open(REDIRECT_TO, os.O_RDWR)
         os.dup2(fd, 0)  # standard input (0)
         os.dup2(fd, 1)  # standard output (1)
         os.dup2(fd, 2)  # standard error (2)
+
+	# Ajouter cela dans un message sur l'interface.
+        # ret_msg = '---\n'.join([(out or ''), (err or '')])
+        if p.wait() != 0:
+            debug("ERR:\n%s\n%s\n" % (out, err))
+
+        debug("SUCCESS\n%s\n%s\n" % (out, err))
+
         os._exit(0)
 
 
@@ -192,39 +291,38 @@ def application(environ, start_response):
     if environ['PATH_INFO'] in ['/bootstrap.min.css', '/jquery.min.js', '/bootstrap.bundle.js']:
         return static_page(start_response, environ['PATH_INFO'][1:])
 
+    if environ['PATH_INFO'] == "/doc":
+        return doc(start_response)
 
-    if environ['PATH_INFO'] == "/firefox":
-        run_cmd(["/usr/bin/firefox", "http://localhost:8080/"])
+    if environ['PATH_INFO'] == "/ui":
+        global LISTENING_PORT
+        run_cmd(["/usr/bin/firefox http://localhost:%s/" % LISTENING_PORT])
 
     elif environ['PATH_INFO'] == "/top":
         run_cmd(["/usr/bin/top"])
 
+    elif environ['PATH_INFO'] == "/systemd/service":
+        return systemd_service_display(start_response)
+
     elif environ['PATH_INFO'] == "/ts/list":
-        TSLIST={}
-
-        for centre in ('Z','U','T','X','Y'):
-            TSLIST[centre]={}
-            for color in ('rouge','jaune','vert','blanc'):
-               TSLIST[centre][color]=[]
-               TSLIST[centre][color].append("ts %s %s" % (centre,color))
-               TSLIST[centre][color].append("ts %s %s" % (color,centre))
-
-        return jsonapi(start_response,TSLIST)
+        global tslist_conf
+        return static_page(start_response, tslist_conf ,fullpath=True )
 
     elif environ['PATH_INFO'][0:4] == "/ts/":
-        (centre,couleur) = environ['PATH_INFO'][4:].split('/')
+        (domain,couleur,tsname) = environ['PATH_INFO'][4:].split('/')
         if couleur == 'bleu':
-            run_cmd(["'/usr/bin/ssh pi@pi02'" ])
+            run_cmd(["'/usr/bin/ccc_root %s'" % tsname ])
         else:
-            run_cmd(["'/usr/bin/echo %s %s >/tmp/toto'" %(centre,couleur) ])
-
-
+            global ts_connection_script
+            passwd_grp="%s-" % domain
+            run_cmd(["%s %s %s %s %s nla "
+			% (ts_connection_script, couleur, tsname, passwd_grp, domain ) ])
 
     else:
         # TODO: passer un message d'erreur
         True
 
-   
+
     return static_page(start_response, 'template.html')
 
 
@@ -245,11 +343,17 @@ def end_process(signum, frame):
 def main(args):
 
     global verbose
+    global debuging
+    global tslist_conf
+    global conf_file
     global document_root
+    global debug_filename
     global ssl_default_ctx
+    global ts_connection_script
+    global LISTENING_PORT
 
     verbose = args.verbose
-    debug = args.debug
+    debuging = args.debug
 
 
 
@@ -257,13 +361,14 @@ def main(args):
     signal.signal(signal.SIGTERM, end_process)
     signal.signal(signal.SIGQUIT, end_process)
 
-    if debug:
+    if debuging:
         log("args list: %s " %  args)
 
     # Get configuration from file.
     if args.conf is not None:
-        log('Using config file %s' % args.conf)
-        conf = json.loads(open(args.conf, 'r').read())
+        conf_file = os.path.abspath(args.conf)
+        log('Using config file %s' % conf_file)
+        conf = json.loads(open(conf_file, 'r').read())
 
         if 'documentroot' in conf:
             document_root = conf['documentroot']
@@ -271,26 +376,50 @@ def main(args):
         if 'ssl_allow_unverified' in conf and conf['ssl_allow_unverified'] == "True":
             ssl_default_ctx = ssl._create_unverified_context()
 
+        if 'ts_connection' in conf:
+           ts_connection_script = conf['ts_connection']
+
+        if 'tslist' in conf:
+           tslist_conf = conf['tslist']
+
+        if 'debug_filename' in conf:
+           debug_filename = conf['debug_filename']
 
     if args.documentroot:
         document_root = args.documentroot
-
     document_root = os.path.abspath(document_root)
 
+    if args.tscnx:
+        ts_connection_script = args.tscnx
+    ts_connection_script = os.path.abspath(ts_connection_script)
 
-    if debug:
-        log("document_root: %s" % document_root)
+    if args.debugfilename:
+        debug_filename = args.debugfilename
+    debug_filename = os.path.abspath(debug_filename)
+    logging.basicConfig(filename=debug_filename,level=logging.DEBUG)
+
+
+    if args.tslist:
+        tslist_conf = args.tslist
+    tslist_conf = os.path.abspath(tslist_conf)
+
+    # TODO: valider l'existence des scripts
+
+    if debuging:
+        log("debug file           : %s" % debug_filename)
+        log("tslist_conf          : %s" % tslist_conf)
+        log("document_root        : %s" % document_root)
+        log("ts_connection_script : %s" % ts_connection_script)
+
+
 
     stop_thread = False
     try:
-        if args.server:
-            port = args.port
-            httpd = server.make_server('', port, application)
-            log("Serving HTTP on port %i..." % port)
-            # Respond to requests until process is killed
-            httpd.serve_forever()
-        else:
-            print("[+] Nothing to poll or to serve... I leave ...")
+        LISTENING_PORT = args.port
+        httpd = server.make_server('', LISTENING_PORT, application)
+        log("Serving HTTP on port %i..." % LISTENING_PORT)
+        # Respond to requests until process is killed
+        httpd.serve_forever()
     except KeyboardInterrupt:
         log('End asked by user...bye bye !')
     except EndException as ee:
@@ -325,16 +454,14 @@ if __name__ == '__main__':
 
     parser.add_argument('--conf', '-c',
                         help='Configuration file.')
-    parser.add_argument('--notifiers', '-n',
-                        help='Notifiers list in Blink1Notifier,SerialLedNotifier')
-    parser.add_argument('--server', '-s', action='store_true',
-                        help="Run http listening server (default=false)")
     parser.add_argument('--port', '-p', default=LISTENING_PORT, type=int,
                         help='Listening port for status push .')
     parser.add_argument('--verbose', '-v', action='store_true',
                         help='Verbose.')
     parser.add_argument('--debug', '-d', action='store_true',
                         help='Debug mode.')
+    parser.add_argument('--debugfilename', default=None,
+                        help='Debug file name mode.')
     parser.add_argument('--fg', action='store_true',
                         help='Forground mode. Disable daemon mode.')
     parser.add_argument('--nopid', action='store_true',
@@ -343,10 +470,15 @@ if __name__ == '__main__':
                         help='Set the pid file.')
     parser.add_argument('--documentroot', '-D', default=None,
                         help='Document root for static web pages.')
-    parser.add_argument('urls', nargs='*',
-                        help='url for http state poller')
+    parser.add_argument('--tslist', '-T', default=None,
+                        help='Url to json ts list')
+    parser.add_argument('--tscnx', '-C', default=None,
+                        help='Ts connection script')
 
     args = parser.parse_args()
+
+
+
 
     if not args.fg:
         # do the UNIX double-fork magic, see Stevens' "Advanced

@@ -2,24 +2,25 @@
 
 Run the microservice
 
-   python ./mydashboard.py -v --fg --nopid -s -D docroot
+   python ./mydashboard -d -v --fg --nopid --conf data/conf.json
 
-From a browser :
+Get help
+
+   curl http://localhost:8080/doc
+
+Run the web interface
+
+
+   curl http://localhost:8080/ui
+
+or
 
    firefox http://localhost:8080/
 
 
 To make a user systemd service
 
-   cat -> ~/.config/systemd/user/mydashboard.service
-   [Unit]
-   Description=My dashbord daemon
-   
-   [Service]
-   ExecStart=/usr/bin/env python3  /home/fccagou/src/fccagou/tools/mydashboard/mydashboard.py -v --fg --nopid -s -D %h/src/fccagou/tools/mydashboard/docroot 
-   
-   [Install]
-   WantedBy=default.target
+   cp data/mydashboard.service ~/.config/systemd/user/mydashboard.service
 
 Set the service
 
