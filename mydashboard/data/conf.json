@@ -1,0 +1,7 @@
+{
+  "documentroot": "docroot",
+  "ts_connection": "data/ts_connection.sh",
+  "tslist": "data/ts.json",
+  "debug_filename": "data/mydash.log"
+}
+

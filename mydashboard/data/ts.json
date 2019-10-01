@@ -1,0 +1,61 @@
+{
+  "DOMAIN1": {
+    "CENTRE1": {
+       "rouge" : [
+          "TS-01",
+          "TS-02"
+       ],
+       "jaune" : [
+          "TS-11",
+          "TS-12"
+       ],
+       "vert" : [
+          "TS-21",
+          "TS-22"
+       ],
+       "blanc" : [
+          "TS-31",
+          "TS-32"
+       ]
+    },
+    "CENTRE2": {
+       "rouge" : [
+          "TS-01"
+       ],
+       "jaune" : [
+          "TS-12"
+       ],
+       "vert" : [
+          "TS-21"
+       ],
+       "blanc" : [
+          "TS-32"
+       ]
+    }
+  },
+  "DOMAIN2": {
+    "CENTRE1": {
+       "rouge" : [
+          "TS-01"
+       ],
+       "jaune" : [
+          "TS-11"
+       ],
+       "vert" : [
+          "TS-21"
+       ],
+       "blanc" : [
+          "TS-31"
+       ]
+    },
+    "CENTRE2": {
+       "vert" : [
+          "TS-21"
+       ],
+       "blanc" : [
+          "TS-32"
+       ]
+    }
+  }
+
+}
