@@ -18,18 +18,10 @@
 
 RELEASE=1
 DISTRIB=${DISTRIB:=el$(sed 's/.* \([0-9\.]\+\) .*/\1/g' /etc/redhat-release | cut -d\. -f1)}
-VERSION=$(grep 'version=' setup-${DISTRIB}.py | sed "s#.* version='## ; s#'.*##")
-
-case ${DISTRIB} in
-	el6)
-		requires=""
-		;;
-	el7)
-		requires=""
-esac
+VERSION=$(grep 'version=' setup.py | sed "s#.* version='## ; s#'.*##")
 
 cd ${0%\/*}
 
-python setup-${DISTRIB}.py -v bdist_rpm --release=$RELEASE --distribution-name=$DISTRIB --obsoletes=pynotif ${requires}
+python setup.py -v bdist_rpm --release=$RELEASE --distribution-name=$DISTRIB --obsoletes=pynotif ${requires}
 
 mv dist/mydashboard-$VERSION-$RELEASE.noarch.rpm dist/mydashboard-$VERSION-$RELEASE-$DISTRIB.noarch.rpm
