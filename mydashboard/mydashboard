@@ -277,8 +277,8 @@ def run_cmd(cmd_set):
         # ret_msg = '---\n'.join([(out or ''), (err or '')])
         if p.wait() != 0:
             debug("ERR:\n%s\n%s\n" % (out, err))
-
-        debug("SUCCESS\n%s\n%s\n" % (out, err))
+	else:
+            debug("SUCCESS\n%s\n%s\n" % (out, err))
 
         os._exit(0)
 
