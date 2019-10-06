@@ -464,23 +464,23 @@ def main(args):
 
     if args.documentroot:
         document_root = args.documentroot
-    document_root = os.path.expanduser(document_root)
+    document_root = os.path.abspath(os.path.expanduser(document_root))
 
     if args.tscnx:
         ts_connection_script = args.tscnx
-    ts_connection_script = os.path.expanduser(ts_connection_script)
+    ts_connection_script = os.path.abspath(os.path.expanduser(ts_connection_script))
 
     if args.debugfilename:
         debug_filename = args.debugfilename
-    debug_filename = os.path.expanduser(debug_filename)
+    debug_filename = os.path.abspath(os.path.expanduser(debug_filename))
     logging.basicConfig(filename=debug_filename,level=logging.DEBUG)
 
 
     if args.tslist:
         tslist_conf = args.tslist
-    tslist_conf = os.path.expanduser(tslist_conf)
+    tslist_conf = os.path.abspath(os.path.expanduser(tslist_conf))
 
-    token_filename = os.path.expanduser(token_filename)
+    token_filename = os.path.abspath(os.path.expanduser(token_filename))
     use_token = not args.notoken
 
 
