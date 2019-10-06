@@ -228,6 +228,7 @@ def jsonapi(start_response, data):
 def doc(start_response):
 
     global LISTENING_PORT
+    global token_filename
 
     service_user_dir = os.path.expanduser('~/.config/systemd/user')
     service_name = os.path.sep.join((service_user_dir, 'mydashboard.service'))
@@ -246,38 +247,48 @@ Liste des actions possibles
   Exemple d'utilisation
 
       mkdir -p %s
-      curl --silent http://localhost:%s/systemd/service -o %s
+      curl -b "MYTOKEN=$(cat %s)" --silent http://localhost:%s/systemd/service -o %s
       systemctl --user enable mydashboard
       systemctl --user start mydashboard
 
-""" % (service_user_dir, LISTENING_PORT, service_name )
+""" % (service_user_dir, token_filename, LISTENING_PORT, service_name )
     return page(start_response, wsgi_to_bytes(output), ctype='text/plain', status='200 OK')
-
-
 
 
 
 def systemd_service_display(start_response):
 
     global conf_file
+    global document_root
 
     if conf_file is None:
-        dash_option = ""
+        dash_option = "-D %s" % document_root
     else:
         dash_option = "--conf %s" % conf_file
 
-    prg_name = os.path.expanduser(sys.argv[0])
+    prg_name = os.path.abspath(os.path.expanduser(sys.argv[0]))
+
+    if 'DISPLAY' in os.environ:
+        display = os.environ['DISPLAY']
+    else:
+        display = ':0'
+
+    if 'LANG' in os.environ:
+        lang = os.environ['LANG']
+    else:
+        lang = 'fr_FR.UTF-8'
 
     status = '200 OK'
     output = """[Unit]
 Description=My dashboard MicroService
 
 [Service]
+Environment="DISPLAY=%s" "LANG=%s"
 ExecStart=%s -d -v --fg --nopid  %s
 
 [Install]
 WantedBy=default.target
-           """ % (prg_name, dash_option)
+           """ % (display, lang, prg_name, dash_option)
 
     return page(start_response, wsgi_to_bytes(output), ctype='text/plain', status='200 OK')
 
