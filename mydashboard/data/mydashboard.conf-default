@@ -1,7 +1,7 @@
 {
   "documentroot": "/etc/mydashboard/html",
-  "ts_connection": "/usr/bin/ts_connection.sh",
-  "tslist": "/etc/mydashboard/ts.json",
+  "remote_connection": "/usr/bin/remote_connection.sh",
+  "remotelist": "/etc/mydashboard/remote.json",
   "debug_filename": "~/mydash.log"
 }
 

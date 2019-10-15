@@ -1,6 +1,6 @@
 {
-  "DOMAIN1": {
-    "CENTRE1": {
+  "FRANCE": {
+    "DOMAIN1": {
        "rouge" : [
           "TS-01",
           "TS-02"
@@ -18,7 +18,7 @@
           "TS-32"
        ]
     },
-    "CENTRE2": {
+    "DOMAIN2": {
        "rouge" : [
           "TS-01"
        ],
@@ -33,8 +33,8 @@
        ]
     }
   },
-  "DOMAIN2": {
-    "CENTRE1": {
+  "VANUATU": {
+    "DOMAIN2": {
        "rouge" : [
           "TS-01"
        ],
@@ -48,7 +48,7 @@
           "TS-31"
        ]
     },
-    "CENTRE2": {
+    "DOMAIN3": {
        "vert" : [
           "TS-21"
        ],

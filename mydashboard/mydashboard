@@ -104,10 +104,10 @@ document_root = '/etc/mydashboard/html'
 ssl_default_ctx = None
 
 # Script used for rdp connection
-ts_connection_script = 'data/ts_connection.sh'
+remote_connection_script = 'data/remote_connection.sh'
 
-# Default ts_list for demo
-tslist_conf = 'data/ts.json'
+# Default remote_list for demo
+remotelist_conf = 'data/remote.json'
 
 # debug flag
 debuging = False
@@ -240,7 +240,7 @@ Liste des actions possibles
 
 /ui : Lance firefox et se connect au microservice
 
-/ts/list : Liste de machines accessibles via rdp  (json)
+/remote/list : Liste de machines accessibles via rdp  (json)
 
 /systemd/service : Genere le script de service a mettre en userland
 
@@ -369,7 +369,7 @@ def application(environ, start_response):
             return page(start_response, output=wsgi_to_bytes("I'm a tea pots"),
                     status="418 I'm a teapot")
 
-    if environ['PATH_INFO'] in ['/bootstrap.min.css', '/jquery.min.js', '/bootstrap.bundle.js']:
+    if environ['PATH_INFO'] in ['/bootstrap.min.css', '/jquery.min.js', '/bootstrap.bundle.js', '/computer.png']:
         return static_page(start_response, environ['PATH_INFO'][1:])
 
     if environ['PATH_INFO'] == "/doc":
@@ -385,19 +385,15 @@ def application(environ, start_response):
     elif environ['PATH_INFO'] == "/systemd/service":
         return systemd_service_display(start_response)
 
-    elif environ['PATH_INFO'] == "/ts/list":
-        global tslist_conf
-        return static_page(start_response, tslist_conf ,fullpath=True )
+    elif environ['PATH_INFO'] == "/remote/list":
+        global remotelist_conf
+        return static_page(start_response, remotelist_conf ,fullpath=True )
 
-    elif environ['PATH_INFO'][0:4] == "/ts/":
-        (domain,couleur,tsname) = environ['PATH_INFO'][4:].split('/')
-        if couleur == 'bleu':
-            run_cmd(["'/usr/bin/ccc_root %s'" % tsname ])
-        else:
-            global ts_connection_script
-            passwd_grp="%s-" % domain
-            run_cmd(["%s %s %s %s %s nla "
-			% (ts_connection_script, couleur, tsname, passwd_grp, domain ) ])
+    elif environ['PATH_INFO'][0:8] == "/remote/":
+        (site,domain,group,remote_host) = environ['PATH_INFO'][8:].split('/')
+        global remote_connection_script
+        run_cmd(["%s %s %s %s %s nla "
+            % (remote_connection_script, site, domain, group, remote_host) ])
 
     else:
         # TODO: passer un message d'erreur
@@ -426,13 +422,13 @@ def main(args):
     global verbose
     global debuging
     global use_token
-    global tslist_conf
+    global remotelist_conf
     global conf_file
     global document_root
     global debug_filename
     global ssl_default_ctx
     global token_filename
-    global ts_connection_script
+    global remote_connection_script
     global LISTENING_PORT
 
     verbose = args.verbose
@@ -459,11 +455,11 @@ def main(args):
         if 'ssl_allow_unverified' in conf and conf['ssl_allow_unverified'] == "True":
             ssl_default_ctx = ssl._create_unverified_context()
 
-        if 'ts_connection' in conf:
-           ts_connection_script = conf['ts_connection']
+        if 'remote_connection' in conf:
+           remote_connection_script = conf['remote_connection']
 
-        if 'tslist' in conf:
-           tslist_conf = conf['tslist']
+        if 'remotelist' in conf:
+           remotelist_conf = conf['remotelist']
 
         if 'debug_filename' in conf:
            debug_filename = conf['debug_filename']
@@ -477,9 +473,9 @@ def main(args):
         document_root = args.documentroot
     document_root = os.path.abspath(os.path.expanduser(document_root))
 
-    if args.tscnx:
-        ts_connection_script = args.tscnx
-    ts_connection_script = os.path.abspath(os.path.expanduser(ts_connection_script))
+    if args.remotecnx:
+        remote_connection_script = args.remotecnx
+    remote_connection_script = os.path.abspath(os.path.expanduser(remote_connection_script))
 
     if args.debugfilename:
         debug_filename = args.debugfilename
@@ -487,9 +483,9 @@ def main(args):
     logging.basicConfig(filename=debug_filename,level=logging.DEBUG)
 
 
-    if args.tslist:
-        tslist_conf = args.tslist
-    tslist_conf = os.path.abspath(os.path.expanduser(tslist_conf))
+    if args.remotelist:
+        remotelist_conf = args.remotelist
+    remotelist_conf = os.path.abspath(os.path.expanduser(remotelist_conf))
 
     token_filename = os.path.abspath(os.path.expanduser(token_filename))
     use_token = not args.notoken
@@ -498,10 +494,10 @@ def main(args):
     # TODO: valider l'existence des scripts
 
     if debuging:
-        log("debug file           : %s" % debug_filename)
-        log("tslist_conf          : %s" % tslist_conf)
-        log("document_root        : %s" % document_root)
-        log("ts_connection_script : %s" % ts_connection_script)
+        log("debug file               : %s" % debug_filename)
+        log("remotelist_conf          : %s" % remotelist_conf)
+        log("document_root            : %s" % document_root)
+        log("remote_connection_script : %s" % remote_connection_script)
         if use_token:
             log("token_filename       : %s" % token_filename)
             log("MYTOKEN              : %s" % MYTOKEN)
@@ -578,10 +574,10 @@ if __name__ == '__main__':
                         help='Set the pid file.')
     parser.add_argument('--documentroot', '-D', default=None,
                         help='Document root for static web pages.')
-    parser.add_argument('--tslist', '-T', default=None,
-                        help='Url to json ts list')
-    parser.add_argument('--tscnx', '-C', default=None,
-                        help='Ts connection script')
+    parser.add_argument('--remotelist', '-R', default=None,
+                        help='Url to json remote list')
+    parser.add_argument('--remotecnx', '-C', default=None,
+                        help='Remote connection script')
     parser.add_argument('--notoken', action='store_true',
                         help='Unsafe mode without token.')
 

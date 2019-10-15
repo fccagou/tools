@@ -1,7 +1,7 @@
 {
   "documentroot": "docroot",
-  "ts_connection": "data/ts_connection.sh",
-  "tslist": "data/ts.json",
+  "remote_connection": "data/remote_connection.sh",
+  "remotelist": "data/remote.json",
   "debug_filename": "data/mydash.log"
 }
 
