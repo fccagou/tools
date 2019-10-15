@@ -19,7 +19,7 @@
 
 from distutils.core  import setup
 setup(name='mydashboard',
-        version='0.0.1',
+        version='0.0.2',
         description='Userland Dashboard microservice',
         url='http://github.com/fccagou/tools',
         author='fccagou',
@@ -40,6 +40,7 @@ setup(name='mydashboard',
                 ]),
             ('share/doc/mydashboard/samples',[
                 'data/conf.json',
+                'data/rdp_connection.sh',
             ]),
             ('/etc/mydashboard', ['data/mydashboard.conf-default']),
 #            ('/usr/lib/systemd/system', ['data/pyap.service']),
