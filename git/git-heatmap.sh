@@ -1,0 +1,131 @@
+#!/bin/sh
+
+
+cat <<EOF_HEADER
+<svg width="722" height="112" class="js-calendar-graph-svg">
+  <g transform="translate(10, 20)">
+
+EOF_HEADER
+
+translate=-1
+x=14
+
+for d in $(seq 365 -1 0)
+do
+	prev_day=$(date --date="$(( $d + 1 )) days ago" "+%Y-%m-%d")
+	the_date=$(date --date="$d days ago" "+%Y-%m-%d")
+	next_day=$(date --date="$(( $d - 1 ))days ago" "+%Y-%m-%d")
+	the_day=$(date --date="$d days ago" "+%u")
+	y=$(( ( ( ${the_day} - 1 ) % 13 ) * 13 ))
+
+	# nb_commit=$(git log --pretty=format:"%ad" --date=format:"%Y-%m-%d"   --after=${prev_day} --before=${next_day} | wc -l)
+
+	work_load=0
+
+	for stats  in $(git log --shortstat --after=${prev_day} --before=${next_day}  | egrep 'file.* changed' | awk '{ print $1"-"$4"-"$6}')
+	do
+		nb_files=${stats/-*}
+		nb_ins=${stats##-*}
+		nb_ins=${nb_ins/-*}
+		nb_del=${stats##*-}
+		work_load=$(( $work_load + $nb_files + $nb_ins + ${nb_del:-0} )) 
+	done
+
+
+
+	if [ ${work_load} -eq 0 ]
+	then
+		color="#ebedf0"
+		#color="#ffffd9"
+	elif [ ${work_load} -lt 5 ]
+	then
+		color="#c7e9b4"
+		color="#edf8b1"
+	elif [ ${work_load} -lt 10 ]
+	then
+		# color="#7bc96f"
+		color="#c6e48b"
+	elif [ ${work_load} -lt 20 ]
+	then
+		# color="#196127"
+		color="#7fcdbb"
+	elif [ ${work_load} -lt 30 ]
+	then
+		color="#41b6c4"
+	elif [ ${work_load} -lt 40 ]
+	then
+		color="#1d91c0"
+	elif [ ${work_load} -lt 50 ]
+	then
+		color="#225ea8"
+	elif [ ${work_load} -lt 60 ]
+	then
+		color="#253494"
+	elif [ ${work_load} -lt 70 ]
+	then
+		color="#081d58"
+	else
+		#color="#095117"
+		color="#081d58"
+	fi
+
+
+
+	if [ ${translate} -eq -1 ]
+	then
+		translate=0
+		echo '<g transform="translate(0, 0)">'
+	else
+		if [ ${the_day} -eq 1 ]
+		then
+			echo '<g transform="translate('${translate}', 0)">'
+		fi
+
+	fi
+
+
+
+	cat <<EOF_RECT
+    <rect class="day" width="10" height="10" x="${x}" y="${y}" fill="${color}" data-count="${work_load}" data-date="${the_date}"/>
+EOF_RECT
+
+	if [ ${the_day} -eq 7 ]
+	then
+		echo "</g>"
+		x=$(( $x - 1 ))
+		translate=$(( $translate + 14 ))
+	fi
+
+
+done
+
+
+
+if [ ${the_day} -ne 7 ]
+then
+	echo "</g>"
+fi
+
+x=14
+
+for m in $(seq 11 -1 0)
+do
+	the_month=$(date --date="$m month ago" "+%b")
+    echo '<text x="'${x}'" y="-7" class="month">'${the_month}'</text>'
+	x=$(( $x + 65 ))
+
+done
+
+
+cat <<EOF_FOOT
+    <text text-anchor="start" class="wday" dx="-10" dy="8" style="display: none;">Sun</text>
+    <text text-anchor="start" class="wday" dx="-10" dy="22">Mon</text>
+    <text text-anchor="start" class="wday" dx="-10" dy="32" style="display: none;">Tue</text>
+    <text text-anchor="start" class="wday" dx="-10" dy="48">Wed</text>
+    <text text-anchor="start" class="wday" dx="-10" dy="57" style="display: none;">Thu</text>
+    <text text-anchor="start" class="wday" dx="-10" dy="73">Fri</text>
+    <text text-anchor="start" class="wday" dx="-10" dy="81" style="display: none;">Sat</text>
+  </g>
+</svg>
+
+EOF_FOOT
