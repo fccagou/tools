@@ -369,7 +369,7 @@ def application(environ, start_response):
             return page(start_response, output=wsgi_to_bytes("I'm a tea pots"),
                     status="418 I'm a teapot")
 
-    if environ['PATH_INFO'] in ['/bootstrap.min.css', '/jquery.min.js', '/bootstrap.bundle.js', '/computer.png', '/mydashboard.js']:
+    if environ['PATH_INFO'] in ['/bootstrap.min.css', '/jquery.min.js', '/bootstrap.bundle.js', '/computer.png', '/mydashboard.js', '/mydashboard.css' ]:
         return static_page(start_response, environ['PATH_INFO'][1:])
 
     if environ['PATH_INFO'] == "/doc":

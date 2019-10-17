@@ -1,0 +1,61 @@
+
+body {font-family: "Lato", sans-serif; background: #334;}
+
+.site {
+    text-align: center;
+    color: #ef0000;
+
+}
+.sidebar {
+    height: 100%;
+    width: 80px;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    background-color: #111;
+    overflow-x: hidden;
+    padding-top: 16px;
+}
+
+.sidebar a {
+    padding: 6px 8px 6px 16px;
+    text-decoration: none;
+    font-size: 20px;
+    color: #818181;
+    dosplay: block;
+}
+
+.sidebar a:hover {
+    color: #f1f1f1;
+}
+
+.btn-rouge {
+    color: #fff;
+    background-color: #dc3545;
+    border-color: #dc3545;
+}
+.btn-jaune {
+    color: #212529;
+    background-color: #ffc107;
+    border-color: #ffc107;
+}
+
+.btn-vert {
+    color: #fff;
+    background-color: #28a745;
+    border-color: #28a745;
+}
+
+
+.btn-blanc {
+    color: #343a40;
+    background-color: #ffffff;
+    border-color: #343a40;
+}
+
+.btn-bleu {
+    color: #fff;
+    background-color: #17a2b8;
+    border-color: #17a2b8;
+}
