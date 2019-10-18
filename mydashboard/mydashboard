@@ -109,6 +109,9 @@ remote_connection_script = 'data/remote_connection.sh'
 # Default remote_list for demo
 remotelist_conf = 'data/remote.json'
 
+# Default menu for demo
+menu_conf = 'data/menu.json'
+
 # debug flag
 debuging = False
 
@@ -385,6 +388,10 @@ def application(environ, start_response):
     elif environ['PATH_INFO'] == "/systemd/service":
         return systemd_service_display(start_response)
 
+    elif environ['PATH_INFO'] == "/conf/menu":
+        global menu_conf
+        return static_page(start_response, menu_conf ,fullpath=True )
+
     elif environ['PATH_INFO'] == "/remote/list":
         global remotelist_conf
         return static_page(start_response, remotelist_conf ,fullpath=True )
@@ -423,6 +430,7 @@ def main(args):
     global debuging
     global use_token
     global remotelist_conf
+    global menu_conf
     global conf_file
     global document_root
     global debug_filename
@@ -461,6 +469,9 @@ def main(args):
         if 'remotelist' in conf:
            remotelist_conf = conf['remotelist']
 
+        if 'menuconf' in conf:
+           menu_conf = conf['menuconf']
+
         if 'debug_filename' in conf:
            debug_filename = conf['debug_filename']
 
@@ -487,6 +498,10 @@ def main(args):
         remotelist_conf = args.remotelist
     remotelist_conf = os.path.abspath(os.path.expanduser(remotelist_conf))
 
+    if args.menuconf:
+        menu_conf = args.menuconf
+    menu_conf = os.path.abspath(os.path.expanduser(menu_conf))
+
     token_filename = os.path.abspath(os.path.expanduser(token_filename))
     use_token = not args.notoken
 
@@ -496,6 +511,7 @@ def main(args):
     if debuging:
         log("debug file               : %s" % debug_filename)
         log("remotelist_conf          : %s" % remotelist_conf)
+        log("menu_conf                : %s" % menu_conf)
         log("document_root            : %s" % document_root)
         log("remote_connection_script : %s" % remote_connection_script)
         if use_token:
@@ -576,6 +592,8 @@ if __name__ == '__main__':
                         help='Document root for static web pages.')
     parser.add_argument('--remotelist', '-R', default=None,
                         help='Url to json remote list')
+    parser.add_argument('--menuconf', '-M', default=None,
+                        help='Url to json menu configuration')
     parser.add_argument('--remotecnx', '-C', default=None,
                         help='Remote connection script')
     parser.add_argument('--notoken', action='store_true',

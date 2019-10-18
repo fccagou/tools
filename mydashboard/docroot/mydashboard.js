@@ -46,3 +46,16 @@ function RemoteDisplay( container_id ) {
 
 }
 
+
+function CreateNavBar( container_id ) {
+
+    $.getJSON('/conf/menu', function ( data ) {
+        var items = [];
+        $.each( data, function ( title ) {
+            items.push('<li class="nav-item"><a class="nav-link" href="'+data[title]+'">'+title+'</a></li>');
+        });
+
+        $(container_id).html(items.join(""));
+    });
+}
+
