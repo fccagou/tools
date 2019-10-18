@@ -357,7 +357,7 @@ then
 		${host_param}${REMOTE_HOST}
 EOF_DEBUG
 else
-/usr/bin/xfreerdp ${CERT_CONF} \ 
+/usr/bin/xfreerdp ${CERT_CONF} \
 		${network_param} \
 		${login_param}${LOGIN} \
 		${domain_param}:${DOMAIN} \
