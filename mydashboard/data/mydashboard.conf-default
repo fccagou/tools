@@ -1,7 +1,0 @@
-{
-  "documentroot": "/etc/mydashboard/html",
-  "remote_connection": "/usr/bin/remote_connection.sh",
-  "remotelist": "/etc/mydashboard/remote.json",
-  "debug_filename": "~/mydash.log"
-}
-
