@@ -131,6 +131,9 @@ MYTOKEN=token_hex(16)
 # Safe mode if token is used
 use_token=True
 
+# Web browser
+WEB_BROWSER='/usr/bin/firefox'
+
 
 # -----------------------------------------------------------------
 # Informational functions.
@@ -357,11 +360,12 @@ def launch_gui():
 
     global MYTOKEN
     global use_token
+    global WEB_BROWSER
     global LISTENING_PORT
     if use_token:
-        run_cmd(["/usr/bin/firefox http://localhost:%s/%s" % (LISTENING_PORT,MYTOKEN)])
+        run_cmd(["%s http://localhost:%s/%s" % (WEB_BROWSER, LISTENING_PORT,MYTOKEN)])
     else:
-        run_cmd(["/usr/bin/firefox http://localhost:%s/%s" % (LISTENING_PORT)])
+        run_cmd(["% http://localhost:%s/%s" % (WEB_BROWSER, LISTENING_PORT)])
 
 
 # -----------------------------------------------------------------
@@ -450,11 +454,10 @@ def main(args):
     global token_filename
     global remote_connection_script
     global LISTENING_PORT
+    global WEB_BROWSER
 
     verbose = args.verbose
     debuging = args.debug
-
-
 
     # Catch signal to quit cleanly.
     signal.signal(signal.SIGTERM, end_process)
@@ -495,6 +498,8 @@ def main(args):
         else:
             gui = False
 
+        if 'webbrowser' in conf:
+            WEB_BROWSER = conf['webbrowser']
 
 
     if args.documentroot:
@@ -519,6 +524,10 @@ def main(args):
         menu_conf = args.menuconf
     menu_conf = os.path.abspath(os.path.expanduser(menu_conf))
 
+    if args.webbrowser:
+        WEB_BROWSER = args.webbrowser
+    WEB_BROWSER = os.path.abspath(os.path.expanduser(WEB_BROWSER))
+
     if args.gui:
         gui = True
 
@@ -532,9 +541,10 @@ def main(args):
         if gui:
             log('Launch gui')
         log("debug file               : %s" % debug_filename)
-        log("remotelist_conf          : %s" % remotelist_conf)
         log("menu_conf                : %s" % menu_conf)
+        log("web browser              : %s" % WEB_BROWSER)
         log("document_root            : %s" % document_root)
+        log("remotelist_conf          : %s" % remotelist_conf)
         log("remote_connection_script : %s" % remote_connection_script)
         if use_token:
             log("token_filename       : %s" % token_filename)
@@ -563,7 +573,7 @@ def main(args):
         log("Serving HTTP on port %i..." % LISTENING_PORT)
         # Respond to requests until process is killed
         if gui:
-            run_cmd(["/usr/bin/firefox http://localhost:%s/%s" % (LISTENING_PORT,MYTOKEN)])
+            launch_gui ()
 
         httpd.serve_forever()
     except KeyboardInterrupt:
@@ -626,6 +636,8 @@ if __name__ == '__main__':
                         help='Unsafe mode without token.')
     parser.add_argument('--gui', action='store_true',
                         help='Launch grahical user interface')
+    parser.add_argument('--webbrowser', default=None,
+            help='Select web browser (default: %s)' % WEB_BROWSER)
 
     args = parser.parse_args()
 
