@@ -2,6 +2,7 @@
   "documentroot": "docroot",
   "remote_connection": "data/remote_connection.sh",
   "remotelist": "data/remote.json",
-  "debug_filename": "data/mydash.log"
+  "debug_filename": "data/mydash.log",
+  "gui": "False"
 }
 

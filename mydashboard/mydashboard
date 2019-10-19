@@ -351,6 +351,19 @@ def run_cmd(cmd_set):
         os._exit(0)
 
 
+
+def launch_gui():
+    """Lauch the gui"""
+
+    global MYTOKEN
+    global use_token
+    global LISTENING_PORT
+    if use_token:
+        run_cmd(["/usr/bin/firefox http://localhost:%s/%s" % (LISTENING_PORT,MYTOKEN)])
+    else:
+        run_cmd(["/usr/bin/firefox http://localhost:%s/%s" % (LISTENING_PORT)])
+
+
 # -----------------------------------------------------------------
 # HTTP: WEB APP
 # -----------------------------------------------------------------
@@ -379,8 +392,7 @@ def application(environ, start_response):
         return doc(start_response)
 
     if environ['PATH_INFO'] == "/ui":
-        global LISTENING_PORT
-        run_cmd(["/usr/bin/firefox http://localhost:%s/%s" % (LISTENING_PORT,MYTOKEN)])
+        launch_gui ()
 
     elif environ['PATH_INFO'] == "/top":
         run_cmd(["/usr/bin/top"])
@@ -478,6 +490,11 @@ def main(args):
         if 'token_filename' in conf:
             token_filename = conf['token_filename']
 
+        if 'gui' in conf and conf['gui'] == "True":
+            gui = True
+        else:
+            gui = False
+
 
 
     if args.documentroot:
@@ -502,6 +519,9 @@ def main(args):
         menu_conf = args.menuconf
     menu_conf = os.path.abspath(os.path.expanduser(menu_conf))
 
+    if args.gui:
+        gui = True
+
     token_filename = os.path.abspath(os.path.expanduser(token_filename))
     use_token = not args.notoken
 
@@ -509,6 +529,8 @@ def main(args):
     # TODO: valider l'existence des scripts
 
     if debuging:
+        if gui:
+            log('Launch gui')
         log("debug file               : %s" % debug_filename)
         log("remotelist_conf          : %s" % remotelist_conf)
         log("menu_conf                : %s" % menu_conf)
@@ -517,6 +539,7 @@ def main(args):
         if use_token:
             log("token_filename       : %s" % token_filename)
             log("MYTOKEN              : %s" % MYTOKEN)
+
 
     if not use_token:
         warning('UNSAFE MODE')
@@ -539,6 +562,9 @@ def main(args):
         httpd = server.make_server('', LISTENING_PORT, application)
         log("Serving HTTP on port %i..." % LISTENING_PORT)
         # Respond to requests until process is killed
+        if gui:
+            run_cmd(["/usr/bin/firefox http://localhost:%s/%s" % (LISTENING_PORT,MYTOKEN)])
+
         httpd.serve_forever()
     except KeyboardInterrupt:
         log('End asked by user...bye bye !')
@@ -598,6 +624,8 @@ if __name__ == '__main__':
                         help='Remote connection script')
     parser.add_argument('--notoken', action='store_true',
                         help='Unsafe mode without token.')
+    parser.add_argument('--gui', action='store_true',
+                        help='Launch grahical user interface')
 
     args = parser.parse_args()
 
