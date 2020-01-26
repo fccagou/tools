@@ -1,0 +1,241 @@
+#!/usr/bin/bash
+
+###############################################################
+#  TITRE: 
+#
+#  AUTEUR:   fccagou
+#  VERSION: 
+#  CREATION:  22:20:38 25/01/2020
+#  MODIFIE: 
+#
+#  DESCRIPTION: 
+###############################################################
+#
+
+GIT=/usr/bin/git
+PGM=${PGM:-$(basename $0)}
+
+# Variables
+
+env_dir="$(cd $(dirname ${0}) && pwd)"
+conf_dir='config'
+puppet_file="${conf_dir}/Puppetfile"
+origin_url="$(git config remote.origin.url)"
+prefix_url="${origin_url%/*}"
+conf_url="${prefix_url}/config.git"
+forge_url=''
+default_modules_dir="modules"
+
+
+RESTORE='\e[0m'
+RED='\e[31m'
+GREEN='\e[32m'
+YELLOW='\e[33m'
+BLUE='\e[34m'
+
+
+usage () {
+
+	cat <<EOF_usage
+
+    ${PGM}
+
+	${PGM} --help
+
+EOF_usage
+
+}
+
+help () {
+
+	cat <<EOF_help_header
+Setup new puppet environment
+
+ SYNOPSIS
+
+EOF_help_header
+
+	usage
+
+	cat <<EOF_help
+
+ DESCRIPTION
+	Create new puppet environment according to config/setup.conf
+	options.
+
+ COMMAND
+
+      --help|-h
+
+		This help
+
+
+EOF_help
+}
+
+
+# ============================================================================
+#  Gestion des erreurs + aide
+# ============================================================================
+#
+
+chapter  () {
+	echo -e "\e[1;40m[#] ${*}                                                                 ${RESTORE}"
+}
+
+error () {
+	echo -e "${RED}[-] ${*}${RESTORE}"
+}
+warning () {
+	echo -e "${RED}[!]${RESTORE} ${*}"
+}
+
+action () {
+	echo -e "${GREEN}[+] ${*}${RESTORE}"
+}
+
+
+info () {
+	echo -e "${BLUE} -  ${RESTORE}${*}"
+}
+
+todo () {
+	echo -e "${BLUE}[ ] TODO: ${RESTORE}${*}"
+}
+
+
+# ============================================================================
+#    
+# ============================================================================
+
+process_module () {
+	mod_name="${1}"
+	version="${2}"
+	mod_remote_url="${3}"
+	mod_commit="${4}"
+	mod_branch="${5}"
+	modulepath="${6}"
+
+	chapter "Process module ${mod_name}"
+	[ -n "${version}" ]  && info "version: ${version}"
+	[ -n "${mod_remote_url}" ] && info "url: ${mod_remote_url}"
+	[ -n "${mod_commit}" ] && info "commit; ${mod_commit}"
+	[ -n "${mod_branch}" ] && git_branch="-b ${mod_branch}" && info "branch: ${mod_branch}"
+	[ -n "${modulepath}" ] && info "module path: ${modulepath}"
+
+	if [ -d "${modulepath}/${mod_name}" ]
+	then
+		action "Updating ${mod_name} from $(git config remote.origin.url)"
+		( cd "${modulepath}/${mod_name}" && ${GIT} pull -q --rebase )
+	else
+		action "Cloning ${mod_name}"
+		${GIT} submodule add "${mod_remote_url}" "${modulepath}/${mod_name}"
+		${GIT} commit -m "SETUP add(${mod_name}): ${modulepath}"
+	fi
+
+}
+
+# ============================================================================
+#  MAIN  
+# ============================================================================
+
+
+pushd "${env_dir}" >/dev/null
+
+chapter "Configuration setup"
+
+${GIT} config status.submodulesummary 1
+${GIT} config diff.submodule log
+
+if [ -d "${conf_dir}" ]
+then
+	pushd "${conf_dir}" >/dev/null
+	conf_url="$(git config remote.origin.url)"
+
+	action "Update ${conf_dir} from ${conf_url}"
+	$GIT pull -q --rebase origin master
+	popd >/dev/null
+
+else
+	cat <<EOF_INFO
+Config dir ${conf_dir} does not exist.
+You need to clone it.
+
+By default, remote url is ${conf_url}.
+
+EOF_INFO
+
+	read -p " > Would you like to change this remote [y/N] ? " rep
+	case "${rep}" in
+		"y"|"Y"|"o"|"O")
+			read -p ' > New config repo : ' conf_url
+			;;
+		*)
+			:
+			;;
+	esac
+
+	if [ -z "${conf_url}" ]
+	then
+		exit 1
+	fi
+	action "Create new config dir from ${conf_url}"
+	$GIT submodule add -q "${conf_url}" "${conf_dir}"
+	${GIT} commit -m "SETUP conf(nit): ${conf_dir}"
+
+fi
+
+
+if [ ! -f "${puppet_file}" ]
+then
+	error "can't access config file ${puppet_file}"
+	exit 1
+fi
+
+[ -d "${default_modules_dir}" ] || mkdir -p "${default_modules_dir}"
+
+default_remote_url="${conf_url%/*}"
+module_remote_url="${default_remote_url}"
+egrep '^(mod|forge| [ ]*(git|commit|branch):|[ ]*$|#-git_remote_url:)' "${puppet_file}" | while read action p1 p2 p3 p4 p5 
+do
+	case "${action}" in
+		"forge")
+			forge_url="${p1}"
+			;;
+		"mod")
+			[ -n "${mod_name}" ] \
+				&& process_module "${mod_name}" "${version}" "${mod_remote_url}" "${mod_commit}" "${mod_branch}" "${default_modules_dir}"
+
+			mod_name="${p1//\'/}"
+			version="${p2//\'/}"
+			mod_remote_url="${module_remote_url}/${mod_name}.git"
+			mod_commit=""
+			mod_branch=""
+			;;
+		*git:)
+			mod_remote_url="${p1//\'/}"
+			;;
+		*commit:)
+			mod_commit="${p1//\'/}"
+			;;
+		*branch:)
+			mod_branch="${p1//\'/}"
+			;;
+		"#-git_remote_url:")
+			if [ "${p1}" == "relative" ]
+			then
+				module_remote_url="${default_remote_url}/${p2}"
+			else
+				module_remote_url="${p1}"
+			fi
+			;;
+		*)
+			
+			[ -n "${mod_name}" ] \
+				&& process_module "${mod_name}" "${version}" "${mod_remote_url}" "${mod_commit}" "${mod_branch}" "${default_modules_dir}"
+			mod_name=""
+			;;
+	esac
+	
+done
+
