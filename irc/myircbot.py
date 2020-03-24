@@ -6,10 +6,13 @@ import socket
 import string
 import time
 
+from  urllib import request
 
 
 def info(msg):
    print("[+] {0}".format(msg))
+
+
 
 
 
@@ -34,9 +37,17 @@ class IRC:
     # :opium.gin.local 353 toto = #tuxoncloud :toto
     irc_names = re.compile(":([^ ]*) ([^ ]*) ([^ ]*) = ([^ ]*) :(.*)")
 
+    events_level = {
+            'none': 0,
+            'talk': 10,
+            'join': 50,
+            'master_present': 100,
+     }
+
 
     def __init__(self, irc_server="localhost", irc_port=6667, irc_channel="#tuxoncloud",
-            my_master="fccagou", my_irc_nick="cagoubot", my_irc_user="cagoubot", my_irc_realname="Cagou Bot"):
+            my_master="fccagou", my_irc_nick="cagoubot", my_irc_user="cagoubot", my_irc_realname="Cagou Bot",
+            pyap_url=None):
         self.irc_server = irc_server
         self.irc_port = irc_port
         self.irc_channel = irc_channel
@@ -48,8 +59,8 @@ class IRC:
         self.socket = None
         self.readbuffer = ""
         self.nb_hello_master = 0
-
-
+        self.last_event = IRC.events_level['none']
+        self.pyap_url = pyap_url
 
     def connect(self):
         info("Server {0}:{1} connection...".format(self.irc_server, self.irc_port))
@@ -63,7 +74,7 @@ class IRC:
     def _recv(self):
         self.readbuffer = self.readbuffer+self.socket.recv(1024).decode("UTF-8")
         data = str.split(self.readbuffer, "\n")
-        readbuffer = data.pop()
+        self.readbuffer = data.pop()
         return data
 
     def send_nick(self):
@@ -82,7 +93,7 @@ class IRC:
             self.send_mesg(self.my_master, msg)
 
     def pong(self, msg):
-        self._send("PONG {O}".format(msg))
+        self._send("PONG {0}".format(msg))
 
     def hello_master(self, tempo=0):
         if tempo > 0:
@@ -114,35 +125,73 @@ class IRC:
                 if line.find(msg) > 0:
                     not_found = False
                     break
-    
+
                 if not self.is_my_master_connected:
                     m = IRC.irc_names.match(line)
                     self.is_my_master_connected = m and self.my_master in m[5]
+
+                    if self.is_my_master_connected:
+                        self.notify_master_present()
+
+
+    def external_notify(self, event_type):
+        if self.last_event != event_type:
+            self.last_event = event_type
+            self.pyap_notify(self.last_event)
+
+    def notify_master_present(self):
+        self.external_notify('master_present')
+
+    def notify_new_join(self):
+        self.external_notify('join')
+
+    def notify_new_talk(self):
+        if 'master_present' == self.last_event or IRC.events_level['talk'] > IRC.events_level[self.last_event]:
+            self.external_notify('talk')
+
+    def pyap_notify(self, status):
+        if self.pyap_url is not None:
+            status_list = {
+                    'none': 'unknown',
+                    'master_present': 'security/ack ok',
+                    'join': 'security/ack critical security',
+                    'talk': 'security/ack warning security'
+            }
+
+            for s in status_list[status].split():
+                try:
+                    f = request.urlopen("{0}/{1}".format(self.pyap_url,s))
+                    f.close()
+                    time.sleep(0.5)
+                except:
+                    info('Notification error ({0})'.format(s))
 
 
     def serve(self):
 
         while 1:
-        
             for line in self._recv():
                 line = str.rstrip(line)
                 print("<< {0}".format(line))
-        
+
                 if line.find("PING") == 0:
-                    self.pong(line[1])
-        
+                    self.pong(line.split()[1])
+
                 if line.find("JOIN") > 0:
                     m = IRC.irc_join.match(line)
                     if m and m[2] == self.my_master:
                         info("My master is joining")
-                        is_my_master_connected = True
-                    
+                        self.is_my_master_connected = True
+                        self.notify_master_present ()
+                    else:
+                        self.notify_new_join ()
+
                 if line.find("QUIT") > 0:
                     m = IRC.irc_quit.match(line)
-                    if m and m[2] == my_master:
+                    if m and m[2] == self.my_master:
                         info("Saaaad, My master quit {0}".format(m[4]))
-                        is_my_master_connected = False
-        
+                        self.is_my_master_connected = False
+
                 if line.find("PRIVMSG") > 0:
                     info("Who commands ?")
                     m = IRC.irc_privmsg.match(line)
@@ -150,17 +199,37 @@ class IRC:
                        print("[-] REGEX ERROR")
                     else:
                        # print("nick: {0}\nUser: {1}\nHost: {2}\nDest: {3}\nMsg: {4}".format(m.group(1), m.group(2), m.group(3), m.group(4), m.group(5)))
-                       user = m[2]
+                       from_nick = m[1]
+                       from_user = m[2]
+                       from_host = m[3]
                        to = m[4]
-                       if to != self.my_irc_nick:
-                           info("This msg is not for me")
+                       from_msg = m[5]
+
+                       if from_user == self.my_master:
+                           # Message from master
+                           self.notify_master_present ()
+                           if to == self.my_irc_nick:
+                               # Is talking to me
+                               if not self.is_my_master_connected:
+                                   # TODO: improve the case
+                                   info("WARNING Got a msg from master when not connected ...")
+                                   self.is_my_master_connected = True
+                                   self.hello_master()
+
+                               # Checking the question
+                               if "clear notification" in from_msg:
+                                   self.last_event = 'none'
+                                   self.notify_master_present ()
+                               else:
+                                   self.talk_to_master("Hum ... What do U mean by {0}".format(from_msg))
+
                        else:
-                           if user != self.my_master:
-                               info("{0} is not my master !!".format(user))
-                               self.talk_to_master("ALERT {0} ".format(m[0]))
-                           else:
-                               #self.hello_master()
-                               self.talk_to_master("Tu viens de me dire => {0}".format(m[5]))
+                          self.notify_new_talk ()
+                          # Someone else talking
+                          if to == self.my_irc_nick:
+                              # I fo not speak to unknown person.
+                              info("{0} is not my master !!".format(from_user))
+                              self.talk_to_master("ALERT {0} ".format(m[0]))
 
 
 
@@ -171,15 +240,15 @@ def main( irc_bot ):
     irc_bot.connect()
     irc_bot.send_nick()
     irc_bot.send_user()
-    
+
     info("Waiting server replies ({0} s)...".format(server_connect_tempo))
     time.sleep(server_connect_tempo)
 
     irc_bot.join()
     irc_bot.serve()
-   
-    
-    
+
+
+
 
 
 if __name__ == '__main__':
@@ -215,8 +284,10 @@ if __name__ == '__main__':
     parser.add_argument('--myircrealname', '-r', default = IRC.my_irc_realname,
                         help="My irc real name ({0})".format(IRC.my_irc_realname))
 
-    args = parser.parse_args()
+    parser.add_argument('--pyapurl', default = None,
+                        help="Define pyap url notifier (default is None)")
 
+    args = parser.parse_args()
 
     irc_bot = IRC( irc_server=args.server
             ,irc_port=args.port
@@ -225,6 +296,7 @@ if __name__ == '__main__':
             ,my_irc_nick=args.myircnick
             ,my_irc_user=args.myircuser
             ,my_irc_realname=args.myircrealname
+            ,pyap_url = args.pyapurl
             )
 
     main(irc_bot)
