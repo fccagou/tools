@@ -8,6 +8,9 @@
 Generates an github like svg heatmap for the last year of changes of the current
 git repository.
 
-![Alt text](./tools.svg)
-<img src="./tools.svg">
+    curl -o some/dir/in/path/git-heatmap https://raw.githubusercontent.com/fccagou/tools/master/git/git-heatmap \
+    && chmod +x some/dir/in/path/git-heatmap
+
+    git heatmap help
+
 

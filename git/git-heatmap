@@ -1,6 +1,38 @@
 #!/bin/sh
 
 
+if [ "${1}" = "help" ] || [ "${1}" = "--help" ]
+then
+	cat <<EOF_HELP
+GIT-HEATMAP(1)
+
+NAME
+
+		git-heatmap > somefile.html
+        firefox somefile.html
+
+EOF_HELP
+    exit 0
+fi
+
+
+
+
+YEAR="${1}"
+
+if [ -z "${YEAR}" ]
+then
+	# check last 365 days
+	FIRST_DAY_AGO=365
+	LAST_DAY_AGO=0
+else
+	CURRENT_YEAR=$(date +%Y)
+	DOY=$(date +%j)
+	FIRST_DAY_AGO=$(( ( (${CURRENT_YEAR} - ${YEAR}) * 365 ) + ${DOY} - 1))
+	LAST_DAY_AGO=$(( $FIRST_DAY_AGO - 365 ))
+fi
+
+
 cat <<EOF_HEADER
 <svg width="722" height="112" class="js-calendar-graph-svg">
   <g transform="translate(10, 20)">
@@ -10,7 +42,11 @@ EOF_HEADER
 translate=-1
 x=14
 
-for d in $(seq 365 -1 0)
+# plot_data=/tmp/heatmap.dat
+#
+# echo "Date NB" > "${plot_data}"
+
+for d in $(seq ${FIRST_DAY_AGO} -1 ${LAST_DAY_AGO})
 do
 	prev_day=$(date --date="$(( $d + 1 )) days ago" "+%Y-%m-%d")
 	the_date=$(date --date="$d days ago" "+%Y-%m-%d")
@@ -84,6 +120,8 @@ do
 	fi
 
 
+# 	echo "${the_date} ${work_load}" >> "${plot_data}"
+
 
 	cat <<EOF_RECT
     <rect class="day" width="10" height="10" x="${x}" y="${y}" fill="${color}" data-count="${work_load}" data-date="${the_date}"/>
@@ -105,6 +143,7 @@ if [ ${the_day} -ne 7 ]
 then
 	echo "</g>"
 fi
+
 
 x=14
 
