@@ -23,6 +23,33 @@ case "${api}" in
     "delete_cache" )
       method='DELETE'
       api='/puppet-admin-api/v1/environment-cache'
+	  # add this to auth.conf
+	  #   {
+      #      # Allow localhost to clear cache for an env
+      #      match-request: {
+	  #          path: "/puppet-admin-api/v1/environment-cache"
+      #          type: path
+      #          method: delete
+	  #          query-params: {
+      #            environment: [ production, env_1, env2 ]
+      #          }
+      #      }
+      #      allow: <set_allowed_hosts
+      #      sort-order: 500
+      #      name: "clear cache for 1 env"
+      #  },
+	  #  {
+      #      # Allow localhost to clear cache
+      #      match-request: {
+      #          path: "/puppet-admin-api/v1/environment-cache"
+      #          type: path
+      #          method: delete
+      #      }
+      #      allow: <set_allowed_hosts
+      #      sort-order: 500
+      #      name: "clear cache"
+      #  },
+
       ;;
     "env_list")
 	  # ./puppet-request-api.sh  env_list | jq -Mr '.environments|keys[]'
