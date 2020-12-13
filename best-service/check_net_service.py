@@ -4,6 +4,7 @@
   list passed in parameters.
 """
 
+import os
 import sys
 import socket
 from time import time
@@ -44,14 +45,14 @@ def gotit(msg):
 # Check Service
 # -------------------------------------------------------------------------
 
-def check_best_tcp_service(service_list, threshold=5):
+def check_best_tcp_service(service_list, threshold=5, algo='fastest'):
     """ Check best service"""
 
     best_time = threshold
     best_service = None
     best_status = _OK
 
-    action ("Search best service with {0} threshold\n".format(threshold))
+    action ("Search {} service with {} threshold\n".format(algo, threshold))
 
     socket.setdefaulttimeout( threshold )
 
@@ -87,6 +88,9 @@ def check_best_tcp_service(service_list, threshold=5):
                     error('Connect error')
                     best_status = _SOME_ERROR
                     continue
+
+            if algo == 'first_up':
+                return _OK,cur_service
 
             connect_time = time2 - time1
 
@@ -124,16 +128,60 @@ if __name__ == "__main__":
     parser.add_argument('--threshold', '-t', default=1000, type=float,
                         help='Threshold for acceptable service (float).')
 
+    parser.add_argument('--no-store',
+            action='store_false',
+            dest='store',
+            help='Do not store lastused service')
+
+    parser.add_argument('--last-used-store',
+            dest='last_used_store',
+            default='~/.check_services',
+            help='File pasth used to store lastused service (default: ~/.check_services)')
+
+    parser.add_argument('--last-used-first',
+            action='store_true',
+            dest='last_used_first',
+            help='Use last first')
+
+    parser.add_argument('--algo', '-a',
+            default='fastest',
+            choices=['fastest', 'first_up'],
+            help='Check algorithm (default: fastest)')
+
     parser.add_argument('service', nargs='+',
             help='list of services to check in forme host:port')
 
     args = parser.parse_args()
-    _VERBOSE = args.verbose
 
+
+    _VERBOSE = args.verbose
+    _STORE = os.path.expanduser(args.last_used_store)
+
+    if args.last_used_first:
+        action('Get last used service from {}'.format(_STORE))
+        # Use last use service first
+        try:
+            with open(_STORE,'r') as get_last_used:
+                args.service.insert(0,get_last_used.readline().strip())
+        except FileNotFoundError:
+            error('store fil not found {}'.format(_STORE))
+
+    # Run check
     (status, service) = check_best_tcp_service (
                 service_list = args.service,
-                threshold = args.threshold
+                threshold = args.threshold,
+                algo = args.algo
             )
+
+    if args.store and service is not None:
+        # Update last used service
+        try:
+            with open(_STORE,'w') as get_last_used:
+                get_last_used.write(str(service))
+            action('Store last used service {} in {}'.format(service, _STORE))
+        except OSError:
+            error('Error storing last used service in {}'.format(_STORE))
+
 
     print(service)
     sys.exit(status)
