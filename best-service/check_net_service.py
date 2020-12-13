@@ -37,7 +37,8 @@ def error(msg):
 def gotit(msg):
     "Display message with [>] prefix in verbose mode"
     if _VERBOSE:
-        print ("[>] {0}".format(msg))
+        print (" >  {0}".format(msg))
+
 
 # -------------------------------------------------------------------------
 # Check Service
