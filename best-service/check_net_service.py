@@ -40,28 +40,6 @@ def gotit(msg):
         print ("[>] {0}".format(msg))
 
 # -------------------------------------------------------------------------
-# Doc
-# -------------------------------------------------------------------------
-
-def usage():
-    "Show program's usage"
-
-    print ("""
-Usage {0}: [-h|--help] | [-v|--verbose] [-t|--threshold] host1:port1 [host2:port2]..[hostn:portn]
-
-       -h|--help         :  this help
-       -v|--verbose      :  verbose mode (before -t option)
-       -t|--threshold    :  acceptable connect time threshold
-       host:port         :  tcp host:port to check
-
-RETURNS:
-
-      host:port           : the quicker responder.
-
-""".format(sys.argv[0]))
-
-
-# -------------------------------------------------------------------------
 # Check Service
 # -------------------------------------------------------------------------
 
@@ -134,34 +112,26 @@ def check_best_tcp_service(service_list, threshold=5):
 
 if __name__ == "__main__":
 
-    _THRESHOLD=1000
-    # I should have used argparse ... but not needed now K.I.S.S.
+    # Process passed arguments.
+    import argparse
+    parser = argparse.ArgumentParser( description='Net Service Checker')
 
-    if len(sys.argv) == 1:
-        usage ()
-        sys.exit(1)
 
-    _FIRST_ARG = 1
-    if sys.argv[_FIRST_ARG] == '-h' or sys.argv[_FIRST_ARG] == '--help':
-        usage ()
-        sys.exit(0)
+    parser.add_argument('--verbose', '-v', action='store_true',
+                        help='verbose.')
 
-    if sys.argv[_FIRST_ARG] == '-v' or sys.argv[_FIRST_ARG] == '--verbose':
-        _VERBOSE = True
-        _FIRST_ARG = 2
+    parser.add_argument('--threshold', '-t', default=1000, type=float,
+                        help='Threshold for acceptable service (float).')
 
-    if sys.argv[_FIRST_ARG] == '-t' or sys.argv[_FIRST_ARG] == '--threshold':
-        _FIRST_ARG +=1
-        try:
-            _THRESHOLD = sys.argv[_FIRST_ARG]
-            _FIRST_ARG += 1
-        except IndexError:
-            usage ()
-            sys.exit(1)
+    parser.add_argument('service', nargs='+',
+            help='list of services to check in forme host:port')
+
+    args = parser.parse_args()
+    _VERBOSE = args.verbose
 
     (status, service) = check_best_tcp_service (
-                service_list = sys.argv[_FIRST_ARG:],
-                threshold = float(_THRESHOLD)
+                service_list = args.service,
+                threshold = args.threshold
             )
 
     print(service)
