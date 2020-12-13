@@ -96,7 +96,7 @@ def check_best_tcp_service(service_list, threshold=5):
                 try:
                     a_socket.connect((host, int(port)))
                     time2 = time()
-                except TypeError:
+                except (TypeError, ValueError):
                     error('Bad parameter')
                     best_status = _SOME_ERROR
                     continue
