@@ -9,110 +9,149 @@ import sys
 import socket
 from time import time
 
-_NO_SERVICE_FOUND = 404
-_SOME_ERROR = 206
-_OK = 0
 
 # -------------------------------------------------------------------------
 # Tools for verbose display
 # -------------------------------------------------------------------------
 
-_VERBOSE = False
+
+class DisplayTools:
+    def __init__(self, verbose=False):
+        self.__verbose = verbose
+
+    def action(self, msg):
+        "Display message with [*] prefix in verbose mode"
+        if self.__verbose:
+            print("[*] {0}".format(msg))
+
+    def info(self, msg):
+        "Display message with [+] prefix in verbose mode"
+        if self.__verbose:
+            print("[+] {0}".format(msg))
+
+    def error(self, msg):
+        "Display message with [-] prefix in verbose mode"
+        if self.__verbose:
+            print("[-] {0}".format(msg))
+
+    def gotit(self, msg):
+        "Display message with [>] prefix in verbose mode"
+        if self.__verbose:
+            print(" >  {0}".format(msg))
 
 
-def action(msg):
-    "Display message with [*] prefix in verbose mode"
-    if _VERBOSE:
-        print("[*] {0}".format(msg))
+class NetTools:
+    """ NetTools"""
 
+    _NO_SERVICE_FOUND = 404
+    _SOME_ERROR = 206
+    _OK = 0
 
-def info(msg):
-    "Display message with [+] prefix in verbose mode"
-    if _VERBOSE:
-        print("[+] {0}".format(msg))
+    def __init__(self, verbose=False):
+        self.display = DisplayTools(verbose)
 
+    # -------------------------------------------------------------------------
+    # Check Service
+    # -------------------------------------------------------------------------
 
-def error(msg):
-    "Display message with [-] prefix in verbose mode"
-    if _VERBOSE:
-        print("[-] {0}".format(msg))
+    def check_best_tcp_service(
+        self,
+        service_list,
+        threshold=5,
+        algo="fastest",
+        last_used_first=False,
+        data_store="~/.check_services",
+        store=False,
+    ):
+        """ Check best service"""
 
+        _STORE = os.path.expanduser(data_store)
 
-def gotit(msg):
-    "Display message with [>] prefix in verbose mode"
-    if _VERBOSE:
-        print(" >  {0}".format(msg))
+        if last_used_first:
+            self.display.action("Get last used service from {}".format(_STORE))
+            # Use last use service first
+            try:
+                with open(_STORE, "r") as get_last_used:
+                    service_list.insert(0, get_last_used.readline().strip())
+            except FileNotFoundError:
+                self.display.error("Store file not found {}".format(_STORE))
 
+        best_time = threshold
+        best_service = None
+        best_status = NetTools._OK
 
-# -------------------------------------------------------------------------
-# Check Service
-# -------------------------------------------------------------------------
+        self.display.action(
+            "Search {} service with {} threshold\n".format(algo, threshold)
+        )
 
+        socket.setdefaulttimeout(threshold)
 
-def check_best_tcp_service(service_list, threshold=5, algo="fastest"):
-    """ Check best service"""
+        for cur_service in service_list:
 
-    best_time = threshold
-    best_service = None
-    best_status = _OK
+            cur_service = cur_service.strip()
+            try:
+                host, port = cur_service.split(":")
+            except ValueError:
+                self.display.error("Bad parameter ({0})".format(cur_service))
+                best_status = NetTools._SOME_ERROR
+                continue
 
-    action("Search {} service with {} threshold\n".format(algo, threshold))
+            self.display.action("host={0} port={1}".format(host, port))
+            # No more parameter check,let socket.connect check and
+            # catch error in exception
 
-    socket.setdefaulttimeout(threshold)
+            try:
+                time1 = time()
+                with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as a_socket:
+                    try:
+                        a_socket.connect((host, int(port)))
+                        time2 = time()
+                    except (TypeError, ValueError):
+                        self.display.error("Bad parameter")
+                        best_status = NetTools._SOME_ERROR
+                        continue
+                    except socket.timeout:
+                        self.display.error("Connect timeout error")
+                        best_status = NetTools._SOME_ERROR
+                        continue
+                    except socket.gaierror:
+                        self.display.error("Connect error")
+                        best_status = NetTools._SOME_ERROR
+                        continue
 
-    for cur_service in service_list:
+                if algo == "first_up":
+                    return _OK, cur_service
 
-        cur_service = cur_service.strip()
-        try:
-            host, port = cur_service.split(":")
-        except ValueError:
-            error("Bad parameter ({0})".format(cur_service))
-            best_status = _SOME_ERROR
-            continue
+                connect_time = time2 - time1
 
-        action("host={0} port={1}".format(host, port))
-        # No more parameter check,let socket.connect check and
-        # catch error in exception
+                if connect_time < best_time:
+                    best_time = connect_time
+                    best_service = cur_service
+                    self.display.gotit("{0} {1}".format(cur_service, connect_time))
+                else:
+                    self.display.info(" {0} {1}".format(cur_service, connect_time))
 
-        try:
-            time1 = time()
-            with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as a_socket:
-                try:
-                    a_socket.connect((host, int(port)))
-                    time2 = time()
-                except (TypeError, ValueError):
-                    error("Bad parameter")
-                    best_status = _SOME_ERROR
-                    continue
-                except socket.timeout:
-                    error("Connect timeout error")
-                    best_status = _SOME_ERROR
-                    continue
-                except socket.gaierror:
-                    error("Connect error")
-                    best_status = _SOME_ERROR
-                    continue
+            except OSError:
+                best_status = NetTools._SOME_ERROR
+                self.display.error("Socket error")
 
-            if algo == "first_up":
-                return _OK, cur_service
+        if store and best_service is not None:
+            # Update last used service
+            try:
+                with open(_STORE, "w") as get_last_used:
+                    get_last_used.write(str(best_service))
+                self.display.action(
+                    "Store last used service {} in {}".format(best_service, _STORE)
+                )
+            except OSError:
+                self.display.error(
+                    "Error storing last used service in {}".format(_STORE)
+                )
 
-            connect_time = time2 - time1
+        if best_service is None:
+            return NetTools._NO_SERVICE_FOUND, ""
 
-            if connect_time < best_time:
-                best_time = connect_time
-                best_service = cur_service
-                gotit("{0} {1}".format(cur_service, connect_time))
-            else:
-                info(" {0} {1}".format(cur_service, connect_time))
-
-        except OSError:
-            best_status = _SOME_ERROR
-            error("Socket error")
-
-    if best_service is None:
-        return _NO_SERVICE_FOUND, ""
-
-    return best_status, best_service
+        return best_status, best_service
 
 
 # -------------------------------------------------------------------------
@@ -174,28 +213,17 @@ if __name__ == "__main__":
     _VERBOSE = args.verbose
     _STORE = os.path.expanduser(args.last_used_store)
 
-    if args.last_used_first:
-        action("Get last used service from {}".format(_STORE))
-        # Use last use service first
-        try:
-            with open(_STORE, "r") as get_last_used:
-                args.service.insert(0, get_last_used.readline().strip())
-        except FileNotFoundError:
-            error("store fil not found {}".format(_STORE))
+    tools = NetTools(verbose=_VERBOSE)
 
     # Run check
-    (status, service) = check_best_tcp_service(
-        service_list=args.service, threshold=args.threshold, algo=args.algo
+    (status, service) = tools.check_best_tcp_service(
+        service_list=args.service,
+        threshold=args.threshold,
+        algo=args.algo,
+        last_used_first=args.last_used_first,
+        data_store=_STORE,
+        store=args.store,
     )
-
-    if args.store and service is not None:
-        # Update last used service
-        try:
-            with open(_STORE, "w") as get_last_used:
-                get_last_used.write(str(service))
-            action("Store last used service {} in {}".format(service, _STORE))
-        except OSError:
-            error("Error storing last used service in {}".format(_STORE))
 
     print(service)
     sys.exit(status)
