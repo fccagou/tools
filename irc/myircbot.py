@@ -6,26 +6,23 @@ import socket
 import string
 import time
 
-from  urllib import request
+from urllib import request
 
 
 def info(msg):
-   print("[+] {0}".format(msg))
-
-
-
+    print("[+] {0}".format(msg))
 
 
 class IRC:
 
     # Defaults values
-    irc_server="localhost"
-    irc_port=6667
-    irc_channel="#tuxoncloud"
-    my_love="fccagou"
-    my_irc_nick="cagoubot"
-    my_irc_user="cagoubot"
-    my_irc_realname="Cagou Bot"
+    irc_server = "localhost"
+    irc_port = 6667
+    irc_channel = "#tuxoncloud"
+    my_love = "fccagou"
+    my_irc_nick = "cagoubot"
+    my_irc_user = "cagoubot"
+    my_irc_realname = "Cagou Bot"
 
     # IRC protcol.
     #:fccagou!fccagou@localhost PRIVMSG toto :hello man
@@ -38,16 +35,23 @@ class IRC:
     irc_names = re.compile(":([^ ]*) ([^ ]*) ([^ ]*) = ([^ ]*) :(.*)")
 
     events_level = {
-            'none': 0,
-            'talk': 10,
-            'join': 50,
-            'love_present': 100,
-     }
+        "none": 0,
+        "talk": 10,
+        "join": 50,
+        "love_present": 100,
+    }
 
-
-    def __init__(self, irc_server="localhost", irc_port=6667, irc_channel="#tuxoncloud",
-            my_love="fccagou", my_irc_nick="cagoubot", my_irc_user="cagoubot", my_irc_realname="Cagou Bot",
-            pyap_url=None):
+    def __init__(
+        self,
+        irc_server="localhost",
+        irc_port=6667,
+        irc_channel="#tuxoncloud",
+        my_love="fccagou",
+        my_irc_nick="cagoubot",
+        my_irc_user="cagoubot",
+        my_irc_realname="Cagou Bot",
+        pyap_url=None,
+    ):
         self.irc_server = irc_server
         self.irc_port = irc_port
         self.irc_channel = irc_channel
@@ -59,20 +63,20 @@ class IRC:
         self.socket = None
         self.readbuffer = ""
         self.nb_hello_love = 0
-        self.last_event = IRC.events_level['none']
+        self.last_event = IRC.events_level["none"]
         self.pyap_url = pyap_url
 
     def connect(self):
         info("Server {0}:{1} connection...".format(self.irc_server, self.irc_port))
-        self.socket=socket.socket( )
+        self.socket = socket.socket()
         self.socket.connect((self.irc_server, self.irc_port))
 
-    def _send(self,msg):
+    def _send(self, msg):
         info(" >> {0}".format(msg))
         self.socket.send(bytes("{0}\r\n".format(msg), "UTF-8"))
 
     def _recv(self):
-        self.readbuffer = self.readbuffer+self.socket.recv(1024).decode("UTF-8")
+        self.readbuffer = self.readbuffer + self.socket.recv(1024).decode("UTF-8")
         data = str.split(self.readbuffer, "\n")
         self.readbuffer = data.pop()
         return data
@@ -81,12 +85,14 @@ class IRC:
         self._send("NICK {0}".format(self.my_irc_nick))
 
     def send_user(self):
-        self._send("USER {0} {1} bla :{2}".format(self.my_irc_user, self.irc_server, self.my_irc_realname))
-
+        self._send(
+            "USER {0} {1} bla :{2}".format(
+                self.my_irc_user, self.irc_server, self.my_irc_realname
+            )
+        )
 
     def send_mesg(self, to, msg):
         self._send("PRIVMSG {0} :{1}".format(to, msg))
-
 
     def talk_to_love(self, msg):
         if self.is_my_love_connected:
@@ -102,15 +108,18 @@ class IRC:
 
         info("Say hello to my love {0}".format(self.my_love))
         if self.nb_hello_love == 0:
-            self.talk_to_love("Hello {0}, how are U today ?".format(self.my_love, self.my_irc_nick))
+            self.talk_to_love(
+                "Hello {0}, how are U today ?".format(self.my_love, self.my_irc_nick)
+            )
             self.nb_hello_love = self.nb_hello_love + 1
         else:
-            self.talk_to_love("Welcome back {0}, I missed U !".format(self.my_love, self.my_irc_nick))
-
+            self.talk_to_love(
+                "Welcome back {0}, I missed U !".format(self.my_love, self.my_irc_nick)
+            )
 
     def join(self):
         self._send("JOIN {0}".format(self.irc_channel))
-        self.wait_until ("End of NAMES list")
+        self.wait_until("End of NAMES list")
         if self.is_my_love_connected:
             self.hello_love(tempo=3)
 
@@ -133,46 +142,47 @@ class IRC:
                     if self.is_my_love_connected:
                         self.notify_love_present()
 
-
     def external_notify(self, event_type):
         if self.last_event != event_type:
             self.last_event = event_type
             self.pyap_notify(self.last_event)
 
     def notify_love_present(self):
-        self.external_notify('love_present')
+        self.external_notify("love_present")
 
     def notify_new_join(self):
-        self.external_notify('join')
+        self.external_notify("join")
 
     def notify_new_talk(self):
-        if 'love_present' == self.last_event or IRC.events_level['talk'] > IRC.events_level[self.last_event]:
-            self.external_notify('talk')
+        if (
+            "love_present" == self.last_event
+            or IRC.events_level["talk"] > IRC.events_level[self.last_event]
+        ):
+            self.external_notify("talk")
 
     def pyap_notify(self, status):
         if self.pyap_url is not None:
             status_list = {
-                    'none': 'unknown',
-                    'love_present': 'security/ack ok',
-                    'join': 'security/ack critical security',
-                    'talk': 'security/ack warning security'
+                "none": "unknown",
+                "love_present": "security/ack ok",
+                "join": "security/ack critical security",
+                "talk": "security/ack warning security",
             }
 
             for s in status_list[status].split():
                 try:
-                    f = request.urlopen("{0}/{1}".format(self.pyap_url,s))
+                    f = request.urlopen("{0}/{1}".format(self.pyap_url, s))
                     f.close()
                     time.sleep(0.5)
                 except:
-                    info('Notification error ({0})'.format(s))
-
+                    info("Notification error ({0})".format(s))
 
     def serve(self):
 
         while 1:
             for line in self._recv():
                 line = str.rstrip(line)
-                print("<< {0}".format(line))
+                print("<< {0} {1}".format(time.ctime(), line))
 
                 if line.find("PING") == 0:
                     self.pong(line.split()[1])
@@ -182,9 +192,9 @@ class IRC:
                     if m and m[2] == self.my_love:
                         info("My love is joining")
                         self.is_my_love_connected = True
-                        self.notify_love_present ()
+                        self.notify_love_present()
                     else:
-                        self.notify_new_join ()
+                        self.notify_new_join()
 
                 if line.find("QUIT") > 0:
                     m = IRC.irc_quit.match(line)
@@ -196,46 +206,49 @@ class IRC:
                     info("Who commands ?")
                     m = IRC.irc_privmsg.match(line)
                     if not m:
-                       print("[-] REGEX ERROR")
+                        print("[-] REGEX ERROR")
                     else:
-                       # print("nick: {0}\nUser: {1}\nHost: {2}\nDest: {3}\nMsg: {4}".format(m.group(1), m.group(2), m.group(3), m.group(4), m.group(5)))
-                       from_nick = m[1]
-                       from_user = m[2]
-                       from_host = m[3]
-                       to = m[4]
-                       from_msg = m[5]
+                        # print("nick: {0}\nUser: {1}\nHost: {2}\nDest: {3}\nMsg: {4}".format(m.group(1), m.group(2), m.group(3), m.group(4), m.group(5)))
+                        from_nick = m[1]
+                        from_user = m[2]
+                        from_host = m[3]
+                        to = m[4]
+                        from_msg = m[5]
 
-                       if from_user == self.my_love:
-                           # Message from love
-                           self.notify_love_present ()
-                           if to == self.my_irc_nick:
-                               # Is talking to me
-                               if not self.is_my_love_connected:
-                                   # TODO: improve the case
-                                   info("WARNING Got a msg from love when not connected ...")
-                                   self.is_my_love_connected = True
-                                   self.hello_love()
+                        if from_user == self.my_love:
+                            # Message from love
+                            self.notify_love_present()
+                            if to == self.my_irc_nick:
+                                # Is talking to me
+                                if not self.is_my_love_connected:
+                                    # TODO: improve the case
+                                    info(
+                                        "WARNING Got a msg from love when not connected ..."
+                                    )
+                                    self.is_my_love_connected = True
+                                    self.hello_love()
 
-                               # Checking the question
-                               if "clear notification" in from_msg:
-                                   self.last_event = 'none'
-                                   self.notify_love_present ()
-                               else:
-                                   self.talk_to_love("Hum ... What do U mean by {0}".format(from_msg))
+                                # Checking the question
+                                if "clear notification" in from_msg:
+                                    self.last_event = "none"
+                                    self.notify_love_present()
+                                else:
+                                    self.talk_to_love(
+                                        "Hum ... What do U mean by {0}".format(from_msg)
+                                    )
 
-                       else:
-                          self.notify_new_talk ()
-                          # Someone else talking
-                          if to == self.my_irc_nick:
-                              # I fo not speak to unknown person.
-                              info("{0} is not my love !!".format(from_user))
-                              self.talk_to_love("ALERT {0} ".format(m[0]))
+                        else:
+                            self.notify_new_talk()
+                            # Someone else talking
+                            if to == self.my_irc_nick:
+                                # I fo not speak to unknown person.
+                                info("{0} is not my love !!".format(from_user))
+                                self.talk_to_love("ALERT {0} ".format(m[0]))
 
 
+def main(irc_bot):
 
-def main( irc_bot ):
-
-    server_connect_tempo=3
+    server_connect_tempo = 3
 
     irc_bot.connect()
     irc_bot.send_nick()
@@ -248,58 +261,82 @@ def main( irc_bot ):
     irc_bot.serve()
 
 
-
-
-
-if __name__ == '__main__':
+if __name__ == "__main__":
 
     # Process passed arguments.
     try:
         import argparse
+
         parser = argparse.ArgumentParser(
-            description='My IRC Bot',
-            )
+            description="My IRC Bot",
+        )
         USING_ARGPARSE = True
     except ImportError:
         import optparse
-        parser = optparse.OptionParser(
-            description='My IRC Bot.')
+
+        parser = optparse.OptionParser(description="My IRC Bot.")
         parser.parse_args_orig = parser.parse_args
         parser.parse_args = lambda: parser.parse_args_orig()[0]
         parser.add_argument = parser.add_option
         USING_ARGPARSE = False
 
-    parser.add_argument('--server', '-s', default = IRC.irc_server,
-                        help="irc server ({0})".format(IRC.irc_server))
-    parser.add_argument('--port', '-p', default = IRC.irc_port,
-                        help="irc port ({0})".format(IRC.irc_port))
-    parser.add_argument('--ircchannel', '-c', default = IRC.irc_channel,
-                        help="irc channel ({0})".format(IRC.irc_channel))
-    parser.add_argument('--mylove', '-m', default = IRC.my_love,
-                        help="Got only one love ({0}) <3".format(IRC.my_love))
-    parser.add_argument('--myircnick', '-n', default = IRC.my_irc_nick,
-                        help="My irc nick ({0})".format(IRC.my_irc_nick))
-    parser.add_argument('--myircuser', '-u', default = IRC.my_irc_user,
-                        help="My irc user ({0})".format(IRC.my_irc_user))
-    parser.add_argument('--myircrealname', '-r', default = IRC.my_irc_realname,
-                        help="My irc real name ({0})".format(IRC.my_irc_realname))
+    parser.add_argument(
+        "--server",
+        "-s",
+        default=IRC.irc_server,
+        help="irc server ({0})".format(IRC.irc_server),
+    )
+    parser.add_argument(
+        "--port", "-p", default=IRC.irc_port, help="irc port ({0})".format(IRC.irc_port)
+    )
+    parser.add_argument(
+        "--ircchannel",
+        "-c",
+        default=IRC.irc_channel,
+        help="irc channel ({0})".format(IRC.irc_channel),
+    )
+    parser.add_argument(
+        "--mylove",
+        "-m",
+        default=IRC.my_love,
+        help="Got only one love ({0}) <3".format(IRC.my_love),
+    )
+    parser.add_argument(
+        "--myircnick",
+        "-n",
+        default=IRC.my_irc_nick,
+        help="My irc nick ({0})".format(IRC.my_irc_nick),
+    )
+    parser.add_argument(
+        "--myircuser",
+        "-u",
+        default=IRC.my_irc_user,
+        help="My irc user ({0})".format(IRC.my_irc_user),
+    )
+    parser.add_argument(
+        "--myircrealname",
+        "-r",
+        default=IRC.my_irc_realname,
+        help="My irc real name ({0})".format(IRC.my_irc_realname),
+    )
 
-    parser.add_argument('--pyapurl', default = None,
-                        help="Define pyap url notifier (default is None)")
+    parser.add_argument(
+        "--pyapurl", default=None, help="Define pyap url notifier (default is None)"
+    )
 
     args = parser.parse_args()
 
-    irc_bot = IRC( irc_server=args.server
-            ,irc_port=args.port
-            ,irc_channel=args.ircchannel
-            ,my_love=args.mylove
-            ,my_irc_nick=args.myircnick
-            ,my_irc_user=args.myircuser
-            ,my_irc_realname=args.myircrealname
-            ,pyap_url = args.pyapurl
-            )
+    irc_bot = IRC(
+        irc_server=args.server,
+        irc_port=args.port,
+        irc_channel=args.ircchannel,
+        my_love=args.mylove,
+        my_irc_nick=args.myircnick,
+        my_irc_user=args.myircuser,
+        my_irc_realname=args.myircrealname,
+        pyap_url=args.pyapurl,
+    )
 
     main(irc_bot)
 
     os._exit(os.EX_OK)
-
