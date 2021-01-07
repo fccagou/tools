@@ -187,7 +187,7 @@ do
 	git remote add $m ${remote_repo}
 	git push --follow-tags $m $m:master
 
-	git remote rm $m
+	git remote remove $m
 
 done
 
