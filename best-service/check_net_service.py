@@ -120,7 +120,7 @@ class NetTools:
                         continue
 
                 if algo == "first_up":
-                    return _OK, cur_service
+                    return NetTools._OK, cur_service
 
                 connect_time = time2 - time1
 
