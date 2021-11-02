@@ -5,7 +5,7 @@
 # VARS
 #============================================================================
 
-PGM=${PGM:-$(basename $0)}
+PGM="${PGM:-$(basename "$0")}"
 # Variables
 RESTORE='\033[0m'
 RED='\033[00;31m'
@@ -61,7 +61,7 @@ action () {
 }
 
 info() {
-   printf -- "[*] ${*}"
+   printf -- "[*] %s" "${*}"
 }
 
 
@@ -86,7 +86,7 @@ banner
 
 export DOCKER_CONTENT_TRUST=0
 
-PREFIX="$(cd $(dirname $0); pwd)"
+PREFIX="$(cd "$(dirname "$0")"; pwd)"
 
 unset RUN_EL RUN_LOGSTASH RUN_KIBANA PULL
 
@@ -112,10 +112,11 @@ done
 
 
 
-VERSION=${1:-latest}
-CONFIG=${2:-${PREFIX}/${VERSION}/etc/logstash/config}
-PIPELINE=${3:-${PREFIX}/${VERSION}/etc/logstash/pipeline}
-LOGDIR=${4:-${PREFIX}/${VERSION}/log}
+VERSION="${1:-latest}"
+# Warning: unused
+CONFIG="${2:-${PREFIX}/${VERSION}/etc/logstash/config}"
+PIPELINE="${3:-${PREFIX}/${VERSION}/etc/logstash/pipeline}"
+LOGDIR="${4:-${PREFIX}/${VERSION}/log}"
 
 
 PRODUCTS='elasticsearch logstash kibana'
@@ -131,15 +132,15 @@ then
 	for p in ${PRODUCTS}
 	do
 		action "Pulling $p ${VERSION}"
-	    docker pull ${DOCKER_REPO}/${p}/${p}:${VERSION} | grep Status
-	    docker tag ${DOCKER_REPO}/${p}/${p}:${VERSION} $p:${VERSION}
+	    docker pull "${DOCKER_REPO}/${p}/${p}":"${VERSION}" | grep Status
+	    docker tag "${DOCKER_REPO}/${p}/${p}:${VERSION}" "$p":"${VERSION}"
 	done
 
 	for b in $BEATS
 	do
 		action "Pulling beat $b ${VERSION}"
-	    docker pull ${DOCKER_REPO}/beats/${b}:${VERSION} | grep Status
-	    docker tag ${DOCKER_REPO}/beats/${b}:${VERSION} $b:${VERSION}
+	    docker pull "${DOCKER_REPO}/beats/${b}":"${VERSION}" | grep Status
+	    docker tag "${DOCKER_REPO}/beats/${b}":"${VERSION}" "$b":"${VERSION}"
 	done
 
 	exit 0
@@ -155,7 +156,7 @@ then
     info "Using direcory as elastic data ${EL_DATA}\n"
     action "Running elasticsearch:${VERSION}\n"
     docker run --rm -p 9200:9200 \
-    	-v${EL_DATA}:/usr/share/elasticsearch/data:Z  \
+    	-v"${EL_DATA}":/usr/share/elasticsearch/data:Z  \
     	-e "http.host=0.0.0.0" \
     	-e "transport.host=127.0.0.1" \
     	-e "discovery.type=single-node" \
@@ -164,7 +165,7 @@ then
         -e "ELASTIC_CONTAINER=true" \
         -e "cluster.name=dobby-cluster" \
         -e "node.name=dobby" \
-    	--name="elasticsearch" docker.elastic.co/elasticsearch/elasticsearch:${VERSION} 2>&1 > ${LOGDIR}/elastic.log &
+    	--name="elasticsearch" docker.elastic.co/elasticsearch/elasticsearch:"${VERSION}" > "${LOGDIR}"/elastic.log 2>&1 &
 
     # -v full_path_to/custom_elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
 
@@ -190,16 +191,14 @@ fi
 if [ -n "${RUN_LOGSTASH}" ]
 then
 	action "Running logstash:${VERSION}\n"
-	docker run --rm  -p 5000:5000 -p5044:5044 -v${LOGDIR}:/logs -v ${PIPELINE}:/usr/share/logstash/pipeline:Z --name="logstash" --link elasticsearch:elasticsearch docker.elastic.co/logstash/logstash:${VERSION} &
+	docker run --rm  -p 5000:5000 -p5044:5044 -v"${LOGDIR}":/logs -v "${PIPELINE}":/usr/share/logstash/pipeline:Z --name="logstash" --link elasticsearch:elasticsearch docker.elastic.co/logstash/logstash:"${VERSION}" &
 
 fi
 
 if [ -n "${RUN_KIBANA}" ]
 then
 	action "Running kibana:${VERSION} / elasticsearch has IP ${EL_IP}\n"
-	docker run --rm -p 5601:5601 -e "http.host=0.0.0.0" -e "transport.host=127.0.0.1" --name="kibana" --link elasticsearch:elasticsearch docker.elastic.co/kibana/kibana:${VERSION} &
+	docker run --rm -p 5601:5601 -e "http.host=0.0.0.0" -e "transport.host=127.0.0.1" --name="kibana" --link elasticsearch:elasticsearch docker.elastic.co/kibana/kibana:"${VERSION}" &
 
 fi
 
-
-#
