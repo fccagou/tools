@@ -1,0 +1,4171 @@
+
+<!doctype html>
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Packages for 64-bit Linux with Python 3.7 &#8212; Anaconda 2.0 documentation</title>
+    <link rel="stylesheet" href="../../../_static/styles.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="https://media.readthedocs.com/css/badge_only.css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    <script type="text/javascript" src="https://media.readthedocs.com/javascript/readthedocs-doc-embed.js"></script>
+    <link rel="index" title="Index" href="../../../genindex/" />
+    <link rel="search" title="Search" href="../../../search/" />
+    <link rel="next" title="Packages for 64-bit Linux with Python 2.7" href="../py2.7_linux-64/" />
+    <link rel="prev" title="Packages for 64-bit Linux with Python 3.6" href="../py3.6_linux-64/" />
+<link rel="icon" href="../../../_static/img/favicon.ico" type="image/x-icon" />
+<meta name="msapplication-TileColor" content="#ffffff" />
+<meta name="theme-color" content="#ffffff" />
+<script type="text/javascript" src="../../../_static/vendor/jquery.jscrollpane.min.js"></script>
+<script type="text/javascript" src="../../../_static/vendor/anaconda.lib.min.js"></script>
+<script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+  
+<!-- RTD Extra Head -->
+
+<!-- 
+Always link to the latest version, as canonical.
+http://docs.readthedocs.org/en/latest/canonical.html
+-->
+<link rel="canonical" href="https://docs.anaconda.com/anaconda/packages/py3.7_linux-64/" />
+
+<link rel="stylesheet" href="https://media.readthedocs.com/css/readthedocs-doc-embed.css" type="text/css" />
+
+<script type="text/javascript" src="../../../_static/readthedocs-data.js"></script>
+
+<!-- Add page-specific data, which must exist in the page js, not global -->
+<script type="text/javascript">
+READTHEDOCS_DATA['page'] = "anaconda/packages/py3.7_linux-64"
+READTHEDOCS_DATA['source_suffix'] = ".rst"
+</script>
+
+<script type="text/javascript" src="https://media.readthedocs.com/javascript/readthedocs-analytics.js"></script>
+
+<!-- end RTD <extrahead> -->
+</head><body>
+
+
+<div class="off-canvas-wrap panels-layout-continuum_two_col">
+  <div class="inner-wrap">
+    <header class="brand-header">
+      <div class="content-wrapper">
+        <div class="columns col-xs-10 col-sm-6 col-md-6 col-lg-6">
+          <a class="image-link " href="../../../" role="button" aria-label="Anaconda. Click to return home.">
+            <img class="logo" alt="Anaconda" title="Anaconda" aria-hidden="true" src="../../../_static/images/logos/logo-docs.svg" />
+          </a>
+        </div>
+        <div class="columns col-xs-2 col-lg-3 col-sm-3 pull-right">
+          <div class="row">
+            <div class="pull-right">
+              <div class="header-search">
+                <a href="../../../search/" class="search__link">
+                  <span class="search__link-icon"></span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+    <div id="main-content">
+      <div class="content-wrapper"> 
+        <div class="breadcrumb-wrapper">
+          <div class="breadcrumb-container">
+            <button class="anchor toggle-sidebar menu-icon menu-icon">
+              <i class="fa fa-bars"></i>
+            </button>
+          </div>
+        </div>
+        <div>
+          <div class="layout-two-col">
+            <aside class="layout-two-col__second natural" id="layout-two-col-sidebar">
+              <div class="panel-pane pane-menu-tree pane-node-field-doc-navigation-menu"><!--#DOCS_SIDEBAR_BEGIN-->
+                <ul class="current">
+<li class="toctree-l1"><a class="reference external" href="https://docs.anaconda.com">Home</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://enterprise-docs.anaconda.com">Anaconda Enterprise 5</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../anaconda-enterprise-4/">Anaconda Enterprise 4</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../">Anaconda Distribution</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../../install/">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user-guide/">User guide</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../../reference/">Reference</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../../reference/glossary/">Glossary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../reference/release-notes/">Release notes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../reference/help-support/">Help and support</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../user-guide/troubleshooting/">Troubleshooting</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="../">Packages</a><ul class="current">
+<li class="toctree-l4 current"><a class="reference internal" href="../pkg-docs/">Anaconda package lists</a><ul class="current">
+<li class="toctree-l5"><a class="reference internal" href="../py3.6_win-64/">Packages for 64-bit Windows with Python 3.6</a></li>
+<li class="toctree-l5"><a class="reference internal" href="../py3.7_win-64/">Packages for 64-bit Windows with Python 3.7</a></li>
+<li class="toctree-l5"><a class="reference internal" href="../py2.7_win-64/">Packages for 64-bit Windows with Python 2.7</a></li>
+<li class="toctree-l5"><a class="reference internal" href="../py3.6_win-32/">Packages for 32-bit Windows with Python 3.6</a></li>
+<li class="toctree-l5"><a class="reference internal" href="../py3.7_win-32/">Packages for 32-bit Windows with Python 3.7</a></li>
+<li class="toctree-l5"><a class="reference internal" href="../py2.7_win-32/">Packages for 32-bit Windows with Python 2.7</a></li>
+<li class="toctree-l5"><a class="reference internal" href="../py3.6_osx-64/">Packages for macOS with Python 3.6</a></li>
+<li class="toctree-l5"><a class="reference internal" href="../py3.7_osx-64/">Packages for macOS with Python 3.7</a></li>
+<li class="toctree-l5"><a class="reference internal" href="../py2.7_osx-64/">Packages for macOS with Python 2.7</a></li>
+<li class="toctree-l5"><a class="reference internal" href="../py3.6_linux-64/">Packages for 64-bit Linux with Python 3.6</a></li>
+<li class="toctree-l5 current"><a class="current reference internal" href="#">Packages for 64-bit Linux with Python 3.7</a></li>
+<li class="toctree-l5"><a class="reference internal" href="../py2.7_linux-64/">Packages for 64-bit Linux with Python 2.7</a></li>
+<li class="toctree-l5"><a class="reference internal" href="../py3.6_linux-ppc64le/">Packages for 64-bit Linux on IBM Power CPUs with Python 3.6</a></li>
+<li class="toctree-l5"><a class="reference internal" href="../py3.7_linux-ppc64le/">Packages for 64-bit Linux on IBM Power CPUs with Python 3.7</a></li>
+<li class="toctree-l5"><a class="reference internal" href="../py2.7_linux-ppc64le/">Packages for 64-bit Linux on IBM Power CPUs with Python 2.7</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="../r-language-pkg-docs/">R language packages for Anaconda</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../docs-pkgs/">Documentation download packages</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../oldpkglists/">Old package lists</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../eula/">End User License Agreement</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../anaconda-cloud/">Anaconda Cloud</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../archive/">Archive</a></li>
+</ul>
+
+                <!--#DOCS_SIDEBAR_END--></div>
+            </aside>
+            <main class="layout-two-col__first">
+              <div class="panel-pane pane-node"  >
+                <div class="pane-content">
+                  <article class="basic-page">
+                    <!--#DOCS_CONTENT_BEGIN-->
+                    
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="packages-for-64-bit-linux-with-python-3-7">
+<h1>Packages for 64-bit Linux with Python 3.7<a class="headerlink" href="#packages-for-64-bit-linux-with-python-3-7" title="Permalink to this headline">¶</a></h1>
+<p>Platform: Linux 64-bit</p>
+<p>Python version: 3.7</p>
+<p>Number of supported packages: 661</p>
+<table border="1" class="docutils">
+  <tr class="row-odd">
+    <th>Name</th>
+    <th>Version</th>
+    <th>Summary / License</th>
+    <th>In Installer</th>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/ContinuumIO/anaconda-nb-extensions-meta-config">_ipyw_jlab_nb_ext_conf</a></td>
+    <td>0.1.0</td>
+    <td>A configuration metapackage for enabling Anaconda-bundled jupyter extensions / BSD</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="None">_libgcc_mutex</a></td>
+    <td>0.1</td>
+    <td>Mutex for libgcc and libgcc-ng / None</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/ContinuumIO/anaconda-nb-extensions-meta-config">_nb_ext_conf</a></td>
+    <td>0.4.0</td>
+    <td>A configuration metapackage for enabling Anaconda-bundled jupyter extensions / BSD</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/sgillies/affine">affine</a></td>
+    <td>2.2.2</td>
+    <td>Matrices describing affine transformation of the plane. / BSD 3-Clause</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="http://agate.readthedocs.org/">agate</a></td>
+    <td>1.6.1</td>
+    <td>A data analysis library that is optimized for humans instead of machines. / COPYING</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="http://agate-dbf.readthedocs.org/">agate-dbf</a></td>
+    <td>0.2.1</td>
+    <td>agate-dbf adds read support for dbf files to agate. / MIT</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://agate-excel.readthedocs.org/">agate-excel</a></td>
+    <td>0.2.3</td>
+    <td>agate-excel adds read support for Excel files (xls and xlsx) to agate. / MIT</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/aio-libs/aiobotocore">aiobotocore</a></td>
+    <td>0.10.2</td>
+    <td>Async client for aws services using botocore and aiohttp / Apache 2</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/Tinche/aiofiles">aiofiles</a></td>
+    <td>0.4.0</td>
+    <td>File support for asyncio / Apache 2.0</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/aio-libs/aiohttp">aiohttp</a></td>
+    <td>3.5.4</td>
+    <td>Async http client/server framework (asyncio) / Apache 2.0</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="http://www.sphinx-doc.org/en/stable/index.html">alabaster</a></td>
+    <td>0.7.12</td>
+    <td>Configurable, Python 2+3 compatible Sphinx theme. / BSD 3-Clause</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="https://bitbucket.org/zzzeek/alembic">alembic</a></td>
+    <td>1.0.10</td>
+    <td>A database migration tool for SQLAlchemy. / MIT</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/ContinuumIO/anaconda-clean">anaconda-clean</a></td>
+    <td>1.1.0</td>
+    <td>Delete Anaconda configuration files / BSD</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="http://anaconda.org">anaconda-client</a></td>
+    <td>1.7.2</td>
+    <td>anaconda.org command line client library / BSD 3-clause</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/ContinuumIO/navigator">anaconda-navigator</a></td>
+    <td>1.9.6</td>
+    <td>Anaconda Navigator / proprietary - Continuum Analytics, Inc.</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/Anaconda-Platform/anaconda-project">anaconda-project</a></td>
+    <td>0.8.3</td>
+    <td>Tool for encapsulating, running, and reproducing data science projects / BSD 3-Clause</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/ContinuumIO/anaconda-verify">anaconda-verify</a></td>
+    <td>1.3.8</td>
+    <td>tool for (passively) verifying conda recipes and conda packages / BSD</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://pypi.python.org/pypi/ansi2html">ansi2html</a></td>
+    <td>1.5.2</td>
+    <td>Convert text with ANSI color codes to HTML or to LaTeX. / LGPLv3+</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="http://ant.apache.org/">ant</a></td>
+    <td>1.9.9</td>
+    <td>Java build tool / Apache 2.0</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/ales-erjavec/anyqt/">anyqt</a></td>
+    <td>0.0.10</td>
+    <td>PyQt4/PyQt5 compatibility layer. / GPL-3.0</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="http://github.com/ActiveState/appdirs">appdirs</a></td>
+    <td>1.4.3</td>
+    <td>A small Python module for determining appropriate platform-specific dirs. / MIT</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="http://docs.enthought.com/apptools/">apptools</a></td>
+    <td>4.4.0</td>
+    <td>application tools / BSD 3-clause</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/kislyuk/argcomplete">argcomplete</a></td>
+    <td>1.10.0</td>
+    <td>Bash tab completion for argparse / Apache 2.0</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/crsmithdev/arrow">arrow</a></td>
+    <td>0.13.1</td>
+    <td>Better dates & times for Python. / Apache-2.0</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/wbond/asn1crypto">asn1crypto</a></td>
+    <td>0.24.0</td>
+    <td>Python ASN.1 library with a focus on performance and a pythonic API / MIT</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="https://www.astroid.org/">astroid</a></td>
+    <td>2.2.5</td>
+    <td>A abstract syntax tree for Python with inference support. / LGPL 2.1</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="http://www.astropy.org/">astropy</a></td>
+    <td>3.2.1</td>
+    <td>Community-developed Python Library for Astronomy / BSD</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="http://github.com/aio-libs/async_timeout">async-timeout</a></td>
+    <td>3.0.1</td>
+    <td>Timeout context manager for asyncio programs / Apache 2.0</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/MagicStack/asyncpg">asyncpg</a></td>
+    <td>0.18.3</td>
+    <td>A fast PostgreSQL Database Client Library for Python/asyncio. / Apache 2.0</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/canopytax/asyncpgsa">asyncpgsa</a></td>
+    <td>0.26.0</td>
+    <td>A fast PostgreSQL Database Client Library for Python/asyncio. / Apache 2.0</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/untitaker/python-atomicwrites">atomicwrites</a></td>
+    <td>1.3.0</td>
+    <td>Atomic file writes / MIT</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="https://attrs.readthedocs.io/en/stable/">attrs</a></td>
+    <td>19.1.0</td>
+    <td>attrs is the Python package that will bring back the joy of writing classes by relieving you from the drudgery of implementing object protocols (aka dunder methods). / MIT</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="http://www.gnu.org/software/automake/">automake</a></td>
+    <td>1.16.1</td>
+    <td>Tool for automatically generating Makefile.in files compliant with the GNU Coding Standards. / GPL3</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/glyph/Automat">automat</a></td>
+    <td>0.7.0</td>
+    <td>self-service finite-state machines for the programmer on the go / MIT</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/jupyter-incubator/sparkmagic/tree/master/autovizwidget">autovizwidget</a></td>
+    <td>0.12.7</td>
+    <td>An Auto-Visualization library for pandas dataframes / BSD 3-clause</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/Azure/azure-sdk-for-python">azure</a></td>
+    <td>1.0.2</td>
+    <td>Microsoft Azure SDK for Python / Apache License 2.0</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="http://babel.pocoo.org/">babel</a></td>
+    <td>2.7.0</td>
+    <td>Utilities to internationalize and localize Python applications / BSD 3-clause</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/takluyver/backcall/">backcall</a></td>
+    <td>0.1.0</td>
+    <td>Specifications for callback functions passed in to an API / BSD-3-Clause</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="https://bitbucket.org/brandon/backports">backports</a></td>
+    <td>1.0</td>
+    <td>None / BSD</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/pjdelport/backports.os">backports.os</a></td>
+    <td>0.1.1</td>
+    <td>Backport of new features in Python's os module / Python Software Foundation</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/chrippa/backports.shutil_get_terminal_size">backports.shutil_get_terminal_size</a></td>
+    <td>1.0.0</td>
+    <td>A backport of the get_terminal_size function from Python 3.3's shutil. / MIT</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/pjdelport/backports.weakref">backports.weakref</a></td>
+    <td>1.0.post1</td>
+    <td>Backport of new features in Python's weakref module / Python-2.0</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="http://bitbucket.org/pypa/bandersnatch/">bandersnatch</a></td>
+    <td>3.2.0</td>
+    <td>PyPI mirror client according to PEP 381 / Academic Free License</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="http://matplotlib.org/basemap">basemap</a></td>
+    <td>1.2.0</td>
+    <td>Plot on map projections using matplotlib / MIT</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="http://github.com/Blosc/bcolz">bcolz</a></td>
+    <td>1.2.1</td>
+    <td>A columnar data container that can be compressed / MIT</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/pyca/bcrypt/">bcrypt</a></td>
+    <td>3.1.6</td>
+    <td>modern password hashing for your software and your servers / Apache License, Version 2.0</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="http://www.crummy.com/software/BeautifulSoup/">beautifulsoup4</a></td>
+    <td>4.7.1</td>
+    <td>Python library designed for screen-scraping / MIT</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="http://biopython.org">biopython</a></td>
+    <td>1.73</td>
+    <td>Collection of freely available tools for computational molecular biology / Biopython License Agreement</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/ilanschnell/bitarray">bitarray</a></td>
+    <td>0.9.3</td>
+    <td>efficient arrays of booleans -- C extension / PSF</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="http://github.com/bokeh/bkcharts">bkcharts</a></td>
+    <td>0.2</td>
+    <td>High level chart types built on top of Bokeh / BSD 3-Clause</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="None">blas</a></td>
+    <td>1.0</td>
+    <td>None / None</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="http://blaze.pydata.org">blaze</a></td>
+    <td>0.11.3</td>
+    <td>NumPy and Pandas interface to big data / BSD 3-Clause</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/mozilla/bleach">bleach</a></td>
+    <td>3.1.0</td>
+    <td>Easy, whitelist-based HTML-sanitizing tool / Apache-2.0</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="http://stutzbachenterprises.com/blist/">blist</a></td>
+    <td>1.3.6</td>
+    <td>Replacement for Python lists with better performance / BSD 3-clause</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/Blosc/c-blosc">blosc</a></td>
+    <td>1.16.3</td>
+    <td>A blocking, shuffling and loss-less compression library that can be faster than `memcpy()` / BSD 3-Clause</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="http://bokeh.pydata.org/">bokeh</a></td>
+    <td>1.2.0</td>
+    <td>Statistical and novel interactive HTML plots for Python / BSD 3-Clause</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="http://www.boost.org/">boost</a></td>
+    <td>1.67.0</td>
+    <td>Free peer-reviewed portable C++ source libraries. / Boost-1.0</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/boto/boto/">boto</a></td>
+    <td>2.49.0</td>
+    <td>Amazon Web Services Library / MIT</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="https://aws.amazon.com/sdk-for-python">boto3</a></td>
+    <td>1.9.162</td>
+    <td>Amazon Web Services SDK for Python / Apache 2.0</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="http://aws.amazon.com/sdk-for-python/">botocore</a></td>
+    <td>1.12.163</td>
+    <td>Low-level, data-driven core of boto 3. / Apache 2.0</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/biolab/bottlechest">bottlechest</a></td>
+    <td>0.7.1</td>
+    <td>fast NumPy array functions specialized for use in Orange / BSD</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="http://berkeleyanalytics.com/bottleneck">bottleneck</a></td>
+    <td>1.2.1</td>
+    <td>Fast NumPy array functions written in Cython. / BSD 2-Clause</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/ilanschnell/bsdiff4">bsdiff4</a></td>
+    <td>1.1.5</td>
+    <td>binary diff and patch using the BSDIFF4-format / BSD</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="http://packages.python.org/BTrees">btrees</a></td>
+    <td>4.5.1</td>
+    <td>scalable persistent object containers / ZPL 2.1</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/nvawda/bz2file">bz2file</a></td>
+    <td>0.98</td>
+    <td>Read and write bzip2-compressed files. / Apache Software</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="http://www.bzip.org/">bzip2</a></td>
+    <td>1.0.8</td>
+    <td>high-quality data compressor / bzip2</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/conda-forge/ca-certificates-feedstock">ca-certificates</a></td>
+    <td>2019.5.15</td>
+    <td>Certificates for use with other packages. / ISC</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/ionrock/cachecontrol">cachecontrol</a></td>
+    <td>0.12.5</td>
+    <td>httplib2 caching algorithms for use with requests / Apache-2.0</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/pydanny/cached-property">cached-property</a></td>
+    <td>1.5.1</td>
+    <td>A decorator for caching properties in classes. / BSD-3-Clause</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="http://cairographics.org/">cairo</a></td>
+    <td>1.14.12</td>
+    <td>Cairo is a 2D graphics library with support for multiple output devices. / LGPL 2.1 or MPL 1.1</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="https://capturer.readthedocs.org">capturer</a></td>
+    <td>2.4</td>
+    <td>Easily capture stdout/stderr of the current process and subprocesses. / MIT</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="http://scitools.org.uk/cartopy">cartopy</a></td>
+    <td>0.17.0</td>
+    <td>A library providing cartographic tools for python. / LGPL-3.0</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="http://certifi.io/">certifi</a></td>
+    <td>2019.6.16</td>
+    <td>Python package for providing Mozilla's CA Bundle. / ISC</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="https://bitbucket.org/cffi/cffi">cffi</a></td>
+    <td>1.12.3</td>
+    <td>Foreign Function Interface for Python calling C code. / MIT</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="https://chainer.org/">chainer</a></td>
+    <td>5.3.0</td>
+    <td>A flexible framework of neural networks / MIT License</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/Anaconda-Server/chalmers">chalmers</a></td>
+    <td>0.8.0</td>
+    <td>Monitor and control a number of processes on any operating system / MIT</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://chameleon.readthedocs.org">chameleon</a></td>
+    <td>3.6</td>
+    <td>HTML/XML template engine for Python / Repoze</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/chardet/chardet">chardet</a></td>
+    <td>3.0.4</td>
+    <td>Universal character encoding detector / LGPL2</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="http://www.cherrypy.org">cherrypy</a></td>
+    <td>18.1.1</td>
+    <td>Object-Oriented HTTP framework / BSD 3-Clause</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/ContinuumIO/chest">chest</a></td>
+    <td>0.2.3</td>
+    <td>Simple on-disk dictionary / BSD 3-Clause</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="http://packages.qa.debian.org/c/chrpath.html">chrpath</a></td>
+    <td>0.16</td>
+    <td>Tool to edit the rpath in ELF binaries / GPL2</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://palletsprojects.com/p/click">click</a></td>
+    <td>7.0</td>
+    <td>Python composable command line interface toolkit / BSD-3-Clause</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/click-contrib/click-plugins">click-plugins</a></td>
+    <td>1.1.1</td>
+    <td>An extension module for click to enable registering CLI commands via setuptools entry-points / BSD-3-Clause</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/mapbox/cligj">cligj</a></td>
+    <td>0.5.0</td>
+    <td>Click params for commmand line interfaces to GeoJSON. / BSD 3-Clause</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/cloudpipe/cloudpickle">cloudpickle</a></td>
+    <td>1.2.1</td>
+    <td>Extended pickling support for Python objects / BSD 3-Clause</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/Anaconda-Platform/clyent">clyent</a></td>
+    <td>1.2.2</td>
+    <td>Command line client library for windows and posix / BSD 3-Clause</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="http://www.cmake.org/">cmake</a></td>
+    <td>3.14.0</td>
+    <td>CMake is an extensible, open-source system that manages the build process / BSD 3-clause</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/Pylons/colander">colander</a></td>
+    <td>1.7.0</td>
+    <td>A serialization, deserialization, and validation library / BSD-like</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/tartley/colorama">colorama</a></td>
+    <td>0.4.1</td>
+    <td>Cross-platform colored terminal text / BSD-3-Clause</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="http://github.com/pyviz/colorcet">colorcet</a></td>
+    <td>2.0.1</td>
+    <td>Collection of perceptually uniform colormaps / CC-BY-4.0</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://conda.io">conda</a></td>
+    <td>4.7.10</td>
+    <td>OS-agnostic, system-level binary package and environment manager. / BSD 3-Clause</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/conda/conda-build">conda-build</a></td>
+    <td>3.18.9</td>
+    <td>tools for building conda packages / BSD 3-Clause</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/scitools/conda-build-all">conda-build-all</a></td>
+    <td>1.0.2</td>
+    <td>conda build-all is a conda subcommand providing matrix building / BSD 3-clause</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/conda/conda-env">conda-env</a></td>
+    <td>2.6.0</td>
+    <td>Tools for interacting with conda environments. / BSD 3-Clause</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/spyder-ide/conda-manager">conda-manager</a></td>
+    <td>0.4.0</td>
+    <td>Graphical conda package manager / MIT</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/conda/conda-verify">conda-verify</a></td>
+    <td>3.4.2</td>
+    <td>tool for validating conda recipes and conda packages / BSD 3-Clause</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/zorro3/ConfigArgParse">configargparse</a></td>
+    <td>0.14.0</td>
+    <td>replacement for argparse allowing options to be set via config files and/or env vars / MIT</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/DiffSK/configobj">configobj</a></td>
+    <td>5.0.6</td>
+    <td>Config file reading, writing and validation. / BSD License</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/twisted/constantly">constantly</a></td>
+    <td>15.1.0</td>
+    <td>Symbolic constants in Python / MIT</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="http://github.com/conda/constructor">constructor</a></td>
+    <td>2.3.0</td>
+    <td>create installer from conda packages / BSD 3-Clause</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="http://contextlib2.readthedocs.org">contextlib2</a></td>
+    <td>0.5.5</td>
+    <td>Backports and enhancements for the contextlib module / PSF</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="http://cornice.readthedocs.org/">cornice</a></td>
+    <td>3.5.1</td>
+    <td>build and document Web Services with Pyramid / MPL 2.0</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://coverage.readthedocs.io">coverage</a></td>
+    <td>4.5.3</td>
+    <td>Code coverage measurement for Python / Apache 2.0</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/pyca/cryptography">cryptography</a></td>
+    <td>2.7</td>
+    <td>Provides cryptographic recipes and primitives to Python developers / Apache 2.0 or BSD 3-Clause, PSF 2</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="https://pythonhosted.org/cssselect/">cssselect</a></td>
+    <td>1.0.3</td>
+    <td>CSS Selectors for Python / BSD 3-Clause</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://csvkit.rtfd.org/">csvkit</a></td>
+    <td>1.0.4</td>
+    <td>A suite of command-line tools for working with CSV, the king of tabular file formats. / MIT</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="http://cubes.databrewery.org/">cubes</a></td>
+    <td>1.1</td>
+    <td>A light-weight Python OLAP framework for data warehouses / MIT</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://developer.nvidia.com/cuda-toolkit">cudatoolkit</a></td>
+    <td>10.1.168</td>
+    <td>development environment for GPU-accelerated applications / proprietary - Nvidia</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="None">cudnn</a></td>
+    <td>7.6.0</td>
+    <td>NVIDIA's cuDNN deep neural network acceleration library / Proprietary</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="http://curl.haxx.se/">curl</a></td>
+    <td>7.65.2</td>
+    <td>tool and library for transferring data with URL syntax / MIT/X derivate (http://curl.haxx.se/docs/copyright.html)</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/jacklzhu/CVXcanon">cvxcanon</a></td>
+    <td>0.1.1</td>
+    <td>Low-level library to perform the matrix building step in CVXPY / GPL3</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="http://cvxopt.org">cvxopt</a></td>
+    <td>1.2.0</td>
+    <td>Convex optimization package / GPL 3</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="http://matplotlib.org/cycler">cycler</a></td>
+    <td>0.10.0</td>
+    <td>Composable style cycles. / BSD 3-Clause</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="http://www.cython.org/">cython</a></td>
+    <td>0.29.12</td>
+    <td>The Cython compiler for writing C extensions for the Python language / Apache-2.0</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/pytoolz/cytoolz">cytoolz</a></td>
+    <td>0.10.0</td>
+    <td>Cython implementation of Toolz. High performance functional utilities / BSD-3-Clause</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="https://dask.org/">dask</a></td>
+    <td>2.1.0</td>
+    <td>Parallel PyData with Task Scheduling / BSD 3-Clause</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="http://github.com/dask/dask/">dask-core</a></td>
+    <td>2.1.0</td>
+    <td>Parallel Python with task scheduling / BSD 3-Clause</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="http://github.com/dask/dask-glm">dask-glm</a></td>
+    <td>0.2.0</td>
+    <td>Generalized Linear Models in Dask / BSD-3-Clause</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="http://github.com/dask/dask-ml">dask-ml</a></td>
+    <td>0.13.0</td>
+    <td>Distributed and parallel machine learning using dask. / BSD-3-Clause</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="http://dask-searchcv.readthedocs.io/">dask-searchcv</a></td>
+    <td>0.2.0</td>
+    <td>Tools for doing hyperparameter search with Scikit-Learn and Dask / BSD-3-Clause</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="http://datashader.org">datashader</a></td>
+    <td>0.7.0</td>
+    <td>Data visualization toolchain based on aggregating into a grid / BSD-3-Clause</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="http://datashape.pydata.org">datashape</a></td>
+    <td>0.5.4</td>
+    <td>A data description language. / BSD 2-Clause</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/kmike/datrie/">datrie</a></td>
+    <td>0.7.1</td>
+    <td>Super-fast, efficiently stored Trie for Python, uses libdatrie / LGPLv2</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="http://www.oracle.com/technology/software/products/berkeley-db/index.html">db</a></td>
+    <td>6.1.26</td>
+    <td>The Berkeley DB embedded database system. / AGPL-3.0</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://pypi.python.org/pypi/dbf">dbf</a></td>
+    <td>0.98.0</td>
+    <td>Pure python package for reading/writing dBase, FoxPro, and Visual FoxPro .dbf files (including memos) / BSD 3-clause</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="http://www.freedesktop.org/wiki/Software/dbus/">dbus</a></td>
+    <td>1.13.6</td>
+    <td>Simple message bus system for applications to talk to one another / GPL2</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/micheles/decorator">decorator</a></td>
+    <td>4.4.0</td>
+    <td>Better living through Python with decorators. / BSD 3-Clause</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="https://bitbucket.org/tiran/defusedxml">defusedxml</a></td>
+    <td>0.6.0</td>
+    <td>XML bomb protection for Python stdlib modules / PSF 2.0</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="http://www.cacr.caltech.edu/~mmckerns/dill.htm">dill</a></td>
+    <td>0.2.9</td>
+    <td>Serialize all of python (almost) / BSD 3-Clause</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://bitbucket.org/pypa/distlib">distlib</a></td>
+    <td>0.2.8</td>
+    <td>Distribution utilities / Python Software Foundation License</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="http://distributed.readthedocs.io/en/latest/">distributed</a></td>
+    <td>2.1.0</td>
+    <td>Distributed computing with Dask / BSD 3-Clause</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="http://www.djangoproject.com/">django</a></td>
+    <td>2.2.1</td>
+    <td>A high-level Python Web framework that encourages rapid development and clean, pragmatic design. / BSD 3-Clause</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="http://www.dnspython.org">dnspython</a></td>
+    <td>1.16.0</td>
+    <td>A DNS toolkit for Python / BSD-like</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="http://docopt.org">docopt</a></td>
+    <td>0.6.2</td>
+    <td>Pythonic argument parser, that will make you smile / MIT</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="http://docutils.sourceforge.net/">docutils</a></td>
+    <td>0.14</td>
+    <td>Docutils -- Python Documentation Utilities / Public Domain Dedictation and BSD 2-Clause and PSF 2.1.1 and GPL 3.0</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/dropbox/dropbox-sdk-python">dropbox</a></td>
+    <td>9.3.0</td>
+    <td>Official Dropbox API Client / MIT</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="http://github.com/warner/python-ecdsa">ecdsa</a></td>
+    <td>0.13</td>
+    <td>ECDSA cryptographic signature library (pure Python) / MIT</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://www.embotech.com/ECOS">ecos</a></td>
+    <td>2.0.5</td>
+    <td>Embedded Conic Solver (ECOS) / GPL3</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/elastic/elasticsearch-py">elasticsearch</a></td>
+    <td>7.0.2</td>
+    <td>Python client for Elasticsearch / Apache 2.0</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/elastic/elasticsearch-py-async">elasticsearch-async</a></td>
+    <td>6.2.0</td>
+    <td>Async backend for elasticsearch-py / Apache 2.0</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/elasticsearch/elasticsearch-dsl-py">elasticsearch-dsl</a></td>
+    <td>7.0.0</td>
+    <td>Higher-level Python client for Elasticsearch / Apache 2.0</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/nucleic/enaml">enaml</a></td>
+    <td>0.10.3</td>
+    <td>Declarative DSL for building rich user interfaces in Python / BSD 3-clause</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/takluyver/entrypoints">entrypoints</a></td>
+    <td>0.3</td>
+    <td>Discover and load entry points from installed packages. / MIT License</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="http://docs.enthought.com/envisage/">envisage</a></td>
+    <td>4.7.2</td>
+    <td>Extensible application framework / BSD 3-clause</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="http://rhodesmill.org/pyephem/">ephem</a></td>
+    <td>3.7.6.0</td>
+    <td>Basic astronomical computations for Python / LGPL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://bitbucket.org/openpyxl/et_xmlfile">et_xmlfile</a></td>
+    <td>1.0.1</td>
+    <td>An implementation of lxml.xmlfile for the standard library / MIT</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="http://expat.sourceforge.net/">expat</a></td>
+    <td>2.2.6</td>
+    <td>Expat XML parser library in C. / MIT</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/pbrady/fastcache">fastcache</a></td>
+    <td>1.1.0</td>
+    <td>C implementation of Python 3 lru_cache / MIT</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="http://github.com/dask/fastparquet">fastparquet</a></td>
+    <td>0.3.0</td>
+    <td>Python interface to the parquet format / BSD-3</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/kurtmckee/feedparser">feedparser</a></td>
+    <td>5.2.1</td>
+    <td>parse feeds in Python / OSI Approved</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/benediktschmitt/py-filelock">filelock</a></td>
+    <td>3.0.12</td>
+    <td>A platform independent file lock. / Public Domain</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="http://github.com/Toblerity/Fiona">fiona</a></td>
+    <td>1.8.4</td>
+    <td>Fiona reads and writes spatial data files / BSD-3-Clause</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="http://flake8.pycqa.org/">flake8</a></td>
+    <td>3.7.7</td>
+    <td>Your Tool For Style Guide Enforcement / MIT</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="http://flask.pocoo.org">flask</a></td>
+    <td>1.1.1</td>
+    <td>A microframework based on Werkzeug, Jinja2 and good intentions. / BSD 3-Clause</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/corydolphin/flask-cors">flask-cors</a></td>
+    <td>3.0.7</td>
+    <td>A Flask extension adding a decorator for CORS support / MIT</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/maxcountryman/flask-login">flask-login</a></td>
+    <td>0.4.1</td>
+    <td>User session management for Flask / MIT</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/miguelgrinberg/Flask-SocketIO/">flask-socketio</a></td>
+    <td>2.8.5</td>
+    <td>Socket.IO integration for Flask applications / MIT</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/lepture/flask-wtf">flask-wtf</a></td>
+    <td>0.14.2</td>
+    <td>Simple integration of Flask and WTForms / BSD 3-Clause</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="http://www.freedesktop.org/wiki/Software/fontconfig/">fontconfig</a></td>
+    <td>2.13.0</td>
+    <td>A library for configuring and customizing font access. / MIT</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="http://freeimage.sourceforge.net/">freeimage</a></td>
+    <td>3.17.0</td>
+    <td>Supports popular graphics image formats like PNG, BMP, JPEG, TIFF / GPLv2 and FreeImage Public License</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="http://www.freetds.org/">freetds</a></td>
+    <td>1.00.97</td>
+    <td>FreeTDS is a free implementation of Sybase's DB-Library, CT-Library, and ODBC libraries / GPL-2</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://www.freetype.org/">freetype</a></td>
+    <td>2.9.1</td>
+    <td>A Free, High-Quality, and Portable Font Engine / GPL-2.0 and FreeType</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/fribidi/fribidi">fribidi</a></td>
+    <td>1.0.5</td>
+    <td>The Free Implementation of the Unicode Bidirectional Algorithm. / LGPL-2.1</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/mila-udem/fuel.git">fuel</a></td>
+    <td>0.2.0</td>
+    <td>data pipeline framework for machine learning / MIT License</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/gruns/furl">furl</a></td>
+    <td>2.0.0</td>
+    <td>URL manipulation made simple. / PUBLIC-DOMAIN</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="http://python-future.org">future</a></td>
+    <td>0.17.1</td>
+    <td>Clean single-source support for Python 3 and 2 / MIT</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="http://www.gdal.org">gdal</a></td>
+    <td>2.3.3</td>
+    <td>GDAL is a translator library for raster and vector geospatial data formats that is released under an X/MIT style Open Source license by the Open Source Geospatial Foundation. / MIT</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="http://github.com/RaRe-Technologies/gensim">gensim</a></td>
+    <td>3.4.0</td>
+    <td>Topic Modelling for Humans / LGPL-3.0</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="http://trac.osgeo.org/geos/">geos</a></td>
+    <td>3.7.1</td>
+    <td>Geometry Engine - Open Source. / LGPLv2.1</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/chrippa/backports.shutil_get_terminal_size">get_terminal_size</a></td>
+    <td>1.0.0</td>
+    <td>Get the size of the terminal window. / MIT</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="http://www.gevent.org/">gevent</a></td>
+    <td>1.4.0</td>
+    <td>Coroutine-based network library / MIT</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="https://bitbucket.org/noppo/gevent-websocket">gevent-websocket</a></td>
+    <td>0.10.1</td>
+    <td>Websocket handler for the gevent pywsgi server, a Python network library / Apache</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://git-scm.com/">git</a></td>
+    <td>2.20.1</td>
+    <td>distributed version control system / GPL v2 and LGPL 2.1</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/gitpython-developers/GitPython">gitpython</a></td>
+    <td>2.1.11</td>
+    <td>Python Git Library / BSD 3-Clause</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://developer.gnome.org/glib/">glib</a></td>
+    <td>2.56.2</td>
+    <td>Provides core application building blocks for libraries and applications written in C. / LGPL-2.1</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/miracle2k/python-glob2">glob2</a></td>
+    <td>0.7</td>
+    <td>Version of the glob module that supports recursion via **, and can capture patterns. / BSD-2-Clause</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="http://glueviz.org">glue-core</a></td>
+    <td>0.14.2</td>
+    <td>Multi-dimensional linked data exploration / BSD 3-Clause</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="http://glueviz.org">glue-vispy-viewers</a></td>
+    <td>0.11</td>
+    <td>3D viewers for Glue / BSD 3-Clause</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="http://glueviz.org">glueviz</a></td>
+    <td>0.13.3</td>
+    <td>Multi-dimensional linked data exploration / BSD 3-Clause</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="http://gmplib.org/">gmp</a></td>
+    <td>6.1.2</td>
+    <td>The GNU multiprecision library. / GPL 2 and LGPL 3</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="https://pypi.python.org/pypi/gmpy2">gmpy2</a></td>
+    <td>2.0.8</td>
+    <td>GMP/MPIR, MPFR, and MPC interface to Python 2.6+ and 3.x / LGPL 3</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="http://graphite.sil.org/">graphite2</a></td>
+    <td>1.3.13</td>
+    <td>A "smart font" system that handles the complexities of lesser-known languages of the world. / LGPLv2</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="http://www.graphviz.org/">graphviz</a></td>
+    <td>2.40.1</td>
+    <td>Open Source graph visualization software. / EPL v1.0</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/python-greenlet/greenlet">greenlet</a></td>
+    <td>0.4.15</td>
+    <td>Lightweight in-process concurrent programming / MIT</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="http://github.com/EducationalTestingService/gridmap">gridmap</a></td>
+    <td>0.14.0</td>
+    <td>Map Python functions onto a cluster using a grid engine / GPL3</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="http://www.gnu.org/software/gsl/">gsl</a></td>
+    <td>2.4</td>
+    <td>GNU Scientific Library / GPL-3.0</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="http://gstreamer.freedesktop.org/">gst-plugins-base</a></td>
+    <td>1.14.0</td>
+    <td>GStreamer Base Plug-ins / GPL2</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="http://gstreamer.freedesktop.org/">gstreamer</a></td>
+    <td>1.14.0</td>
+    <td>Library for constructing graphs of media-handling components / LGPL 2</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="http://gunicorn.org">gunicorn</a></td>
+    <td>19.9.0</td>
+    <td>WSGI HTTP Server for UNIX / MIT</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="None">h2o</a></td>
+    <td>3.18.0.2</td>
+    <td>hadoop-centric machine learning (core java package) / None</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="None">h2o-py</a></td>
+    <td>3.18.0.2</td>
+    <td>fast, scalable machine learning (python interface) / None</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="http://www.h5py.org/">h5py</a></td>
+    <td>2.9.0</td>
+    <td>Read and write HDF5 files from Python. / BSD-3-Clause</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="http://www.freedesktop.org/wiki/Software/HarfBuzz/">harfbuzz</a></td>
+    <td>1.8.8</td>
+    <td>An OpenType text shaping engine. / MIT</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="http://www.hdfgroup.org/HDF4/">hdf4</a></td>
+    <td>4.2.13</td>
+    <td>Library and multi-object file format for storing and managing data between machines. / BSD 3-Clause</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="http://www.hdfgroup.org/HDF5/">hdf5</a></td>
+    <td>1.10.4</td>
+    <td>HDF5 is a data model, library, and file format for storing and managing data / HDF5</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/dask/hdfs3">hdfs3</a></td>
+    <td>0.3.0</td>
+    <td>Python wrapper for libhdfs3 / BSD 3-Clause</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/jupyter-incubator/sparkmagic/tree/master/hdijupyterutils">hdijupyterutils</a></td>
+    <td>0.12.7</td>
+    <td>Project with useful classes/methods for all projects created by the HDInsight team at Microsoft around Jupyter / BSD 3-clause</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="http://stutzbachenterprises.com/">heapdict</a></td>
+    <td>1.0.0</td>
+    <td>A heap with decrease-key and increase-key operations / BSD 3-Clause</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="www.holoviews.org">holoviews</a></td>
+    <td>1.12.3</td>
+    <td>Stop plotting your data - annotate your data and let it visualize itself. / BSD 3-Clause</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="http://github.com/cloudera/hs2client">hs2client</a></td>
+    <td>0.1</td>
+    <td>Python bindings for the libhs2client C++ library / Apache 2.0</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/html5lib/html5lib-python">html5lib</a></td>
+    <td>1.0.1</td>
+    <td>HTML parser based on the WHATWG HTML specification / MIT</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/jmoiron/humanize">humanize</a></td>
+    <td>0.5.1</td>
+    <td>Python humanize utilities. / MIT</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/python-hyper/hyperlink">hyperlink</a></td>
+    <td>18.0.0</td>
+    <td>Immutable, Pythonic, correct URLs. / MIT</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="http://www.ibis-project.org">ibis-framework</a></td>
+    <td>0.14.0</td>
+    <td>Productivity-centric Python Big Data Framework / Apache 2.0</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="http://site.icu-project.org/">icu</a></td>
+    <td>58.2</td>
+    <td>International Components for Unicode. / MIT</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/kjd/idna">idna</a></td>
+    <td>2.8</td>
+    <td>Internationalized Domain Names in Applications (IDNA). / BSD Like</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="http://imageio.github.io">imageio</a></td>
+    <td>2.5.0</td>
+    <td>a Python library for reading and writing image data / BSD 2-Clause</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/shibukawa/imagesize_py">imagesize</a></td>
+    <td>1.1.0</td>
+    <td>Getting image size from png/jpeg/jpeg2000/gif file / MIT</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="http://importlib-metadata.readthedocs.io">importlib_metadata</a></td>
+    <td>0.17</td>
+    <td>A library to access the metadata for a Python package / APACHE-2.0</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/cloudera/impyla">impyla</a></td>
+    <td>0.15.0</td>
+    <td>Python client for the Impala distributed query engine / Apache 2.0</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://twistedmatrix.com">incremental</a></td>
+    <td>17.5.0</td>
+    <td>A library that versions your Python projects / MIT License</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://software.intel.com/en-us/node/522690">intel-openmp</a></td>
+    <td>2019.4</td>
+    <td>Math library for Intel and compatible processors / proprietary - Intel</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="https://ipython.org">ipykernel</a></td>
+    <td>5.1.1</td>
+    <td>IPython Kernel for Jupyter / BSD-3-Clause</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="http://ipython.org">ipyparallel</a></td>
+    <td>6.2.4</td>
+    <td>Interactive Parallel Computing with IPython / BSD 3-Clause</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://ipython.org/">ipython</a></td>
+    <td>7.6.1</td>
+    <td>IPython: Productive Interactive Computing / BSD-3-Clause</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="http://ipython.org">ipython_genutils</a></td>
+    <td>0.2.0</td>
+    <td>vestigial utilities from IPython / BSD 3-Clause</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/ipython/ipywidgets">ipywidgets</a></td>
+    <td>7.5.0</td>
+    <td>Jupyter Interactive Widgets / BSD 3-clause</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="https://bitbucket.org/micktwomey/pyiso8601">iso8601</a></td>
+    <td>0.1.12</td>
+    <td>Simple module to parse ISO 8601 dates / MIT</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/timothycrosley/isort">isort</a></td>
+    <td>4.3.21</td>
+    <td>A Python utility / library to sort Python imports. / MIT</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/pallets/itsdangerous">itsdangerous</a></td>
+    <td>1.1.0</td>
+    <td>Various helpers to pass trusted data to untrusted environments. / BSD 3-Clause</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="http://www.ece.uvic.ca/~frodo/jasper/">jasper</a></td>
+    <td>2.0.14</td>
+    <td>A reference implementation of the codec specified in the JPEG-2000 Part-1 standard. / JasPer 2.0</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://www.cl.cam.ac.uk/~mgk25/jbigkit">jbig</a></td>
+    <td>2.1</td>
+    <td>Implementation of the JBIG1 data compression standard / GPL-2.0</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/phn/jdcal">jdcal</a></td>
+    <td>1.4.1</td>
+    <td>Julian dates from proleptic Gregorian and Julian calendars. / BSD 2-Clause</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/davidhalter/jedi/">jedi</a></td>
+    <td>0.13.3</td>
+    <td>An autocompletion tool for Python that can be used for text editors. / MIT</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="https://gitlab.com/takluyver/jeepney">jeepney</a></td>
+    <td>0.4</td>
+    <td>Pure Python DBus interface / MIT</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="http://jinja.pocoo.org">jinja2</a></td>
+    <td>2.10.1</td>
+    <td>An easy to use stand-alone template engine written in pure python. / 3-Clause BSD</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="http://packages.python.org/joblib/">joblib</a></td>
+    <td>0.13.2</td>
+    <td>Python function as pipeline jobs. / BSD 3-Clause</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="http://www.ijg.org/">jpeg</a></td>
+    <td>9b</td>
+    <td>read/write jpeg COM, EXIF, IPTC medata / Custom free software license</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/dpranke/pyjson5">json5</a></td>
+    <td>0.8.4</td>
+    <td>A Python implementation of the JSON5 data format / Apache-2.0</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/Julian/jsonschema">jsonschema</a></td>
+    <td>3.0.1</td>
+    <td>An implementation of JSON Schema validation for Python / MIT</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="http://jupyter.org">jupyter</a></td>
+    <td>1.0.0</td>
+    <td>Jupyter metapackage. Install all the Jupyter components in one go. / BSD 3-Clause</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="http://jupyter.org">jupyter_client</a></td>
+    <td>5.3.1</td>
+    <td>Jupyter protocol implementation and client libraries / BSD 3-clause</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="http://jupyter.org">jupyter_console</a></td>
+    <td>6.0.0</td>
+    <td>Jupyter terminal console / BSD-3-Clause</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="http://jupyter.org">jupyter_core</a></td>
+    <td>4.5.0</td>
+    <td>Core common functionality of Jupyter projects. / BSD 3-clause</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/jupyterlab/jupyterlab">jupyterlab</a></td>
+    <td>1.0.2</td>
+    <td>JupyterLab / BSD-3-Clause</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="http://github.com/jupyterlab/jupyterlab_launcher">jupyterlab_launcher</a></td>
+    <td>0.13.1</td>
+    <td>A Launcher for JupyterLab based applications. / BSD 3-Clause</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="http://github.com/jupyterlab/jupyterlab_server">jupyterlab_server</a></td>
+    <td>1.0.0</td>
+    <td>A set of server components for JupyterLab and JupyterLab like applications. / BSD 3-Clause</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="http://kealib.org/">kealib</a></td>
+    <td>1.4.7</td>
+    <td>The KEA format provides an implementation of the GDAL specification within the the HDF5 file format. / MIT</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/fchollet/keras">keras</a></td>
+    <td>2.2.4</td>
+    <td>Deep Learning Library for Theano and TensorFlow / MIT</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/fchollet/keras">keras-gpu</a></td>
+    <td>2.2.4</td>
+    <td>Deep Learning Library for Theano and TensorFlow / MIT</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/jaraco/keyring">keyring</a></td>
+    <td>18.0.0</td>
+    <td>Store and access your passwords safely / Python Software Foundation or MIT</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/nucleic/kiwi">kiwisolver</a></td>
+    <td>1.1.0</td>
+    <td>A fast implementation of the Cassowary constraint solver / BSD 3-Clause</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/dask/knit">knit</a></td>
+    <td>0.2.4</td>
+    <td>Python interface YARN / BSD 3-Clause</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="http://web.mit.edu/kerberos/">krb5</a></td>
+    <td>1.16.1</td>
+    <td>A network authentication protocol. / MIT</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="https://ioam.github.io/lancet/">lancet</a></td>
+    <td>0.9.0</td>
+    <td>Launch jobs, organize the output, and dissect the results. / BSD-3-Clause</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/ionelmc/python-lazy-object-proxy">lazy-object-proxy</a></td>
+    <td>1.4.1</td>
+    <td>A fast and thorough lazy object proxy / BSD-2-Clause</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/cannatag/ldap3">ldap3</a></td>
+    <td>2.6</td>
+    <td>A strictly RFC 4510 conforming LDAP V3 pure Python client library / LGPL-3.0</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="http://www.libarchive.org/">libarchive</a></td>
+    <td>3.3.3</td>
+    <td>Multi-format archive and compression library / BSD 2-Clause</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="http://www.boost.org/">libboost</a></td>
+    <td>1.67.0</td>
+    <td>Free peer-reviewed portable C++ source libraries. / Boost-1.0</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/conda/libconda">libconda</a></td>
+    <td>4.0.3</td>
+    <td>conda 4.0 based library / BSD</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="http://curl.haxx.se/">libcurl</a></td>
+    <td>7.65.2</td>
+    <td>tool and library for transferring data with URL syntax / MIT/X derivate (http://curl.haxx.se/docs/copyright.html)</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="http://thrysoee.dk/editline/">libedit</a></td>
+    <td>3.1.20181209</td>
+    <td>Editline Library (libedit) / NetBSD</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="http://libevent.org/">libevent</a></td>
+    <td>2.1.8</td>
+    <td>An event notification library. / BSD 3-Clause</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://sourceware.org/libffi/">libffi</a></td>
+    <td>3.2.1</td>
+    <td>A Portable Foreign Function Interface Library. / Custom</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="https://gcc.gnu.org/onlinedocs/gccint/Libgcc.html">libgcc-ng</a></td>
+    <td>9.1.0</td>
+    <td>The GCC low-level runtime library / GPL</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="http://www.gdal.org/">libgdal</a></td>
+    <td>2.3.3</td>
+    <td>The Geospatial Data Abstraction Library (GDAL) / MIT</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://gcc.gnu.org/">libgfortran-ng</a></td>
+    <td>7.3.0</td>
+    <td>The GNU Fortran Runtime Library / GPL</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="http://github.com/Theano/libgpuarray">libgpuarray</a></td>
+    <td>0.7.6</td>
+    <td>Library to manipulate arrays on GPU / ISC</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/PivotalRD/libhdfs3">libhdfs3</a></td>
+    <td>2.3.0</td>
+    <td>A Native C/C++ HDFS Client / Apache 2.0</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://www.gnu.org/software/libiconv/">libiconv</a></td>
+    <td>1.15</td>
+    <td>Provides iconv for systems which don't have one (or that cannot convert from/to Unicode.) / GPL and LGPL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://lief.quarkslab.com/">liblief</a></td>
+    <td>0.9.0</td>
+    <td>A cross platform library to parse, modify and abstract ELF, PE and MachO formats. / Apache 2.0</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="http://www.unidata.ucar.edu/software/netcdf/">libnetcdf</a></td>
+    <td>4.6.1</td>
+    <td>Libraries and data formats that support array-oriented scientific data. / MIT</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="http://www.openblas.net/">libopenblas</a></td>
+    <td>0.3.6</td>
+    <td>An Optimized BLAS library / BSD</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="http://www.openblas.net/">libopenblas-static</a></td>
+    <td>0.3.6</td>
+    <td>OpenBLAS static libraries. / BSD</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="http://www.libpng.org/pub/png/libpng.html">libpng</a></td>
+    <td>1.6.37</td>
+    <td>PNG reference library / zlib/libpng</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="https://developers.google.com/protocol-buffers/">libprotobuf</a></td>
+    <td>3.8.0</td>
+    <td>Protocol Buffers - Google's data interchange format. C++ Libraries / BSD-3-Clause</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="http://libsodium.org">libsodium</a></td>
+    <td>1.0.16</td>
+    <td>A modern and easy-to-use crypto library. / ISC</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="https://www.libssh2.org/">libssh2</a></td>
+    <td>1.8.2</td>
+    <td>the SSH library / BSD-3-Clause</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="https://gcc.gnu.org/">libstdcxx-ng</a></td>
+    <td>9.1.0</td>
+    <td>The GNU C++ Runtime Library / GPL3 with runtime exception</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="http://www.libtiff.org/">libtiff</a></td>
+    <td>4.0.10</td>
+    <td>Support for the Tag Image File Format (TIFF). / HPND</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="http://www.gnu.org/software/libtool/">libtool</a></td>
+    <td>2.4.6</td>
+    <td>The GNU Portable Library Tool / GPL 3</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="http://sourceforge.net/projects/libuuid/">libuuid</a></td>
+    <td>1.0.3</td>
+    <td>Portable uuid C library. / BSD 3-Clause</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="http://xcb.freedesktop.org/">libxcb</a></td>
+    <td>1.13</td>
+    <td>This is the C-language Binding (XCB) package to the X Window System protocol / MIT</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="None">libxgboost</a></td>
+    <td>0.90</td>
+    <td>None / None</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="http://xmlsoft.org/">libxml2</a></td>
+    <td>2.9.9</td>
+    <td>The XML C parser and toolkit of Gnome / MIT</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="http://xmlsoft.org/XSLT/">libxslt</a></td>
+    <td>1.1.33</td>
+    <td>The XSLT C library developed for the GNOME project / MIT</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="http://www.lighttpd.net/">lighttpd</a></td>
+    <td>1.4.51</td>
+    <td>Light, fast web server / BSD 3-Clause</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/rkern/line_profiler">line_profiler</a></td>
+    <td>2.1.2</td>
+    <td>Line-by-line profiling for Python / BSD</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/numba/llvmlite">llvmlite</a></td>
+    <td>0.29.0</td>
+    <td>A lightweight LLVM python binding for writing JIT compilers / New BSD License</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/mwilliamson/locket.py">locket</a></td>
+    <td>0.2.0</td>
+    <td>File-based locks for Python for Linux and Windows / BSD 2-Clause</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="http://launchpad.net/pylockfile">lockfile</a></td>
+    <td>0.12.2</td>
+    <td>Platform-independent file locking module / MIT</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/spotify/luigi">luigi</a></td>
+    <td>2.8.6</td>
+    <td>Workflow mgmgt + task scheduling + dependency resolution. / Apache-2.0</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="http://lxml.de/">lxml</a></td>
+    <td>4.3.4</td>
+    <td>Pythonic binding for the C libraries libxml2 and libxslt. / BSD 3-Clause, GPL-2.0, ZPL-2.0, and ElementTree</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/python-lz4/python-lz4">lz4</a></td>
+    <td>2.1.9</td>
+    <td>LZ4 Bindings for Python / BSD 3-Clause</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://www.lz4.org">lz4-c</a></td>
+    <td>1.8.1.2</td>
+    <td>Extremely Fast Compression algorithm / BSD 2-clause</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="http://www.oberhumer.com/opensource/lzo/">lzo</a></td>
+    <td>2.10</td>
+    <td>LZO is a portable lossless data compression library written in ANSI C. / GPL v2+</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="http://www.gnu.org/software/m4/">m4</a></td>
+    <td>1.4.18</td>
+    <td>Implementation of the traditional Unix macro processor. / GPL-3.0</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="http://www.makotemplates.org/">mako</a></td>
+    <td>1.0.10</td>
+    <td>A super-fast templating language that borrows the best ideas from the existing templating languages. / MIT</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://pythonhosted.org/Markdown/">markdown</a></td>
+    <td>3.1.1</td>
+    <td>Python implementation of Markdown. / BSD-3-Clause</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/trentm/python-markdown2">markdown2</a></td>
+    <td>2.3.7</td>
+    <td>fast and complete Python implementation of Markdown / MIT</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://www.palletsprojects.com/p/markupsafe">markupsafe</a></td>
+    <td>1.1.1</td>
+    <td>A Python module that implements the jinja2.Markup string / BSD-3-Clause</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="http://matplotlib.org/">matplotlib</a></td>
+    <td>3.1.0</td>
+    <td>Publication quality figures in Python / PSF-based</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="http://matplotlib.sourceforge.net/">matplotlib-tests</a></td>
+    <td>1.5.0</td>
+    <td>Python 2D plotting library / PSF-based</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/PyCQA/mccabe">mccabe</a></td>
+    <td>0.6.1</td>
+    <td>McCabe complexity checker for Python / MIT</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="http://mdp-toolkit.sourceforge.net/">mdp</a></td>
+    <td>3.5</td>
+    <td>A Python data processing framework. / BSD</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/supervisor/meld3">meld3</a></td>
+    <td>1.0.2</td>
+    <td>An HTML/XML templating engine / BSD-derived</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="http://pypi.python.org/pypi/memory_profiler">memory_profiler</a></td>
+    <td>0.55.0</td>
+    <td>A module for monitoring memory usage of a python program / BSD 3-Clause</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/lepture/mistune">mistune</a></td>
+    <td>0.8.4</td>
+    <td>The fastest markdown parser in pure Python. / BSD 3-Clause</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="https://software.intel.com/en-us/mkl">mkl</a></td>
+    <td>2019.4</td>
+    <td>Math library for Intel and compatible processors / proprietary - Intel</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="None">mkl-devel</a></td>
+    <td>2019.4</td>
+    <td>Metapackage of MKL headers and libraries for developing software that uses MKL / None</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://software.intel.com/en-us/mkl">mkl-include</a></td>
+    <td>2019.4</td>
+    <td>MKL headers for developing software that uses MKL / proprietary - Intel</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="http://github.com/IntelPython/mkl-service">mkl-service</a></td>
+    <td>2.0.2</td>
+    <td>Python hooks for Intel(R) Math Kernel Library runtime control settings. / BSD-3-Clause</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="http://github.com/IntelPython/mkl_fft">mkl_fft</a></td>
+    <td>1.0.12</td>
+    <td>NumPy-based implementation of Fast Fourier Transform using Intel (R) Math Kernel Library. / BSD 3-Clause</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="http://github.com/IntelPython/mkl_random">mkl_random</a></td>
+    <td>1.0.2</td>
+    <td>Intel (R) MKL-powered package for sampling from common probability distributions into NumPy arrays. / BSD 3-Clause</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/testing-cabal/mock">mock</a></td>
+    <td>3.0.5</td>
+    <td>A library for testing in Python / BSD-2-Clause</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="http://www.mongodb.org/">mongodb</a></td>
+    <td>4.0.3</td>
+    <td>A next-gen database that lets you do things you could never do before / AGPLv3</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/erikrose/more-itertools">more-itertools</a></td>
+    <td>7.0.0</td>
+    <td>More routines for operating on iterables, beyond itertools / MIT</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/aalto-speech/morfessor">morfessor</a></td>
+    <td>2.0.4</td>
+    <td>Library for unsupervised and semi-supervised morphological segmentation / BSD 2-Clause</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="http://www.multiprecision.org/">mpc</a></td>
+    <td>1.1.0</td>
+    <td>A C library for the arithmetic of complex numbers with arbitrarily high precision. / LGPL 3</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="http://www.mpfr.org/">mpfr</a></td>
+    <td>4.0.1</td>
+    <td>The MPFR library is a C library for multiple-precision floating-point computations with correct rounding. / LGPL 3</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="http://mpi4py.scipy.org/">mpi4py</a></td>
+    <td>2.0.0</td>
+    <td>Provides bindings of the MPI standard for Python / BSD</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="http://mpld3.github.com">mpld3</a></td>
+    <td>0.3</td>
+    <td>D3 Viewer for Matplotlib. / BSD 3-Clause</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="http://mpmath.org">mpmath</a></td>
+    <td>1.1.0</td>
+    <td>Python library for arbitrary-precision floating-point arithmetic / BSD 3-Clause</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="http://msgpack.org/">msgpack-python</a></td>
+    <td>0.6.1</td>
+    <td>MessagePack (de)serializer. / Apache 2.0</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="http://github.com/aio-libs/multidict">multidict</a></td>
+    <td>4.5.2</td>
+    <td>multidict implementation / Apache 2.0</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/mrocklin/multipledispatch/">multipledispatch</a></td>
+    <td>0.6.0</td>
+    <td>Multiple dispatch in Python / BSD 3-Clause</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="http://github.com/Infinidat/munch">munch</a></td>
+    <td>2.3.2</td>
+    <td>A dot-accessible dictionary (a la JavaScript objects). / MIT</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="http://www.mypy-lang.org/">mypy</a></td>
+    <td>0.701</td>
+    <td>Optional static typing for Python / MIT</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="http://www.mypy-lang.org/">mypy_extensions</a></td>
+    <td>0.4.1</td>
+    <td>Experimental type system extensions for programs checked with the mypy typechecker. / MIT</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://www.mysql.com/">mysql</a></td>
+    <td>5.7.24</td>
+    <td>Open source relational database management system. / GPL-2.0</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://dev.mysql.com/doc/connector-python/en/">mysql-connector-python</a></td>
+    <td>8.0.16</td>
+    <td>Python driver for communicating with MySQL servers / GPL-2.0</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/SethMMorton/natsort">natsort</a></td>
+    <td>6.0.0</td>
+    <td>Sort lists naturally / MIT</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/ContinuumIO/navigator-updater">navigator-updater</a></td>
+    <td>0.2.1</td>
+    <td>Anaconda Navigator Updater / proprietary - Continuum Analytics, Inc.</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/Anaconda-Platform/nb_anacondacloud">nb_anacondacloud</a></td>
+    <td>1.4.0</td>
+    <td>Interact with Anaconda Cloud / BSD-3-Clause</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/Anaconda-Platform/nb_conda">nb_conda</a></td>
+    <td>2.2.1</td>
+    <td>Conda environment and package access extension from within Jupyter / BSD-3-Clause</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/Anaconda-Platform/nb_conda_kernels">nb_conda_kernels</a></td>
+    <td>2.2.2</td>
+    <td>Launch Jupyter kernels for any installed conda environment / BSD 3-Clause</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="http://jupyter.org">nbconvert</a></td>
+    <td>5.5.0</td>
+    <td>Converting Jupyter Notebooks / BSD-3-Clause</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="http://jupyter.org">nbformat</a></td>
+    <td>4.4.0</td>
+    <td>The reference implementation of the Jupyter Notebook format / BSD 3-clause</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/Anaconda-Platform/nbpresent">nbpresent</a></td>
+    <td>3.0.2</td>
+    <td>Next generation slides for Jupyter Notebooks / BSD-3-Clause</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="http://www.gnu.org/software/ncurses/">ncurses</a></td>
+    <td>6.1</td>
+    <td>Library for text-based user interfaces / Free software (MIT-like)</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/neo4j/neo4j-python-driver">neo4j-python-driver</a></td>
+    <td>1.7.1</td>
+    <td>Database connector for Neo4j graph database / Apache-2.0</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/NervanaSystems/neon">neon</a></td>
+    <td>2.6.0</td>
+    <td>Nervana's Python-based Deep Learning framework / Apache 2.0</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="http://github.com/Unidata/netcdf4-python">netcdf4</a></td>
+    <td>1.4.2</td>
+    <td>Provides an object-oriented python interface to the netCDF version 4 library. / OSI Approved and MIT</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://networkx.github.io/">networkx</a></td>
+    <td>2.3</td>
+    <td>Python package for creating and manipulating complex networks / BSD-3-Clause</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="http://www.nginx.org">nginx</a></td>
+    <td>1.15.5</td>
+    <td>Nginx is an HTTP and reverse proxy server / BSD-2-Clause</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="http://nltk.org/">nltk</a></td>
+    <td>3.4.4</td>
+    <td>Build Python programs to work with human language data / Apache 2.0</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="https://nodejs.org/">nodejs</a></td>
+    <td>10.13.0</td>
+    <td>a platform for easily building fast, scalable network applications / MIT</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="http://readthedocs.org/docs/nose/">nose</a></td>
+    <td>1.3.7</td>
+    <td>Nose extends unittest to make testing easier / LGPL-2.1</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/wolever/nose-parameterized">nose-parameterized</a></td>
+    <td>0.6.0</td>
+    <td>Parameterized testing with any Python test framework. / BSD 2-Clause</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="http://jupyter.org">notebook</a></td>
+    <td>6.0.0</td>
+    <td>Jupyter Notebook / BSD 3-clause</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="http://numba.github.com">numba</a></td>
+    <td>0.44.1</td>
+    <td>NumPy aware dynamic Python compiler using LLVM / BSD 2-clause</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/pydata/numexpr">numexpr</a></td>
+    <td>2.6.9</td>
+    <td>Fast numerical expression evaluator for NumPy. / MIT</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="http://numpy.scipy.org/">numpy</a></td>
+    <td>1.16.4</td>
+    <td>Array processing for numbers, strings, records, and objects. / BSD 3-Clause</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="None">numpy-base</a></td>
+    <td>1.16.4</td>
+    <td>None / None</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/numpy/numpydoc">numpydoc</a></td>
+    <td>0.9.1</td>
+    <td>Numpy's Sphinx extensions / BSD 3-Clause</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="http://odo.pydata.org">odo</a></td>
+    <td>0.5.1</td>
+    <td>Data migration in Python / BSD-3-Clause</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="http://www.decalage.info/python/olefileio">olefile</a></td>
+    <td>0.46</td>
+    <td>parse, read and write Microsoft OLE2 files / BSD 2-Clause</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="http://www.openblas.net/">openblas</a></td>
+    <td>0.3.6</td>
+    <td>An Optimized BLAS library / BSD</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="None">openblas-devel</a></td>
+    <td>0.3.6</td>
+    <td>OpenBLAS headers and libraries for developing software that used OpenBLAS. / None</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="http://opencv.org/">opencv</a></td>
+    <td>3.4.2</td>
+    <td>Computer vision and machine learning software library. / BSD 3-clause</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://bintray.com/jetbrains/intellij-jdk">openjdk</a></td>
+    <td>8.0.152</td>
+    <td>The JetBrains Runtime OpenJDK build. / GPLv2</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="http://www.openjpeg.org/">openjpeg</a></td>
+    <td>2.3.0</td>
+    <td>An open-source JPEG 2000 codec written in C / BSD 2-Clause</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://www.open-mpi.org/">openmpi</a></td>
+    <td>3.1.3</td>
+    <td>An open source Message Passing Interface implementation. / BSD 3-Clause</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://openpyxl.readthedocs.io">openpyxl</a></td>
+    <td>2.6.2</td>
+    <td>A Python library to read/write Excel 2010 xlsx/xlsm files / MIT</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="http://www.openssl.org/">openssl</a></td>
+    <td>1.1.1c</td>
+    <td>OpenSSL is an open-source implementation of the SSL and TLS protocols / OpenSSL</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="http://opentracing.io">opentracing</a></td>
+    <td>2.2.0</td>
+    <td>OpenTracing API for Python. / MIT</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/uber-common/opentracing-python-instrumentation">opentracing_instrumentation</a></td>
+    <td>3.0.1</td>
+    <td>Tracing Instrumentation using OpenTracing API (http://opentracing.io) / MIT</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="http://orange.biolab.si">orange3</a></td>
+    <td>3.19.0</td>
+    <td>data visualization and data analysis tool / GPL-3.0</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/pypa/packaging">packaging</a></td>
+    <td>19.0</td>
+    <td>Core utilities for Python packages / Apache 2.0 or BSD 2-Clause</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="http://pandas.pydata.org">pandas</a></td>
+    <td>0.24.2</td>
+    <td>High-performance, easy-to-use data structures and data analysis tools. / BSD 3-clause</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/pydata/pandas-datareader">pandas-datareader</a></td>
+    <td>0.7.0</td>
+    <td>Up to date remote data access for pandas, works for multiple versions of pandas / BSD-3</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="http://github.com/jospolfliet/pandas-profiling">pandas-profiling</a></td>
+    <td>1.4.1</td>
+    <td>Generate profile report for pandas DataFrame / MIT</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/yhat/pandasql">pandasql</a></td>
+    <td>0.7.3</td>
+    <td>Sqldf for pandas / BSD</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="http://pandoc.org/">pandoc</a></td>
+    <td>2.2.3.2</td>
+    <td>Universal markup converter (repackaged binaries). / GPL-2.0</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/jgm/pandocfilters">pandocfilters</a></td>
+    <td>1.4.2</td>
+    <td>A python module for writing pandoc filters / BSD-3-Clause</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="http://www.pango.org/">pango</a></td>
+    <td>1.42.4</td>
+    <td>Text layout and rendering engine. / LGPL-2.1</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="http://ioam.github.io/param/">param</a></td>
+    <td>1.9.1</td>
+    <td>Param: Make your Python code clearer and more reliable by declaring Parameters / BSD-3-Clause</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="http://www.paramiko.org/">paramiko</a></td>
+    <td>2.4.2</td>
+    <td>SSH2 protocol library / LGPL 2.1</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/bear/parsedatetime">parsedatetime</a></td>
+    <td>2.4</td>
+    <td>Parse human-readable date/time text. / Apache 2.0</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/scrapy/parsel">parsel</a></td>
+    <td>1.5.1</td>
+    <td>library to extract data from HTML and XML using XPath and CSS selectors / BSD</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/davidhalter/parso">parso</a></td>
+    <td>0.5.0</td>
+    <td>A Python Parser / MIT</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/dask/partd">partd</a></td>
+    <td>1.0.0</td>
+    <td>Data structure for on-disk shuffle operations / BSD 3-Clause</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="https://bitbucket.org/ecollins/passlib">passlib</a></td>
+    <td>1.7.1</td>
+    <td>comprehensive password hashing framework supporting over 30 schemes / BSD 3-Clause</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="http://nixos.org/patchelf.html">patchelf</a></td>
+    <td>0.9</td>
+    <td>A small utility to modify the dynamic linker and RPATH of ELF executables. / GPL 3</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/jaraco/path.py">path.py</a></td>
+    <td>12.0.1</td>
+    <td>A module wrapper for os.path / MIT</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="https://pathlib.readthedocs.org/">pathlib</a></td>
+    <td>1.0.1</td>
+    <td>Object-oriented filesystem paths / MIT</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/mcmtroffaes/pathlib2">pathlib2</a></td>
+    <td>2.3.4</td>
+    <td>Fork of pathlib aiming to support the full stdlib Python API / MIT</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/pydata/patsy">patsy</a></td>
+    <td>0.5.1</td>
+    <td>Describing statistical models in Python using symbolic formulas / BSD-2-Clause, PSF2</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="http://www.pcre.org/">pcre</a></td>
+    <td>8.43</td>
+    <td>Regular expression pattern matching using the same syntax and semantics as Perl 5. / BSD 3-Clause</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="http://pep8.readthedocs.org/">pep8</a></td>
+    <td>1.7.1</td>
+    <td>Python style guide checker / MIT</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="http://www.perl.org/">perl</a></td>
+    <td>5.26.2.1</td>
+    <td>The Perl programming language interpreter. / Perl Artistic</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="http://github.com/petl-developers/petl">petl</a></td>
+    <td>1.2.0</td>
+    <td>A Python package for extracting, transforming and loading tables of data. / MIT</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="http://pexpect.sourceforge.net/">pexpect</a></td>
+    <td>4.7.0</td>
+    <td>Pexpect makes Python a better tool for controlling other applications. / ISC</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/pickleshare/pickleshare/">pickleshare</a></td>
+    <td>0.7.5</td>
+    <td>Tiny 'shelve'-like database with concurrency support / MIT</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="https://pillow.readthedocs.io">pillow</a></td>
+    <td>6.1.0</td>
+    <td>Pillow is the friendly PIL fork by Alex Clark and Contributors / PIL</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="https://pip.pypa.io/en/stable/">pip</a></td>
+    <td>19.1.1</td>
+    <td>PyPA recommended tool for installing Python packages / MIT</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="https://pivottable.js.org">pivottablejs</a></td>
+    <td>0.9.0</td>
+    <td>PivotTable.js integration for Jupyter/IPython Notebook / MIT License</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="http://www.pixman.org/">pixman</a></td>
+    <td>0.38.0</td>
+    <td>A low-level software library for pixel manipulation. / MIT</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="https://code.launchpad.net/~tseaver/pkginfo/trunk">pkginfo</a></td>
+    <td>1.5.0.1</td>
+    <td>Query metadatdata from sdists / bdists / installed packages. / MIT</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="https://micheles.github.io/plac/">plac</a></td>
+    <td>1.0.0</td>
+    <td>The smartest command line arguments parser in the world / BSD 2-Clause</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://plot.ly/python/">plotly</a></td>
+    <td>4.0.0</td>
+    <td>An interactive, browser-based graphing library for Python / MIT</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/pytest-dev/pluggy">pluggy</a></td>
+    <td>0.12.0</td>
+    <td>Plugin registration and hook calling for Python / MIT</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="http://www.dabeaz.com/ply/index.html">ply</a></td>
+    <td>3.11</td>
+    <td>Python Lex-Yacc / BSD 3-clause</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="http://pypi.python.org/pypi/pomegranate/">pomegranate</a></td>
+    <td>0.10.0</td>
+    <td>Pomegranate is a graphical models library for Python, implemented in Cython for speed. / MIT</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="http://www.portaudio.com/">portaudio</a></td>
+    <td>19.6.0</td>
+    <td>A cross platform, open-source, audio I/O library / MIT</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/jaraco/portend">portend</a></td>
+    <td>2.4</td>
+    <td>TCP port monitoring utilities / MIT</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://pypi.python.org/pypi/portpicker">portpicker</a></td>
+    <td>1.3.1</td>
+    <td>A library to choose unique available network ports. / Apache License 2.0</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="http://semanchuk.com/philip/posix_ipc/">posix_ipc</a></td>
+    <td>1.0.4</td>
+    <td>POSIX IPC for Python / BSD</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="http://www.postgresql.org/">postgresql</a></td>
+    <td>11.2</td>
+    <td>PostgreSQL is a powerful, open source object-relational database system. / PostgreSQL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://proj4.org/">proj4</a></td>
+    <td>5.2.0</td>
+    <td>Cartographic projection software. / MIT</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/prometheus/client_python">prometheus_client</a></td>
+    <td>0.7.1</td>
+    <td>Python client for the Prometheus monitoring system / Apache 2.0</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/jonathanslenders/python-prompt-toolkit">prompt_toolkit</a></td>
+    <td>2.0.9</td>
+    <td>Library for building powerful interactive command lines in Python / BSD 3-clause</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="https://developers.google.com/protocol-buffers/">protobuf</a></td>
+    <td>3.8.0</td>
+    <td>Protocol Buffers - Google's data interchange format. / BSD 3-Clause</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/giampaolo/psutil">psutil</a></td>
+    <td>5.6.3</td>
+    <td>A cross-platform process and system utilities module for Python / BSD 3-Clause</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="http://initd.org/psycopg/">psycopg2</a></td>
+    <td>2.7.6.1</td>
+    <td>PostgreSQL database adapter for Python / LGPL, BSD-like, ZPL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/pexpect/ptyprocess">ptyprocess</a></td>
+    <td>0.6.0</td>
+    <td>Run a subprocess in a pseudo terminal / ISC</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/pytest-dev/py">py</a></td>
+    <td>1.8.0</td>
+    <td>library with cross-python path, ini-parsing, io, code, log facilities / MIT</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="http://www.boost.org/">py-boost</a></td>
+    <td>1.67.0</td>
+    <td>Free peer-reviewed portable C++ source libraries. / Boost-1.0</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://lief.quarkslab.com/">py-lief</a></td>
+    <td>0.9.0</td>
+    <td>A cross platform library to parse, modify and abstract ELF, PE and MachO formats. / Apache 2.0</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="None">py-xgboost</a></td>
+    <td>0.90</td>
+    <td>None / None</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="http://py4j.sourceforge.net/">py4j</a></td>
+    <td>0.10.8.1</td>
+    <td>Enables Python programs to dynamically access arbitrary Java objects / BSD 3-Clause</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/etingof/pyasn1">pyasn1</a></td>
+    <td>0.4.5</td>
+    <td>ASN.1 types and codecs / BSD 2-Clause</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="http://pyasn1.sourceforge.net/">pyasn1-modules</a></td>
+    <td>0.2.2</td>
+    <td>A collection of ASN.1-based protocols modules. / BSD 2-Clause</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://pycodestyle.readthedocs.io/">pycodestyle</a></td>
+    <td>2.5.0</td>
+    <td>Python style guide checker / MIT</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/ContinuumIO/pycosat">pycosat</a></td>
+    <td>0.6.3</td>
+    <td>Bindings to picosat (a SAT solver) / MIT</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/eliben/pycparser">pycparser</a></td>
+    <td>2.19</td>
+    <td>Complete C99 parser in pure Python / BSD 3-clause</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="http://www.pycrypto.org/">pycrypto</a></td>
+    <td>2.6.1</td>
+    <td>Cryptographic modules for Python. / Public Domain</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="http://pycurl.sourceforge.net/">pycurl</a></td>
+    <td>7.43.0.3</td>
+    <td>A Python Interface To The cURL library / LGPL, MIT</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/erocarrera/pydot">pydot</a></td>
+    <td>1.4.1</td>
+    <td>Python interface to Graphviz's Dot / MIT</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="http://pydotplus.readthedocs.org/">pydotplus</a></td>
+    <td>2.0.2</td>
+    <td>Python interface to Graphviz's Dot language / MIT</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="http://github.com/wmayner/pyemd">pyemd</a></td>
+    <td>0.5.1</td>
+    <td>A Python wrapper for the Earth Mover's Distance. / MIT</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/PyCQA/pyflakes">pyflakes</a></td>
+    <td>2.1.1</td>
+    <td>Pyflakes analyzes programs and detects various errors. / MIT</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="http://pygments.org/">pygments</a></td>
+    <td>2.4.2</td>
+    <td>Generic syntax highlighting package / BSD 2-clause</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="http://github.com/Theano/libgpuarray">pygpu</a></td>
+    <td>0.7.6</td>
+    <td>Library to manipulate arrays on GPU / ISC</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/dropbox/PyHive">pyhive</a></td>
+    <td>0.6.1</td>
+    <td>Python interface to Hive / Apache License, Version 2.0</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/jpadilla/pyjwt">pyjwt</a></td>
+    <td>1.7.1</td>
+    <td>JSON Web Token implementation in Python / MIT</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/02strich/pykerberos">pykerberos</a></td>
+    <td>1.2.1</td>
+    <td>high-level interface to Kerberos / Apache</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="http://www.pylint.org/">pylint</a></td>
+    <td>2.3.1</td>
+    <td>python code static checker / GPL</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="http://github.com/pymc-devs/pymc">pymc</a></td>
+    <td>2.3.7</td>
+    <td>PyMC: Bayesian Stochastic Modelling in Python / AFL-3.0</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="http://github.com/pymc-devs/pymc3">pymc3</a></td>
+    <td>3.6</td>
+    <td>Probabilistic Programming in Python. / Apache-2.0</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/mongodb/mongo-python-driver">pymongo</a></td>
+    <td>3.8.0</td>
+    <td>Python driver for MongoDB http://www.mongodb.org / Apache 2.0</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/pympler/pympler">pympler</a></td>
+    <td>0.7</td>
+    <td>Development tool to measure, monitor and analyze the memory behavior of Python objects in a running Python application. / Apache-2</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="http://pymssql.org">pymssql</a></td>
+    <td>2.1.4</td>
+    <td>DB-API interface to Microsoft SQL Server for Python. (new Cython-based version) / LGPL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="http://github.com/PyMySQL/PyMySQL">pymysql</a></td>
+    <td>0.9.3</td>
+    <td>Pure Python MySQL Driver / MIT</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="http://www.pyngl.ucar.edu/Nio.shtml">pynio</a></td>
+    <td>1.5.0</td>
+    <td>PyNIO is a multi-format data I/O package with a NetCDF-style interface. / BSD 3-clause</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/mkleehammer/pyodbc">pyodbc</a></td>
+    <td>4.0.26</td>
+    <td>DB API Module for ODBC / MIT</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="http://pyopengl.sourceforge.net">pyopengl</a></td>
+    <td>3.1.1a1</td>
+    <td>Standard OpenGL bindings for Python / BSD-like</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="http://pyopengl.sourceforge.net">pyopengl-accelerate</a></td>
+    <td>3.1.3b1</td>
+    <td>Acceleration code for PyOpenGL / BSD</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/pyca/pyopenssl">pyopenssl</a></td>
+    <td>19.0.0</td>
+    <td>Python wrapper module around the OpenSSL library / Apache 2.0</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="http://pyparsing.wikispaces.com/">pyparsing</a></td>
+    <td>2.4.0</td>
+    <td>Create and execute simple grammars / MIT</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="http://github.com/pwaller/pyprof2calltree/">pyprof2calltree</a></td>
+    <td>1.4.4</td>
+    <td>Help visualize profiling data from cProfile with qcachegrind / MIT</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/jswhit/pyproj">pyproj</a></td>
+    <td>1.9.6</td>
+    <td>Python interface to PROJ.4 library / OSI</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="http://www.riverbankcomputing.co.uk/software/pyqt">pyqt</a></td>
+    <td>5.9.2</td>
+    <td>Python binding of the cross-platform GUI toolkit Qt. / Commercial, GPL-2.0, GPL-3.0</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="http://www.pyqtgraph.org">pyqtgraph</a></td>
+    <td>0.10.0</td>
+    <td>Scientific Graphics and GUI Library for Python / MIT</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/gawel/pyquery">pyquery</a></td>
+    <td>1.4.0</td>
+    <td>A jquery-like library for python / BSD 3-Clause</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="http://github.com/tobgu/pyrsistent/">pyrsistent</a></td>
+    <td>0.14.11</td>
+    <td>Persistent/Functional/Immutable data structures / MIT</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="http://pysal.org">pysal</a></td>
+    <td>2.0.0</td>
+    <td>Library of spatial analysis functions / BSD-3-Clause</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/pyserial/pyserial">pyserial</a></td>
+    <td>3.4</td>
+    <td>Python serial port access library / BSD-3-Clause</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://pypi.python.org/pypi/pyshp">pyshp</a></td>
+    <td>2.1.0</td>
+    <td>Pure Python read/write support for ESRI Shapefile format / MIT</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="http:/pysmi.sf.net">pysmi</a></td>
+    <td>0.3.4</td>
+    <td>SNMP SMI/MIB Parser / BSD 2-Clause</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="http://snmplabs.com/pysnmp">pysnmp</a></td>
+    <td>4.4.9</td>
+    <td>SNMP library for Python / BSD-2-Clause</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/Anorov/PySocks">pysocks</a></td>
+    <td>1.7.0</td>
+    <td>A Python SOCKS client module. See https://github.com/Anorov/PySocks for more information. / BSD 3-Clause</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="http://spark.apache.org/">pyspark</a></td>
+    <td>2.4.3</td>
+    <td>Apache Spark / Apache 2.0</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="http://mc-stan.org/interfaces/pystan.html">pystan</a></td>
+    <td>2.19.0.0</td>
+    <td>Python interface to Stan, a package for Bayesian inference / GPLv3</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="http://www.pytables.org">pytables</a></td>
+    <td>3.5.2</td>
+    <td>Brings together Python, HDF5 and NumPy to easily handle large amounts of data. / BSD 3-Clause</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="https://docs.pytest.org/en/latest/">pytest</a></td>
+    <td>5.0.1</td>
+    <td>Simple and powerful testing with Python. / MIT</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/astrofrog/pytest-arraydiff">pytest-arraydiff</a></td>
+    <td>0.3</td>
+    <td>pytest plugin to help with comparing array output from tests / BSD</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/astropy/pytest-astropy">pytest-astropy</a></td>
+    <td>0.5.0</td>
+    <td>Meta-package containing dependencies for testing Astropy / BSD</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="http://github.com/pytest-dev/pytest-asyncio">pytest-asyncio</a></td>
+    <td>0.6.0</td>
+    <td>Pytest support for asyncio / Apache 2.0</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="http://bitbucket.org/hpk42/pytest-cache/">pytest-cache</a></td>
+    <td>1.0</td>
+    <td>pytest plugin with mechanisms for caching across test runs / MIT</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/pytest-dev/pytest-cov">pytest-cov</a></td>
+    <td>2.7.1</td>
+    <td>Pytest plugin for measuring coverage / MIT</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/astropy/pytest-doctestplus">pytest-doctestplus</a></td>
+    <td>0.3.0</td>
+    <td>Pytest plugin with advanced doctest features / BSD</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/pytest-dev/pytest-mock">pytest-mock</a></td>
+    <td>1.10.4</td>
+    <td>Thin-wrapper around the mock package for easier use with py.test / MIT</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/astropy/pytest-openfiles">pytest-openfiles</a></td>
+    <td>0.3.2</td>
+    <td>Pytest plugin for detecting inadvertent open file handles / BSD</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="https://bitbucket.org/pytest-dev/pytest-pep8">pytest-pep8</a></td>
+    <td>1.0.6</td>
+    <td>py.test plugin for efficiently checking PEP8 compliance / MIT</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/astropy/pytest-remotedata">pytest-remotedata</a></td>
+    <td>0.3.1</td>
+    <td>Pytest plugin for controlling remote data access / BSD</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/pytest-dev/pytest-runner">pytest-runner</a></td>
+    <td>2.11.1</td>
+    <td>Invoke py.test as distutils command with dependency resolution. / MIT</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://bitbucket.org/pytest-dev/pytest-timeout">pytest-timeout</a></td>
+    <td>1.3.3</td>
+    <td>This is a plugin which will terminate tests after a certain timeout. / MIT</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/pytest-dev/pytest-xdist">pytest-xdist</a></td>
+    <td>1.28.0</td>
+    <td>py.test xdist plugin for distributed testing and loop-on-failing modes / MIT</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="http://www.python.org/">python</a></td>
+    <td>3.7.3</td>
+    <td>General purpose programming language / PSF</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/Blosc/python-blosc">python-blosc</a></td>
+    <td>1.7.0</td>
+    <td>A Python wrapper for the extremely fast Blosc compression library / Apache 2.0</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://pagure.io/python-daemon/">python-daemon</a></td>
+    <td>2.2.3</td>
+    <td>Library to implement a well-behaved Unix daemon process. / Apache Software License</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://dateutil.readthedocs.org/">python-dateutil</a></td>
+    <td>2.8.0</td>
+    <td>Extensions to the standard Python datetime module. / BSD 3 Clause</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/fmoo/python-editor">python-editor</a></td>
+    <td>1.0.4</td>
+    <td>Programmatically open an editor, capture the result. / Apache 2.0</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/miguelgrinberg/python-engineio/">python-engineio</a></td>
+    <td>1.3.1</td>
+    <td>Engine.IO server / MIT</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://docs.python.org/2/library/gdbm.html">python-gdbm</a></td>
+    <td>1.1</td>
+    <td>GNU's reinterpretation of dbm / PSF</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/xflr6/graphviz">python-graphviz</a></td>
+    <td>0.10.1</td>
+    <td>Simple Python interface for Graphviz / MIT</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="http://code.google.com/p/py-leveldb/">python-leveldb</a></td>
+    <td>0.194</td>
+    <td>Python bindings for leveldb database library / BSD 3-Clause</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/Changaco/python-libarchive-c">python-libarchive-c</a></td>
+    <td>2.8</td>
+    <td>Python interface to libarchive / CC0-1.0</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="https://lmdb.readthedocs.io/">python-lmdb</a></td>
+    <td>0.92</td>
+    <td>Universal Python binding for the LMDB 'Lightning' Database / OpenLDAP</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="http://www.tummy.com/Community/software/python-memcached/">python-memcached</a></td>
+    <td>1.59</td>
+    <td>Pure python memcached client / PSF 2.0</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/mullender/python-ntlm">python-ntlm</a></td>
+    <td>1.1.0</td>
+    <td>Provides NTLM support / LGPL</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/python-rapidjson/python-rapidjson">python-rapidjson</a></td>
+    <td>0.0.11</td>
+    <td>Python wrapper around rapidjson / MIT</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/andrix/python-snappy">python-snappy</a></td>
+    <td>0.5.1</td>
+    <td>Python library for the snappy compression library from Google / BSD-3-Clause</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/miguelgrinberg/python-socketio/">python-socketio</a></td>
+    <td>1.7.4</td>
+    <td>Socket.IO server / MIT</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="http://python-sybase.sourceforge.net/">python-sybase</a></td>
+    <td>0.40</td>
+    <td>Python interface to the Sybase relational database system / BSD License</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/WoLpH/python-utils">python-utils</a></td>
+    <td>2.2.0</td>
+    <td>Python Utils is a collection of small Python functions and classes which make common patterns shorter and easier. / BSD-3-Clause</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="http://pytorch.org/">pytorch</a></td>
+    <td>1.0.1</td>
+    <td>PyTorch is an optimized tensor library for deep learning using GPUs and CPUs. / BSD 3-Clause</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="http://pythonhosted.org/pytz/">pytz</a></td>
+    <td>2019.1</td>
+    <td>World timezone definitions, modern and historical. / MIT</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/PyWavelets/pywt">pywavelets</a></td>
+    <td>1.0.3</td>
+    <td>Discrete Wavelet Transforms in Python / MIT</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="http://bitbucket.org/techtonik/python-wget/">pywget</a></td>
+    <td>3.2</td>
+    <td>Pure Python download utility / Public-Domain</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="http://pyyaml.org/wiki/PyYAML">pyyaml</a></td>
+    <td>5.1.1</td>
+    <td>YAML parser and emitter for Python / MIT</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/zeromq/pyzmq">pyzmq</a></td>
+    <td>18.0.0</td>
+    <td>Python bindings for zeromq / BSD 3-clause</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="http://kcachegrind.sourceforge.net/html/Home.html">qcachegrind</a></td>
+    <td>0.7.4</td>
+    <td>A profiling data visualizer / GPLv2</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/quantopian/qgrid">qgrid</a></td>
+    <td>1.1.1</td>
+    <td>Pandas DataFrame viewer for Jupyter Notebook / Apache 2.0</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="http://qt-project.org">qt</a></td>
+    <td>5.9.7</td>
+    <td>Qt is a cross-platform application and UI framework. / LGPL-3.0</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/spyder-ide/qtawesome">qtawesome</a></td>
+    <td>0.5.7</td>
+    <td>Iconic fonts in PyQt and PySide applications / MIT</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="http://jupyter.org">qtconsole</a></td>
+    <td>4.5.1</td>
+    <td>Jupyter Qt console / BSD 3-Clause</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/spyder-ide/qtpy">qtpy</a></td>
+    <td>1.8.0</td>
+    <td>Abtraction layer for PyQt5/PyQt4/PySide / MIT</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="http://www.quandl.com/">quandl</a></td>
+    <td>3.4.5</td>
+    <td>High quality financial and economic data / MIT</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/scrapy/queuelib">queuelib</a></td>
+    <td>1.5.0</td>
+    <td>Collection of persistent (disk-based) queues / BSD</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/mapbox/rasterio">rasterio</a></td>
+    <td>1.0.21</td>
+    <td>Rasterio reads and writes geospatial raster datasets / BSD 3-Clause</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://cnswww.cns.cwru.edu/php/chet/readline/rltop.html">readline</a></td>
+    <td>7.0</td>
+    <td>library for editing command lines as they are typed in / GPL3</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="http://redis.io/download/">redis</a></td>
+    <td>5.0.3</td>
+    <td>Advanced key-value cache and store / 3-clause BSD</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/andymccurdy/redis-py/">redis-py</a></td>
+    <td>3.2.1</td>
+    <td>Python client for Redis key-value store / MIT</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://bitbucket.org/mrabarnett/mrab-regex">regex</a></td>
+    <td>2019.06.05</td>
+    <td>Alternative regular expression module, to replace re. / Python-2.0</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="http://www.reportlab.com/opensource/">reportlab</a></td>
+    <td>3.5.23</td>
+    <td>Open-source engine for creating complex, data-driven PDF documents and custom vector graphics / BSD 3-Clause</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="http://www.repoze.org/">repoze.lru</a></td>
+    <td>0.7</td>
+    <td>A tiny LRU cache implementation and decorator / BSD</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="http://python-requests.org">requests</a></td>
+    <td>2.22.0</td>
+    <td>Python HTTP for Humans / Apache 2.0</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="http://github.com/dashea/requests-file">requests-file</a></td>
+    <td>1.4.1</td>
+    <td>file transport adapter for Requests / Apache</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/Lukasa/requests-ftp">requests-ftp</a></td>
+    <td>0.3.1</td>
+    <td>An FTP transport adapter for use with the Python Requests library / Apache-2</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/requests/requests-kerberos">requests-kerberos</a></td>
+    <td>0.12.0</td>
+    <td>Kerberos authentication handler for python-requests / Other</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/getsentry/responses">responses</a></td>
+    <td>0.10.5</td>
+    <td>utility library for mocking out the 'requests' Python library / Apache 2.0</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/python-rope/rope">rope</a></td>
+    <td>0.14.0</td>
+    <td>A python refactoring library / GPL 2.0</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="https://routes.readthedocs.io/">routes</a></td>
+    <td>2.4.1</td>
+    <td>Routing Recognition and Generation Tools / MIT</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://bitbucket.org/ruamel/yaml">ruamel_yaml</a></td>
+    <td>0.15.46</td>
+    <td>A patched copy of ruamel.yaml. / MIT</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/paulgb/runipy">runipy</a></td>
+    <td>0.1.5</td>
+    <td>Run IPython notebooks from the command line / BSD 2-Clause</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="http://s3fs.readthedocs.io/en/latest/">s3fs</a></td>
+    <td>0.2.1</td>
+    <td>Convenient Filesystem interface over S3 / BSD 3-Clause</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="http://pyhacker.com/pages/sas7bdat.html">sas7bdat</a></td>
+    <td>2.2.2</td>
+    <td>sas7bdat file reader for Python / MIT</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/sassoftware/sas_kernel">sas_kernel</a></td>
+    <td>2.2.0</td>
+    <td>A Jupyter kernel for SAS / Apache 2.0</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/sassoftware/saspy">saspy</a></td>
+    <td>3.1.0</td>
+    <td>A Python interface module to the SAS System / Apache 2.0</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/benhoyt/scandir">scandir</a></td>
+    <td>1.10.0</td>
+    <td>scandir, a better directory iterator and faster os.walk() / BSD 3-Clause</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="http://scikit-bio.org">scikit-bio</a></td>
+    <td>0.5.4</td>
+    <td>Data structures, algorithms and educational resources for bioinformatics. / BSD-3-Clause</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="http://scikit-image.org/">scikit-image</a></td>
+    <td>0.15.0</td>
+    <td>Image processing routines for SciPy. / BSD 3-Clause</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="http://scikit-learn.org/">scikit-learn</a></td>
+    <td>0.21.2</td>
+    <td>A set of python modules for machine learning and data mining / BSD 3-Clause</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="http://www.scikit-rf.org">scikit-rf</a></td>
+    <td>0.14.9</td>
+    <td>Object Oriented Microwave Engineering. / BSD 3-Clause</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="http://www.scipy.org/">scipy</a></td>
+    <td>1.3.0</td>
+    <td>Scientific Library for Python / BSD 3-Clause</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="http://www.scons.org/">scons</a></td>
+    <td>3.0.5</td>
+    <td>Open Source next-generation build tool. / MIT</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://scrapy.org/">scrapy</a></td>
+    <td>1.6.0</td>
+    <td>A high-level Python Screen Scraping framework / BSD 3-Clauses</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://seaborn.pydata.org">seaborn</a></td>
+    <td>0.9.0</td>
+    <td>Statistical data visualization / BSD 3-Clause</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/mitya57/secretstorage">secretstorage</a></td>
+    <td>3.1.1</td>
+    <td>Provides a way for securely storing passwords and other secrets. / BSD-3-Clause</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/rbarrois/python-semanticversion">semantic_version</a></td>
+    <td>2.6.0</td>
+    <td>A library implementing the 'SemVer' scheme. / BSD</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/hsoft/send2trash">send2trash</a></td>
+    <td>1.5.0</td>
+    <td>Python library to natively send files to Trash (or Recycle bin) on all platforms. / BSD-3-Clause</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/pyca/service_identity">service_identity</a></td>
+    <td>18.1.0</td>
+    <td>Service identity verification for pyOpenSSL. / MIT</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/pypa/setuptools">setuptools</a></td>
+    <td>41.0.1</td>
+    <td>Download, build, install, upgrade, and uninstall Python packages / MIT</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/pypa/setuptools_scm/">setuptools_scm</a></td>
+    <td>3.3.3</td>
+    <td>The blessed package to manage your versions by scm tags. / MIT</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/amoffat/sh">sh</a></td>
+    <td>1.12.14</td>
+    <td>Python subprocess interface / MIT</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/Toblerity/Shapely">shapely</a></td>
+    <td>1.6.4</td>
+    <td>Python package for manipulation and analysis of geometric objects in the Cartesian plane. / BSD 3-Clause</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="http://cheeseshop.python.org/pypi/simplegeneric">simplegeneric</a></td>
+    <td>0.8.1</td>
+    <td>Simple generic functions (similar to Python's own len(), pickle.dump(), etc.) / Zope Public</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="http://github.com/simplejson/simplejson">simplejson</a></td>
+    <td>3.16.0</td>
+    <td>Simple, fast, extensible JSON encoder/decoder for Python / MIT</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="http://docs.python.org/3/library/functools.html#functools.singledispatch">singledispatch</a></td>
+    <td>3.4.0.3</td>
+    <td>Transforms a function into a single-dispatch generic function / MIT</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="http://www.riverbankcomputing.com/software/sip/intro">sip</a></td>
+    <td>4.19.8</td>
+    <td>Create Python bindings for C and C++ libraries / GPL-3.0</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="http://pypi.python.org/pypi/six/">six</a></td>
+    <td>1.12.0</td>
+    <td>Python 2 and 3 compatibility utilities / MIT</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/RaRe-Technologies/smart_open">smart_open</a></td>
+    <td>1.8.4</td>
+    <td>Python library for efficient streaming of large files / MIT</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/gitpython-developers/smmap">smmap2</a></td>
+    <td>2.0.5</td>
+    <td>A pure python implementation of a sliding window memory map manager / BSD 3-Clause</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://jiffyclub.github.io/snakeviz/">snakeviz</a></td>
+    <td>1.0.0</td>
+    <td>Web-based viewer for Python profiler output / BSD</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/google/snappy">snappy</a></td>
+    <td>1.1.7</td>
+    <td>A fast compressor/decompressor / BSD 3-clause</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/shibukawa/snowball_py">snowballstemmer</a></td>
+    <td>1.9.0</td>
+    <td>Snowball stemming library collection for Python / BSD-2-Clause</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/mapbox/snuggs">snuggs</a></td>
+    <td>1.4.6</td>
+    <td>Snuggs are s-expressions for NumPy / MIT</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="http://github.com/mrjoes/sockjs-tornado/">sockjs-tornado</a></td>
+    <td>1.0.6</td>
+    <td>SockJS python server implementation on top of Tornado framework / MIT</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="http://www.grantjenks.com/docs/sortedcollections/">sortedcollections</a></td>
+    <td>1.1.2</td>
+    <td>Python Sorted Collections / Apache-2.0</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="http://www.grantjenks.com/docs/sortedcontainers/">sortedcontainers</a></td>
+    <td>2.1.0</td>
+    <td>Python Sorted Container Types: SortedList, SortedDict, and SortedSet / Apache 2.0</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="http://facelessuser.github.io/soupsieve">soupsieve</a></td>
+    <td>1.8</td>
+    <td>A modern CSS selector implementation for BeautifulSoup / MIT</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="https://spacy.io/">spacy</a></td>
+    <td>2.0.16</td>
+    <td>Industrial-strength Natural Language Processing / MIT</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/jupyter-incubator/sparkmagic">sparkmagic</a></td>
+    <td>0.12.7</td>
+    <td>Jupyter magics and kernels for working with remote Spark clusters / BSD 3-clause</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="http://www.sphinx-doc.org">sphinx</a></td>
+    <td>2.1.2</td>
+    <td>Sphinx is a tool that makes it easy to create intelligent and beautiful documentation / BSD-2-Clause</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/snide/sphinx_rtd_theme/">sphinx_rtd_theme</a></td>
+    <td>0.4.3</td>
+    <td>ReadTheDocs.org theme for Sphinx, 2013 version. / MIT</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="None">sphinxcontrib</a></td>
+    <td>1.0</td>
+    <td>Python namespace for sphinxcontrib / BSD</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="http://sphinx-doc.org/">sphinxcontrib-applehelp</a></td>
+    <td>1.0.1</td>
+    <td>sphinxcontrib-applehelp is a sphinx extension which outputs Apple help books / BSD-2-Clause</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="http://sphinx-doc.org/">sphinxcontrib-devhelp</a></td>
+    <td>1.0.1</td>
+    <td>sphinxcontrib-devhelp is a sphinx extension which outputs Devhelp document / BSD-2-Clause</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="http://sphinx-doc.org/">sphinxcontrib-htmlhelp</a></td>
+    <td>1.0.2</td>
+    <td>sphinxcontrib-htmlhelp is a sphinx extension which ... / BSD-2-Clause</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="http://sphinx-doc.org/">sphinxcontrib-jsmath</a></td>
+    <td>1.0.1</td>
+    <td>A sphinx extension which renders display math in HTML via JavaScript / BSD-2-Clause</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="http://sphinx-doc.org/">sphinxcontrib-qthelp</a></td>
+    <td>1.0.2</td>
+    <td>sphinxcontrib-qthelp is a sphinx extension which outputs QtHelp document / BSD-2-Clause</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="http://sphinx-doc.org/">sphinxcontrib-serializinghtml</a></td>
+    <td>1.1.3</td>
+    <td>sphinxcontrib-serializinghtml is a sphinx extension which outputs "serialized" HTML files (json and pickle). / BSD-2-Clause</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="https://pypi.python.org/pypi/sphinxcontrib-websupport">sphinxcontrib-websupport</a></td>
+    <td>1.1.2</td>
+    <td>Sphinx API for Web Apps / BSD-2-Clause</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/explosion/sputnik">sputnik</a></td>
+    <td>0.9.3</td>
+    <td>Sputnik: a data package manager library / MIT</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://www.spyder-ide.org/">spyder</a></td>
+    <td>3.3.6</td>
+    <td>The Scientific Python Development Environment / MIT</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/spyder-ide/spyder-kernels">spyder-kernels</a></td>
+    <td>0.5.1</td>
+    <td>Jupyter kernels for the Spyder console / MIT</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="http://www.sqlalchemy.org/">sqlalchemy</a></td>
+    <td>1.3.5</td>
+    <td>Database Abstraction Library. / MIT</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/kvesteri/sqlalchemy-utils">sqlalchemy-utils</a></td>
+    <td>0.33.11</td>
+    <td>Various utility functions for SQLAlchemy. / BSD 3-Clause</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="http://www.sqlite.org/">sqlite</a></td>
+    <td>3.29.0</td>
+    <td>Implements a self-contained, zero-configuration, SQL database engine. / Public-Domain (http://www.sqlite.org/copyright.html)</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/andialbrecht/sqlparse">sqlparse</a></td>
+    <td>0.3.0</td>
+    <td>A non-validating SQL parser module for Python. / BSD 3-Clause</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://www.statsmodels.org">statsmodels</a></td>
+    <td>0.10.0</td>
+    <td>Statistical computations and models for use with SciPy / BSD 3-Clause</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/mrocklin/streamz/">streamz</a></td>
+    <td>0.5.1</td>
+    <td>Manage streaming data, optionally with Dask and Pandas / BSD-3-Clause</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/stripe/stripe-python">stripe</a></td>
+    <td>2.21.0</td>
+    <td>Stripe python bindings / MIT</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="http://bitbucket.org/jurko/suds">suds-jurko</a></td>
+    <td>0.6</td>
+    <td>Lightweight SOAP client (Jurko's fork). / LGPL-3.0</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://subversion.apache.org/">svn</a></td>
+    <td>1.10.2</td>
+    <td>Intuitive Subversion wrapper / Apache Software License V.2</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="http://www.swig.org/">swig</a></td>
+    <td>3.0.12</td>
+    <td>C/C++ parser code generator / GPL 3</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="http://sympy.org">sympy</a></td>
+    <td>1.4</td>
+    <td>Python library for symbolic mathematics / BSD-3-Clause</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/tableau/TabPy">tabpy-client</a></td>
+    <td>0.2</td>
+    <td>Python client library to manage Tableau Python Server. / MIT</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/tableau/TabPy">tabpy-server</a></td>
+    <td>0.2</td>
+    <td>Web server Tableau uses to run Python scripts. / MIT</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/ionelmc/python-tblib">tblib</a></td>
+    <td>1.4.0</td>
+    <td>Traceback serialization library. / BSD 2-Clause</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="http://pythonpaste.org/tempita/">tempita</a></td>
+    <td>0.5.3dev</td>
+    <td>A small templating language / MIT</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="http://tensorflow.org/">tensorflow</a></td>
+    <td>1.14.0</td>
+    <td>TensorFlow is a machine learning library. / Apache 2.0</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="http://tensorflow.org/">tensorflow-base</a></td>
+    <td>1.14.0</td>
+    <td>TensorFlow is a machine learning library, base package contains only tensorflow. / Apache 2.0</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="http://tensorflow.org/">tensorflow-gpu</a></td>
+    <td>1.14.0</td>
+    <td>Metapackage for selecting a TensorFlow variant. / Apache 2.0</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="http://tensorflow.org/">tensorflow-gpu-base</a></td>
+    <td>1.8.0</td>
+    <td>TensorFlow is a machine learning library, base GPU package, tensorflow only. / Apache 2.0</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="http://tensorflow.org/">tensorflow-tensorboard</a></td>
+    <td>1.5.1</td>
+    <td>TensorBoard lets you watch Tensors Flow / Apache 2.0</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="http://github.com/teradata/PyTd">teradata</a></td>
+    <td>15.10.0.21</td>
+    <td>Script powerful interactions with Teradata Database / MIT</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="http://pypi.python.org/pypi/termcolor">termcolor</a></td>
+    <td>1.1.0</td>
+    <td>ANSII Color formatting for output in terminal. / MIT</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/jupyter/terminado">terminado</a></td>
+    <td>0.8.2</td>
+    <td>Terminals served by tornado websockets / BSD 2-Clause</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="https://testpath.readthedocs.io">testpath</a></td>
+    <td>0.4.2</td>
+    <td>Testpath is a collection of utilities for Python code working with files and commands. / BSD-3-Clause</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="https://geoff.greer.fm/ag">the_silver_searcher</a></td>
+    <td>2.2.0</td>
+    <td>A code searching tool similar to ack, with a focus on speed. / Apache-2.0</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="http://deeplearning.net/software/theano/">theano</a></td>
+    <td>1.0.3</td>
+    <td>Optimizing compiler for evaluating mathematical expressions on CPUs and GPUs. / BSD 3-Clause</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="http://thrift.apache.org">thrift</a></td>
+    <td>0.11.0</td>
+    <td>Python bindings for the Apache Thrift RPC system / Apache 2.0</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://thriftpy.readthedocs.org/">thriftpy</a></td>
+    <td>0.3.9</td>
+    <td>Pure python implementation of Apache Thrift. / MIT</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="http://www.tcl.tk/">tk</a></td>
+    <td>8.6.8</td>
+    <td>A dynamic programming language with GUI support.  Bundles Tcl and Tk. / Tcl/Tk</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="http://toolz.readthedocs.org/">toolz</a></td>
+    <td>0.10.0</td>
+    <td>A functional standard library for Python / BSD 3-Clause</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="http://pytorch.org/">torchvision</a></td>
+    <td>0.2.1</td>
+    <td>Image and video datasets and models for torch deep learning / BSD 3-Clause</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="http://www.tornadoweb.org/">tornado</a></td>
+    <td>6.0.3</td>
+    <td>A Python web framework and asynchronous networking library, originally developed at FriendFeed. / Apache 2.0</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/hfaran/Tornado-JSON">tornado-json</a></td>
+    <td>1.3.2</td>
+    <td>A simple JSON API framework based on Tornado / MIT</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://pypi.python.org/pypi/tqdm">tqdm</a></td>
+    <td>4.32.1</td>
+    <td>A Fast, Extensible Progress Meter / MPLv2.0, MIT</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/testing-cabal/traceback2">traceback2</a></td>
+    <td>1.4.0</td>
+    <td>Backports of the traceback module / PSF 2.0</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="http://ipython.org/">traitlets</a></td>
+    <td>4.3.2</td>
+    <td>Configuration system for Python applications / BSD 3-clause</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="http://code.enthought.com/projects/traits">traits</a></td>
+    <td>5.1.1</td>
+    <td>traits - explicitly typed attributes for Python / BSD 3-clause</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="http://docs.enthought.com/traitsui/">traitsui</a></td>
+    <td>6.1.1</td>
+    <td>TraitsUI - Traits-capable windowing framework / BSD 3-clause</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/zopefoundation/transaction">transaction</a></td>
+    <td>2.4.0</td>
+    <td>Transaction management for Python / ZPL 2.1</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="http://docs.pylonsproject.org/projects/translationstring/en/latest/">translationstring</a></td>
+    <td>1.3</td>
+    <td>Utility library for i18n / BSD</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/haypo/trollius">trollius</a></td>
+    <td>2.2</td>
+    <td>Port of the Tulip project (asyncio module, PEP 3156) on Python 2 / Apache-2.0</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="http://twistedmatrix.com/">twisted</a></td>
+    <td>19.2.0</td>
+    <td>event-driven networking engine / MIT</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://docs.python.org/3.5/library/typing.html">typing</a></td>
+    <td>3.7.4</td>
+    <td>Type Hints for Python - backport for Python<3.5 / PSF</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/esnme/ultrajson">ujson</a></td>
+    <td>1.35</td>
+    <td>Ultra fast JSON decoder and encoder written in C with Python bindings / BSD 3-Clause</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/jdunck/python-unicodecsv">unicodecsv</a></td>
+    <td>0.14.1</td>
+    <td>Drop-in replacement for csv module which supports unicode strings / BSD</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="https://pypi.python.org/pypi/Unidecode">unidecode</a></td>
+    <td>1.0.23</td>
+    <td>ASCII transliterations of Unicode text / GPL-2.0</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="http://www.unixodbc.org/">unixodbc</a></td>
+    <td>2.3.7</td>
+    <td>ODBC on non MS Windows platforms / LGPL-2.1</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="https://urllib3.readthedocs.io/">urllib3</a></td>
+    <td>1.24.2</td>
+    <td>HTTP library with thread-safe connection pooling, file post, and more. / MIT</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="http://github.com/MagicStack/uvloop">uvloop</a></td>
+    <td>0.12.2</td>
+    <td>Ultra fast implementation of asyncio event loop on top of libuv. / MIT</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/habnabit/vcversioner">vcversioner</a></td>
+    <td>2.16.0.0</td>
+    <td>Take version numbers from version control. / ISC</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="http://docs.pylonsproject.org/projects/venusian/en/latest/">venusian</a></td>
+    <td>1.2.0</td>
+    <td>A library for deferring decorator actions / BSD</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://virtualenv.pypa.io/">virtualenv</a></td>
+    <td>16.0.0</td>
+    <td>Virtual Python Environment builder / MIT</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="http://vispy.org/">vispy</a></td>
+    <td>0.5.3</td>
+    <td>High performance interactive 2D/3D data visualization. / BSD 3-Clause</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/almarklein/visvis">visvis</a></td>
+    <td>1.11.2</td>
+    <td>An object oriented approach to visualization of 1D to 4D data / BSD 3-Clause</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/scrapy/w3lib">w3lib</a></td>
+    <td>1.20.0</td>
+    <td>Library of web-related functions / BSD</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/Pylons/waitress">waitress</a></td>
+    <td>1.2.1</td>
+    <td>Production-quality WSGI server with very acceptable performance / ZPL 2.1</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/jquast/wcwidth">wcwidth</a></td>
+    <td>0.1.7</td>
+    <td>Measures number of Terminal column cells of wide-character codes. / MIT</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/gsnedders/python-webencodings">webencodings</a></td>
+    <td>0.5.1</td>
+    <td>Character encoding aliases for legacy web content / BSD 3-Clause</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="http://webob.org/">webob</a></td>
+    <td>1.8.5</td>
+    <td>WSGI request and response object / MIT</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="http://webtest.pythonpaste.org/">webtest</a></td>
+    <td>2.0.33</td>
+    <td>helper to test WSGI applications / MIT</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://palletsprojects.com/p/werkzeug/">werkzeug</a></td>
+    <td>0.15.4</td>
+    <td>The comprehensive WSGI web application library. / BSD 3-Clause</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="https://www.gnu.org/software/wget/">wget</a></td>
+    <td>1.20.1</td>
+    <td>utility for non-interactive download of files from the Web / GPL3</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/pypa/wheel">wheel</a></td>
+    <td>0.33.4</td>
+    <td>A built-package format for Python. / MIT</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="https://bitbucket.org/mchaput/whoosh">whoosh</a></td>
+    <td>2.7.4</td>
+    <td>Whoosh is a fast, featureful full-text indexing and searching library implemented in pure Python / BSD 2-Clause</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="http://ipython.org">widgetsnbextension</a></td>
+    <td>3.5.0</td>
+    <td>Interactive Widgets for Jupyter / BSD 3-clause</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/mongodb-labs/winkerberos">winkerberos</a></td>
+    <td>0.7.0</td>
+    <td>High level interface to SSPI for Kerberos client auth / Apache-2.0</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/danielfrg/word2vec">word2vec</a></td>
+    <td>0.9.4</td>
+    <td>Python interface to Google word2vec / Apache-2.0</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="http://github.com/shazow/workerpool">workerpool</a></td>
+    <td>0.9.4</td>
+    <td>Module for distributing jobs to a pool of worker threads / MIT</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/GrahamDumpleton/wrapt">wrapt</a></td>
+    <td>1.11.2</td>
+    <td>Module for decorators, wrappers and monkey patching / BSD 2-Clause</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/Lawouach/WebSocket-for-Python">ws4py</a></td>
+    <td>0.5.1</td>
+    <td>WebSocket client and server library for Python 2, 3, and PyPy / BSD 3-Clause</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/gawel/WSGIProxy2">wsgiproxy2</a></td>
+    <td>0.4.6</td>
+    <td>A WSGI Proxy with various http client backends / MIT</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="http://wtforms.simplecodes.com">wtforms</a></td>
+    <td>2.2.1</td>
+    <td>A flexible forms validation and rendering library for Python / BSD 3-Clause</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/minrk/wurlitzer">wurlitzer</a></td>
+    <td>1.0.2</td>
+    <td>Capture C-level stdout/stderr in Python / MIT</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="https://wxpython.org/Phoenix/">wxpython</a></td>
+    <td>4.0.4</td>
+    <td>Cross platform GUI toolkit for Python, "Phoenix" version / wxWindows Library v3.1</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/pydata/xarray">xarray</a></td>
+    <td>0.12.1</td>
+    <td>N-D labeled arrays and datasets in Python. / Apache-2.0</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="http://xerces.apache.org/xerces-c/">xerces-c</a></td>
+    <td>3.2.2</td>
+    <td>Xerces-C++ is a validating XML parser written in a portable subset of C++. / Apache 2.0</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="http://www.python-excel.org/">xlrd</a></td>
+    <td>1.2.0</td>
+    <td>Library for developers to extract data from Microsoft Excel (tm) spreadsheet files / BSD 3-Clause and BSD with advertising</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="https://xlsxwriter.readthedocs.io/">xlsxwriter</a></td>
+    <td>1.1.8</td>
+    <td>A Python module for creating Excel XLSX files / BSD 2-Clause</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="http://www.python-excel.org/">xlutils</a></td>
+    <td>2.0.0</td>
+    <td>Utilities for working with Excel files / MIT</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="http://www.python-excel.org/">xlwt</a></td>
+    <td>1.3.0</td>
+    <td>Writing data and formatting information to Excel files / BSD</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="http://tukaani.org/xz/">xz</a></td>
+    <td>5.2.4</td>
+    <td>Data compression software with high compression ratio / LGPL-2.1 and GPL-2.0</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="http://pyyaml.org/wiki/LibYAML">yaml</a></td>
+    <td>0.1.7</td>
+    <td>A C library for parsing and emitting YAML. / MIT</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/aio-libs/yarl">yarl</a></td>
+    <td>1.3.0</td>
+    <td>Yet another URL library / Apache 2.0</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="http://yt-project.org/">yt</a></td>
+    <td>3.4.1</td>
+    <td>Analysis and visualization toolkit for volumetric data / BSD 3-clause</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="http://zeromq.org">zeromq</a></td>
+    <td>4.3.1</td>
+    <td>A high-performance asynchronous messaging library. / LGPL 3</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="http://github.com/mrocklin/zict">zict</a></td>
+    <td>1.0.0</td>
+    <td>Composable Dictionary Classes / BSD 3-Clause</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/jaraco/zipp">zipp</a></td>
+    <td>0.5.1</td>
+    <td>A pathlib-compatible Zipfile object wrapper / MIT</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="http://zlib.net/">zlib</a></td>
+    <td>1.2.11</td>
+    <td>Massively spiffy yet delicately unobtrusive compression library / zlib</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+  <tr>
+    <td><a href="None">zope</a></td>
+    <td>1.0</td>
+    <td>web application server / BSD</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="http://pypi.python.org/pypi/zope.deprecation">zope.deprecation</a></td>
+    <td>4.4.0</td>
+    <td>Zope Deprecation Infrastructure / ZPL 2.1</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="http://docs.zope.org/zope.interface/">zope.interface</a></td>
+    <td>4.6.0</td>
+    <td>Interfaces for Python / ZPL 2.1</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="http://pypi.python.org/pypi/zope.sqlalchemy">zope.sqlalchemy</a></td>
+    <td>1.1</td>
+    <td>Minimal Zope/SQLAlchemy transaction integration / ZPL 2.1</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="http://www.zstd.net">zstd</a></td>
+    <td>1.3.7</td>
+    <td>Zstandard - Fast real-time compression algorithm / BSD 3-Clause</td>
+    <td><i class="fa fa-check"></i></td>
+  </tr>
+</table></div>
+
+
+          </div>
+        </div>
+      </div>
+                    <!--#DOCS_CONTENT_END-->
+                  </article>
+                </div>
+                  <div class="topic_nav" style="padding:20px 0">
+                          <a  class="btn btn-sm alt1" href="../py3.6_linux-64/">&laquo; Packages for 64-bit Linux with Python 3.6</a>
+                          &nbsp;&nbsp;&nbsp;&nbsp;<a class="btn btn-sm alt1" href="../py2.7_linux-64/">Packages for 64-bit Linux with Python 2.7 &raquo;</a>
+                  </div>
+              </div>
+            </main>
+          </div>
+        </div>
+      </div>
+    </div>
+    <footer class="brand-footer">
+      <div class="content-wrapper">
+        <div class="bg-dark row show-for-large-up">
+            <div class="col-lg-4 text-center"><a href="../../../" class="active">Docs Home</a></div>
+            <div class="col-lg-4 text-center"><a href="https://www.anaconda.com/">Anaconda Home</a></div>
+            <div class="col-lg-4 text-center"><a href="https://www.anaconda.com/support">More Help &amp; Support</a></div>
+        </div>
+        <div class="bg-dark row">
+          <div class="col-sm-12 small-centered col-md-12 text-center col-lg-12 copyright">
+            <div class="copyright">
+              <i class="fa fa-copyright"></i>
+              <span>2019 Anaconda, Inc. </span>
+              <br class="hidden-md hidden-lg" />
+              <span>All Rights Reserved. </span>
+              <br class="hidden-md hidden-lg" />
+              <a href="https://www.anaconda.com/privacy-policy/" target="_blank">Privacy Policy </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </footer>
+  </div>
+</div>
+
+
+
+
+  </body>
+</html>
