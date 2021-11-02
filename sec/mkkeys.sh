@@ -15,7 +15,7 @@ openssl x509 -in PK.crt -out PK.cer -outform DER
 openssl x509 -in KEK.crt -out KEK.cer -outform DER
 openssl x509 -in DB.crt -out DB.cer -outform DER
 
-GUID=`python -c 'import uuid; print(str(uuid.uuid1()))'`
+GUID=`python3 -c 'import uuid; print(str(uuid.uuid1()))'`
 echo $GUID > myGUID.txt
 
 cert-to-efi-sig-list -g $GUID PK.crt PK.esl
@@ -39,5 +39,6 @@ echo ""
 echo ""
 echo "For use with KeyTool, copy the *.auth and *.esl files to a FAT USB"
 echo "flash drive or to your EFI System Partition (ESP)."
-echo "For use with most UEFIs' built-in key managers, copy the *.cer files."
+echo "For use with most UEFIs' built-in key managers, copy the *.cer files;"
+echo "but some UEFIs require the *.auth files."
 echo ""
