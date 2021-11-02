@@ -42,7 +42,7 @@ curl==7.65.2
 cycler==0.10.0 
 cython==0.29.12 
 cytoolz==0.10.0 
-dask==2.1.0 
+dask==2021.10.0 
 dask-core==2.1.0 
 dbus==1.13.6 
 decorator==4.4.0 
