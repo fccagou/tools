@@ -18,7 +18,48 @@ fi
 
 
 
-YEAR="${1}"
+
+workload_to_color() {
+
+	local work_load=$1
+
+	if [ ${work_load} -eq 0 ]
+	then
+		color="#ebedf0"
+	elif [ ${work_load} -lt 5 ]
+	then
+		color="#c7e9b4"
+		color="#edf8b1"
+	elif [ ${work_load} -lt 10 ]
+	then
+		color="#c6e48b"
+	elif [ ${work_load} -lt 20 ]
+	then
+		color="#7fcdbb"
+	elif [ ${work_load} -lt 30 ]
+	then
+		color="#41b6c4"
+	elif [ ${work_load} -lt 40 ]
+	then
+		color="#1d91c0"
+	elif [ ${work_load} -lt 50 ]
+	then
+		color="#225ea8"
+	elif [ ${work_load} -lt 60 ]
+	then
+		color="#253494"
+	elif [ ${work_load} -lt 70 ]
+	then
+		color="#081d58"
+	else
+		color="#081d58"
+	fi
+
+	printf -- "%s" "$color"
+
+}
+
+YEAR="$1"
 
 if [ -z "${YEAR}" ]
 then
@@ -59,6 +100,7 @@ do
 	work_load=0
 
 	for stats  in $(git log --shortstat --after=${prev_day} --before=${next_day}  | egrep 'file.* changed' | awk '{ print $1"-"$4"-"$6}')
+    for b in ${BRANCHES//,/ }
 	do
 		nb_files=${stats/-*}
 		nb_ins=${stats##-*}
@@ -67,45 +109,7 @@ do
 		work_load=$(( $work_load + $nb_files + $nb_ins + ${nb_del:-0} )) 
 	done
 
-
-
-	if [ ${work_load} -eq 0 ]
-	then
-		color="#ebedf0"
-		#color="#ffffd9"
-	elif [ ${work_load} -lt 5 ]
-	then
-		color="#c7e9b4"
-		color="#edf8b1"
-	elif [ ${work_load} -lt 10 ]
-	then
-		# color="#7bc96f"
-		color="#c6e48b"
-	elif [ ${work_load} -lt 20 ]
-	then
-		# color="#196127"
-		color="#7fcdbb"
-	elif [ ${work_load} -lt 30 ]
-	then
-		color="#41b6c4"
-	elif [ ${work_load} -lt 40 ]
-	then
-		color="#1d91c0"
-	elif [ ${work_load} -lt 50 ]
-	then
-		color="#225ea8"
-	elif [ ${work_load} -lt 60 ]
-	then
-		color="#253494"
-	elif [ ${work_load} -lt 70 ]
-	then
-		color="#081d58"
-	else
-		#color="#095117"
-		color="#081d58"
-	fi
-
-
+	color="$(workload_to_color $work_load)"
 
 	if [ ${translate} -eq -1 ]
 	then
