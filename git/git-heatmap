@@ -492,8 +492,11 @@ then
 fi
 
 
+# TODO: faire un boucle par année
+
 html_header "Nb de lignes de code modifiées par jour durant l'année $YEAR (01-01-${YEAR} to 31-12-${YEAR})" "${BRANCHES}"
 
+# TODO aouter le nombre de commiters et la liste (/!\ .mailmap)
 
 cat <<EOF_SVG_HEADER
 <svg width="722" height="112" class="js-calendar-graph-svg">
@@ -544,6 +547,7 @@ do
 	fi
 
 
+	# TODO: ajouter le nombre de fichier modifiés, de lignes impactés, de commiteurs
 	level="$(workload_to_level $work_load)"
 	cat <<EOF_RECT
 	<rect class="calendar-day" width="10" height="10" x="${x}" y="${y}" data-count="${work_load}" data-date="${the_date}" data-level="${level}" onmouseover="git_tip(this, event, true);" onmouseout="git_tip(this, event, false);" />
