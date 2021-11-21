@@ -248,6 +248,14 @@ html_color_legend () {
 }
 
 
+html_svg_begin_div () {
+    local div_id="$1"
+    printf -- "<div id=\"%s\" class=\"current-heatmap-div\">\n" "${div_id}"
+}
+
+html_svg_end_div () {
+    printf -- "</div>\n"
+}
 
 
 
@@ -261,6 +269,10 @@ cat <<EOF_HEADER
   <head>
     <meta charset="utf-8">
     <style>
+
+      * {
+	    box-sizing: border-box;
+	  }
 
       body {
           font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
@@ -284,7 +296,6 @@ cat <<EOF_HEADER
           left: 50%;
           width: 5px;
           height: 5px;
-          box-sizing: border-box;
           margin: 0 0 0 -5px;
           content: " ";
           border: 5px solid transparent;
@@ -381,7 +392,18 @@ cat <<EOF_HEADER
       .introduction {
           font-size: 14px;
       }
-
+      .current-heatmap-title {
+           font-size: 16px;
+      }
+      .current-heatmap-div {
+	       margin: 10px;
+		   padding-left: 10px;
+	       border: 1px solid #d0d7de;
+	       border-top-left-radius: 6px;
+           border-top-right-radius: 6px;
+      }
+      .current-heatmap {
+      }
     </style>
 
 
@@ -424,6 +446,8 @@ EOF_HEADER
 
 html_footer() {
 cat <<EOF_FOOTER
+     </div> <!--  heatmap -->
+    </div> <!--  body -->
   </body>
 </html>
 EOF_FOOTER
@@ -438,13 +462,15 @@ git_to_svg() {
     local svg_fill="${3:-no}"
 
     cat <<EOF_SVG_HEADER
-<svg width="722" height="112" class="js-calendar-graph-svg">
-  <g transform="translate(10, 20)">
+<svg width="722" height="150" class="js-calendar-graph-svg">
+  <g transform="translate(10, 50)" class="current-heartmap">
 
 EOF_SVG_HEADER
 
     translate=-1
     x=14
+
+    local nb_commits=0
 
     for d in $(seq 0 364 )
     do
@@ -465,6 +491,7 @@ EOF_SVG_HEADER
                 [ -z "${nb_del}" ] && nb_del=0
 
                 work_load=$(( work_load + nb_files + nb_ins + nb_del ))
+                nb_commits=$(( nb_commits + 1 ))
             done
         done
 
@@ -521,10 +548,13 @@ EOF_RECT
     <text text-anchor="start" class="wday" dx="-10" dy="73" style="display: none;">Sam.</text>
     <text text-anchor="start" class="wday" dx="-10" dy="81">Dim.</text>
   </g>
+    <g>
+      <text x="10" y="20" class="current-heatmap-title" >${nb_commits} commits in ${year}</text>
+	</g>
 </svg>
-
 EOF_FOOT
 
+    return "${nb_commits}"
 
 }
 
@@ -691,7 +721,9 @@ then
         html_color_legend
         for y in ${years//,/ }
         do
+            html_svg_begin_div "${output_prefix}${y}"
             git_to_svg "$y" "$branches" "${svg_fill}"
+            html_svg_end_div
         done
         html_footer
     fi
@@ -714,7 +746,9 @@ else
 
             html_header "${title}" "${branches}" > "${output_filename}"
             html_color_legend >> "${output_filename}"
+            html_svg_begin_div "${output_prefix}${y}" >> "${output_filename}"
             git_to_svg "$y" "$branches"  "${svg_fill}" >> "${output_filename}"
+            html_svg_end_div
             html_footer >> "${output_filename}"
         done
     fi
