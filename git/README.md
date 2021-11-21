@@ -6,7 +6,7 @@
 # git-heatmap
 
 Generates an github like svg heatmap for the last year of changes of the current
-git repository. (see [heatmap.html](heatmal.html))
+git repository. (see [heatmap.html](heatmap.html))
 
     curl -o some/dir/in/path/git-heatmap https://raw.githubusercontent.com/fccagou/tools/master/git/git-heatmap \
     && chmod +x some/dir/in/path/git-heatmap
