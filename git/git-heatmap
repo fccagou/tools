@@ -470,7 +470,8 @@ EOF_SVG_HEADER
     translate=-1
     x=14
 
-    local nb_commits=0
+    local total_nb_commits=0
+    local total_nb_files=0
 
     for d in $(seq 0 364 )
     do
@@ -491,7 +492,9 @@ EOF_SVG_HEADER
                 [ -z "${nb_del}" ] && nb_del=0
 
                 work_load=$(( work_load + nb_files + nb_ins + nb_del ))
-                nb_commits=$(( nb_commits + 1 ))
+                total_nb_commits=$(( total_nb_commits + 1 ))
+                total_nb_files=$(( total_nb_files + 1 ))
+
             done
         done
 
@@ -548,13 +551,13 @@ EOF_RECT
     <text text-anchor="start" class="wday" dx="-10" dy="73" style="display: none;">Sam.</text>
     <text text-anchor="start" class="wday" dx="-10" dy="81">Dim.</text>
   </g>
-    <g>
-      <text x="10" y="20" class="current-heatmap-title" >${nb_commits} commits in ${year}</text>
-	</g>
+  <text x="10" y="20" class="current-heatmap-title" >
+	  [ ${year} ]  ${total_nb_commits} contributions  and  ${total_nb_files} files modified
+  </text>
 </svg>
 EOF_FOOT
 
-    return "${nb_commits}"
+    return "${total_nb_commits}"
 
 }
 
