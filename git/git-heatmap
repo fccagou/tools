@@ -1,84 +1,505 @@
 #!/bin/sh
 
+# ----------------------------------------------------------------------------
+# F U N C T I O N S
+# ----------------------------------------------------------------------------
 
-if [ "${1}" = "help" ] || [ "${1}" = "--help" ]
+# BEGIN DUPLICATED ----------------------------------------------------------
+#
+# FIXME: ces fonctions sont les mêmes que dans le fichier sysconfig/common
+#       Il faudrait trouver un moyen  de pouvoir faire un source du common
+#       à partir de tous les scripts. Cela crée une dépendance un peut trop
+#       forte dont je ne sais identifier l'impact. Du coup, je double le code.
+#       Il faut penser à la mettre à jour partout.
+#
+#
+
+if [ -x /usr/bin/logger ]
 then
-	cat <<EOF_HELP
-GIT-HEATMAP(1)
+    LOGGER=/usr/bin/logger
+elif [ -x /bin/logger ]
+then
+    LOGGER=/bin/logger
+else
+    LOGGER=/usr/bin/echo
+fi
 
-NAME
 
-		git-heatmap > somefile.html
-        firefox somefile.html
+log () {
 
-EOF_HELP
-    exit 0
+   msg="${1}"
+   user="${LOGNAME}"
+
+   # TODO : faire un mode debug
+   # printf -- ${msg}
+   /usr/bin/timeout 2 $LOGGER -p local0.notice \
+      -t "opng" "${user}: ${msg}"
+
+}
+
+#
+# Information
+#
+RESTORE='\e[0m'
+RED='\e[31m'
+GREEN='\e[38;5;64m'
+YELLOW='\e[33m'
+BLUE='\e[34m'
+
+
+# implements: https://no-color.org/
+NO_COLOR="${NO_COLOR:-}"
+# Implements: https://bixense.com/clicolors/
+CLICOLOR="${CLICOLOR:-1}"
+CLICOLOR_FORCE="${CLICOLOR_FORCE:-0}"
+
+if [ -n "${NO_COLOR}" ] \
+	|| [ "${CLICOLOR}" == "0" ] && tty -s && [ "${CLICOLOR_FORCE}" == "0" ]
+then
+	COLOR_CHAPTER=""
+	COLOR_TITLE1=""
+	COLOR_ERROR=""
+	COLOR_INFO=""
+	COLOR_ACTION=""
+	COLOR_WARNING=""
+	COLOR_TODO=""
+	RESTORE=""
+else
+
+    COLOR_CHAPTER='\e[33;48;5;52m['
+    COLOR_TITLE1='\e[7;49;37m['
+    COLOR_ERROR=${RED}
+    COLOR_INFO=${BLUE}
+    COLOR_ACTION=${GREEN}
+    COLOR_WARNING=${RED}
+    COLOR_TODO=${BLUE}
+
 fi
 
 
 
 
 
+chapter  () {
+	printf -- "${COLOR_CHAPTER}% 100s\r[#] %s${RESTORE}\n" " " "${*}"
+}
+
+title1  () {
+	printf -- "${COLOR_TITLE1}% 100s\r |  %s${RESTORE}\n" " " "${*}"
+}
+
+
+error () {
+	printf -- "${COLOR_ERROR}[-] %s${RESTORE} \n" "${*}"
+    log "ERROR: ${1}"
+}
+
+warning () {
+	printf -- "${COLOR_WARNING}[!]${RESTORE} %s\n" "${*}"
+}
+
+action () {
+	printf -- "${COLOR_ACTION}[+] %s${RESTORE}\n" "${*}"
+}
+
+
+info () {
+	printf -- "${COLOR_INFO} |->${RESTORE} %s\n" "${*}"
+}
+
+todo () {
+	printf -- "${COLOR_TODO}[ ] TODO: %s${RESTORE}\n" "${*}"
+}
+
+
+# END DUPLICATED ----------------------------------------------------------
+
+usage () {
+
+	cat <<EOF_HELP
+GIT-HEATMAP(1)
+
+NAME
+
+		git-heatmap [--help|help] [--color-legend | [--year YYYY] [branch1,[branch2,...]] > somefile.html
+        firefox somefile.html
+
+EOF_HELP
+    exit 0
+}
+
+# arc en ciel 0 (rouge) => 100 (rouge)
+#
+
+value_to_rgb_arcenciel() {
+	local value="$1"
+	local interval="${2:-100}"
+	local x=$(( value * 1530 / interval ))
+	local r
+	local g
+	local b
+
+	if [ $x -lt 255 ]
+	then
+		r=255
+		g=$x
+		b=0
+	elif [ $x -lt 510 ]
+	then
+		r=$((510-x))
+		g=255
+		b=0
+	elif [ $x -lt 765 ]
+	then
+		r=0
+		g=255
+		b=$(( $x-510 ))
+	elif [ $x -lt 1020 ]
+	then
+		r=0;
+		g=$((1020-$x))
+		b=255
+	elif [ $x -lt 1275 ]
+	then
+		r=$(( $x-1020 ))
+		g=0
+		b=255
+	elif [ $x -le 1530 ]
+	then
+		r=255;
+		g=0;
+		b=$((1530-$x))
+	fi
+
+	printf -- "#%02x%02x%02x" "$r" "$g" "$b"
+}
+
+
+workload_to_level() {
+	local work_load="$1"
+	local level=0
+
+	[ $work_load -le 100 ] && level=$(( work_load / 10 )) || level=11
+
+	printf -- "%s" "$level"
+
+}
 workload_to_color() {
 
 	local work_load=$1
+	#value_to_rgb "$1" 1024
 
 	if [ ${work_load} -eq 0 ]
 	then
 		color="#ebedf0"
 	elif [ ${work_load} -lt 5 ]
 	then
-		color="#c7e9b4"
-		color="#edf8b1"
+		color="#dce8c4"
 	elif [ ${work_load} -lt 10 ]
 	then
-		color="#c6e48b"
+		color="#daffc0"
 	elif [ ${work_load} -lt 20 ]
 	then
-		color="#7fcdbb"
+		color="#edf8b1"
 	elif [ ${work_load} -lt 30 ]
 	then
-		color="#41b6c4"
+		color="#c6e48b"
 	elif [ ${work_load} -lt 40 ]
 	then
-		color="#1d91c0"
+		color="#b2e498"
 	elif [ ${work_load} -lt 50 ]
 	then
-		color="#225ea8"
+		color="#7fcdbb"
 	elif [ ${work_load} -lt 60 ]
 	then
-		color="#253494"
+		color="#41b6c4"
 	elif [ ${work_load} -lt 70 ]
 	then
-		color="#081d58"
+		color="#1d91c0"
+	elif [ ${work_load} -lt 80 ]
+	then
+		color="#225ea8"
+	elif [ ${work_load} -le 100 ]
+	then
+		color="#253f91"
 	else
-		color="#081d58"
+		color="#301555"
 	fi
 
 	printf -- "%s" "$color"
 
 }
 
-YEAR="$1"
+html_legend() {
+	local legend="$1"
+	local level="$2"
+	cat <<EOF_DIV
+	${legend}
+	    <svg width="10" height="10" class="d-inline-block">
+            <rect class="calendar-day" width="10" height="10" rx="2" ry="2" data-level="${level}"></rect>
+        </svg>
+EOF_DIV
+
+}
+
+
+html_color_legend () {
+	local interval="${1:-100}"
+	local v=0
+	local level="$(workload_to_level "$v" "$interval" )"
+	printf -- "<div id=\"legend\">\n"
+	printf -- "Nb commit\n"
+	html_legend "0" "$level"
+	for v in $( seq 10 10 $interval )
+	do
+		level="$(workload_to_level "$v" "$interval" )"
+		html_legend "&lt;$v" "$level"
+	done
+	level="$(workload_to_level "$(( interval + 1 ))" "$interval" )"
+	html_legend "&gt;$interval" "$level"
+	printf -- "</div>\n"
+}
+
+
+
+
+
+html_header() {
+	local title="${1}"
+	local branches="${2}"
+
+cat <<EOF_HEADER
+<!DOCTYPE html>
+<html lang="fr" data-color-mode="auto" data-light-theme="light" data-dark-theme="dark">
+  <head>
+    <meta charset="utf-8">
+    <style>
+
+      body {
+          font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+          font-size: 12px;
+      }
+
+      .svg-tip {
+          position: absolute;
+          z-index: 99999;
+          padding: 8px 16px;
+          font-size: 12px;
+          color: #ffffff;
+          text-align: center;
+          background: #24292f;
+          border-radius: 6px;
+      }
+
+      .svg-tip::after {
+          position: absolute;
+          bottom: -9px;
+          left: 50%;
+          width: 5px;
+          height: 5px;
+          box-sizing: border-box;
+          margin: 0 0 0 -5px;
+          content: " ";
+          border: 5px solid transparent;
+          border-top-color: #24292f;
+          border-bottom-left-radius: 6px;
+          border-bottom-right-radius: 6px;
+          border-top-left-radius: 6px;
+          border-top-right-radius: 6px
+      }
+
+      .svg-tip-one-line {
+          white-space: nowrap;
+      }
+
+      .calendar-day[data-level="0"] {
+          fill: #eeeeee;
+      	  outline: 1px solid rgba(27,31,35, 0.06);
+          shape-rendering: geometricPrecision;
+          outline-offset: -1px;
+      }
+      .calendar-day[data-level="1"] {
+          fill: #dce8c4;
+      	  outline: 1px solid rgba(27,31,35, 0.06);
+          shape-rendering: geometricPrecision;
+          outline-offset: -1px;
+      }
+      .calendar-day[data-level="2"] {
+          fill: #daffc0;
+      	  outline: 1px solid rgba(27,31,35, 0.06);
+          shape-rendering: geometricPrecision;
+          outline-offset: -1px;
+      }
+      .calendar-day[data-level="3"] {
+          fill: #edf8b1;
+      	  outline: 1px solid rgba(27,31,35, 0.06);
+          shape-rendering: geometricPrecision;
+          outline-offset: -1px;
+      }
+      .calendar-day[data-level="4"] {
+          fill: #c6e48b;
+      	  outline: 1px solid rgba(27,31,35, 0.06);
+          shape-rendering: geometricPrecision;
+          outline-offset: -1px;
+      }
+      .calendar-day[data-level="5"] {
+          fill: #b2e498;
+      	  outline: 1px solid rgba(27,31,35, 0.06);
+          shape-rendering: geometricPrecision;
+          outline-offset: -1px;
+      }
+      .calendar-day[data-level="6"] {
+          fill: #7fcdbb;
+      	  outline: 1px solid rgba(27,31,35, 0.06);
+          shape-rendering: geometricPrecision;
+          outline-offset: -1px;
+      }
+      .calendar-day[data-level="7"] {
+          fill: #41b6c4;
+      	  outline: 1px solid rgba(27,31,35, 0.06);
+          shape-rendering: geometricPrecision;
+          outline-offset: -1px;
+      }
+      .calendar-day[data-level="8"] {
+          fill: #1d91c0;
+      	  outline: 1px solid rgba(27,31,35, 0.06);
+          shape-rendering: geometricPrecision;
+          outline-offset: -1px;
+      }
+      .calendar-day[data-level="9"] {
+          fill: #225ea8;
+      	  outline: 1px solid rgba(27,31,35, 0.06);
+          shape-rendering: geometricPrecision;
+          outline-offset: -1px;
+      }
+      .calendar-day[data-level="10"] {
+          fill: #253f91;
+      	  outline: 1px solid rgba(27,31,35, 0.06);
+          shape-rendering: geometricPrecision;
+          outline-offset: -1px;
+      }
+      .calendar-day[data-level="11"] {
+          fill: #301555;
+      	  outline: 1px solid rgba(27,31,35, 0.06);
+          shape-rendering: geometricPrecision;
+          outline-offset: -1px;
+      }
+
+      .body {
+          position: absolute;
+		  padding-top: 20px;
+		  padding-left: 100px;
+          align: center;
+      }
+      .introduction {
+          font-size: 14px;
+      }
+
+    </style>
+
+
+    <script type="text/javascript">
+        function git_tip(obj, event, show) {
+            var tip_box = document.getElementById("tip");
+		    if (!show) {
+              tip_box.hidden = true;
+            } else {
+              var c_date=obj.getAttribute("data-date");
+              var c_count=obj.getAttribute("data-count");
+
+              tip_box.innerHTML = "<strong>" + c_count + " lignes de code modifiés</strong> le " + c_date;
+
+              tip_box.hidden = false;
+              tip_box.style.top  = event.clientY - tip_box.offsetHeight - 10 + "px";
+              tip_box.style.left = event.clientX - (tip_box.offsetWidth / 2 ) + "px";
+            }
+
+		}
+
+    </script>
+  </head>
+<body>
+
+  <div id="tip" class="svg-tip svg-tip-one-line" style="pointer-events: none; top: 0px; left: 0px;" hidden="" >
+  ::after
+  </div>
+
+  <div class="body">
+
+    <div class="introduction">
+        <h1>${title}</h1>
+        <p><strong>Liste des branches traitées : </strong> ${branches} </p>
+    </div>
+    <div class="heatmap">
+EOF_HEADER
+}
+
+
+html_footer() {
+cat <<EOF_FOOTER
+  </body>
+</html>
+EOF_FOOTER
+}
+
+
+
+
+
+YEAR=""
+BRANCHES=""
+
+while [ $# -gt 0 ]
+do
+	case "$1" in
+		"--help"|"help")
+			usage
+			exit 0
+			;;
+		"--year")
+			[ -n "${BRANCHES}" ] && { error "--year must set before branches"; usage; exit 1; }
+			[ -z "$2" ] && { error "--year needs parameter"; usage; exit 1; }
+			#TODO: check string format YYYYMMDD
+			YEAR="$2"
+			shift; shift;
+			;;
+		"--color-legend")
+			color_legend
+			exit 0
+			;;
+		*)
+			BRANCHES="$1"
+			shift
+			;;
+	esac
+done
+
+
+# If no brach set, get current one
+# git git >= 2.22 git branch --show-current
+[ -z "${BRANCHES}" ] && BRANCHES="$(git rev-parse --abbrev-ref HEAD)"
 
 if [ -z "${YEAR}" ]
 then
 	# check last 365 days
-	FIRST_DAY_AGO=365
-	LAST_DAY_AGO=0
-else
-	CURRENT_YEAR=$(date +%Y)
-	DOY=$(date +%j)
-	FIRST_DAY_AGO=$(( ( (${CURRENT_YEAR} - ${YEAR}) * 365 ) + ${DOY} - 1))
-	LAST_DAY_AGO=$(( $FIRST_DAY_AGO - 365 ))
+	YEAR=$(date +%Y)
+# 	FIRST_DAY_AGO=$((  $(date +%j) - 1 ))
+# 	LAST_DAY_AGO=0
+#else
+#	CURRENT_YEAR=$(date +%Y)
+#	FIRST_DAY_AGO=$(( ( (${CURRENT_YEAR} - ${YEAR}) * 365 ) - 1 ))
+#	LAST_DAY_AGO=$(( $FIRST_DAY_AGO - 365 ))
 fi
 
 
-cat <<EOF_HEADER
+html_header "Nb de lignes de code modifiées par jour durant l'année $YEAR (01-01-${YEAR} to 31-12-${YEAR})" "${BRANCHES}"
+
+
+cat <<EOF_SVG_HEADER
 <svg width="722" height="112" class="js-calendar-graph-svg">
   <g transform="translate(10, 20)">
 
-EOF_HEADER
+EOF_SVG_HEADER
 
 translate=-1
 x=14
@@ -87,29 +508,29 @@ x=14
 #
 # echo "Date NB" > "${plot_data}"
 
-for d in $(seq ${FIRST_DAY_AGO} -1 ${LAST_DAY_AGO})
+for d in $(seq 0 364 )
 do
-	prev_day=$(date --date="$(( $d + 1 )) days ago" "+%Y-%m-%d")
-	the_date=$(date --date="$d days ago" "+%Y-%m-%d")
-	next_day=$(date --date="$(( $d - 1 ))days ago" "+%Y-%m-%d")
-	the_day=$(date --date="$d days ago" "+%u")
+	the_date=$(date --date="$YEAR-1-1 00:00 $d day" "+%Y-%m-%d")
+	prev_day=$(date --date="${the_date} 00:00 1 day ago" "+%Y-%m-%d")
+	next_day=$(date --date="${the_date} 00:00 1 day" "+%Y-%m-%d")
+	the_day=$(date  --date="${the_date} 00:00" "+%u")
 	y=$(( ( ( ${the_day} - 1 ) % 13 ) * 13 ))
 
 	# nb_commit=$(git log --pretty=format:"%ad" --date=format:"%Y-%m-%d"   --after=${prev_day} --before=${next_day} | wc -l)
 
 	work_load=0
-
-	for stats  in $(git log --shortstat --after=${prev_day} --before=${next_day}  | egrep 'file.* changed' | awk '{ print $1"-"$4"-"$6}')
     for b in ${BRANCHES//,/ }
 	do
-		nb_files=${stats/-*}
-		nb_ins=${stats##-*}
-		nb_ins=${nb_ins/-*}
-		nb_del=${stats##*-}
-		work_load=$(( $work_load + $nb_files + $nb_ins + ${nb_del:-0} )) 
+		for stats  in $(git log --shortstat --after=${the_date} --before=${next_day} "$b" | egrep 'file.* changed' | awk '{ print $1"-"$4"-"$6}')
+		do
+			nb_files=${stats/-*}
+			nb_ins=${stats##-*}
+			nb_ins=${nb_ins/-*}
+			nb_del=${stats##*-}
+			work_load=$(( $work_load + $nb_files + $nb_ins + ${nb_del:-0} ))
+		done
 	done
 
-	color="$(workload_to_color $work_load)"
 
 	if [ ${translate} -eq -1 ]
 	then
@@ -120,15 +541,12 @@ do
 		then
 			echo '<g transform="translate('${translate}', 0)">'
 		fi
-
 	fi
 
 
-# 	echo "${the_date} ${work_load}" >> "${plot_data}"
-
-
+	level="$(workload_to_level $work_load)"
 	cat <<EOF_RECT
-    <rect class="day" width="10" height="10" x="${x}" y="${y}" fill="${color}" data-count="${work_load}" data-date="${the_date}"/>
+	<rect class="calendar-day" width="10" height="10" x="${x}" y="${y}" data-count="${work_load}" data-date="${the_date}" data-level="${level}" onmouseover="git_tip(this, event, true);" onmouseout="git_tip(this, event, false);" />
 EOF_RECT
 
 	if [ ${the_day} -eq 7 ]
@@ -151,24 +569,32 @@ fi
 
 x=14
 
-for m in $(seq 11 -1 0)
+for m in $(seq 1 12 )
 do
-	the_month=$(date --date="$m month ago" "+%b")
-    echo '<text x="'${x}'" y="-7" class="month">'${the_month}'</text>'
-	x=$(( $x + 65 ))
+	the_month=$(date --date="${YEAR}-${m}-1" "+%b")
+    echo '    <text x="'${x}'" y="-7" class="month">'${the_month}'</text>'
+	x=$(( $x + 60 ))
 
 done
 
 
 cat <<EOF_FOOT
-    <text text-anchor="start" class="wday" dx="-10" dy="8" style="display: none;">Sun</text>
-    <text text-anchor="start" class="wday" dx="-10" dy="22">Mon</text>
-    <text text-anchor="start" class="wday" dx="-10" dy="32" style="display: none;">Tue</text>
-    <text text-anchor="start" class="wday" dx="-10" dy="48">Wed</text>
-    <text text-anchor="start" class="wday" dx="-10" dy="57" style="display: none;">Thu</text>
-    <text text-anchor="start" class="wday" dx="-10" dy="73">Fri</text>
-    <text text-anchor="start" class="wday" dx="-10" dy="81" style="display: none;">Sat</text>
+    <text text-anchor="start" class="wday" dx="-10" dy="8" >Lun.</text>
+    <text text-anchor="start" class="wday" dx="-10" dy="22" style="display: none;">Mar.</text>
+    <text text-anchor="start" class="wday" dx="-10" dy="32">Mer.</text>
+    <text text-anchor="start" class="wday" dx="-10" dy="48" style="display: none;">Jeu.</text>
+    <text text-anchor="start" class="wday" dx="-10" dy="57">Ven.</text>
+    <text text-anchor="start" class="wday" dx="-10" dy="73" style="display: none;">Sam.</text>
+    <text text-anchor="start" class="wday" dx="-10" dy="81">Dim.</text>
   </g>
 </svg>
 
 EOF_FOOT
+
+
+
+
+
+html_color_legend
+html_footer
+
