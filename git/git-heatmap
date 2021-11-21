@@ -212,6 +212,7 @@ EOF_DIV
 }
 
 
+
 html_color_legend () {
     local interval="${1:-100}"
     local v=0
@@ -447,7 +448,25 @@ cat <<EOF_FOOTER
 EOF_FOOTER
 }
 
+#
+# Returns all years from the first commit separated from ,.
+git_all_years () {
+	local branches="$1"
+	local first_y="$(date +%Y)"
+	local last_y="${first_y}"
 
+	for b in ${branches//,/ }
+	do
+		first_c="$(git rev-list --max-parents=0 "${b}")"
+	    first_c_year="$( git show -s --format=%ci "${first_c}" | cut -d - -f1 )"
+		[ "${first_c_year}" -lt "${first_y}" ] && first_y="${first_c_year}"
+	    last_c_year="$( git show -s --format=%ci "${b}" | cut -d - -f1 )"
+		[ "${last_c_year}" -gt "${last_y}" ] && last_y="${last_c_year}"
+	done
+
+	seq "${last_y}" -1 "${first_y}" | tr ' ' ','
+
+}
 
 git_to_svg() {
     # TODO aouter le nombre de commiters et la liste (/!\ .mailmap)
@@ -615,6 +634,8 @@ NAME
 
     --years                               : All years in YYYY format separated by ','.
                                             If not set, the current year is used.
+                                            If set to "all", all the repo years will checked since
+                                            the first commit.
 
     --aggregate                           : In case of many branches, make a graphe with the sum
                                             off all branches. Dafault is "${aggregate}"
@@ -697,6 +718,7 @@ done
 # output prefix used for output files
 [ -n "${id}" ] && output_prefix="${id}-" || output_prefix=""
 
+[ "${years}" == "all" ] && years="$(git_all_years "${branches}" )"
 
 # -------------------------------------------------------------------------
 #   Main
@@ -745,7 +767,7 @@ else
             html_color_legend >> "${output_filename}"
             html_svg_begin_div "${output_prefix}${y}" >> "${output_filename}"
             git_to_svg "$y" "$branches"  "${svg_fill}" >> "${output_filename}"
-            html_svg_end_div
+            html_svg_end_div >> "${output_filename}"
             html_footer >> "${output_filename}"
         done
     fi
