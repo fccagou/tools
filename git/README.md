@@ -3,10 +3,10 @@
     curl -L -O https://github.com/d3/d3/releases/download/v5.12.0/d3.zip
 
 
-# git-heatmap.sh
+# git-heatmap
 
 Generates an github like svg heatmap for the last year of changes of the current
-git repository.
+git repository. (see [heatmap.html](heatmal.html))
 
     curl -o some/dir/in/path/git-heatmap https://raw.githubusercontent.com/fccagou/tools/master/git/git-heatmap \
     && chmod +x some/dir/in/path/git-heatmap
