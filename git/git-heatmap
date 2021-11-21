@@ -600,13 +600,13 @@ NAME
 
         git-heatmap [--help|help] [--color-legend |
                  [--all-in-one-html]
-                 [--output-dir DIR_FOR_MULTI_FILES]
-                 [--years YYYY,[AAAA,BBBB]]
+                 [--output-dir=DIR_FOR_MULTI_FILES]
+                 [--years=[ all | YYYY,[AAAA,BBBB] ] ]
                  [--aggregate]
                  [--svg-only]
                  [--svg-fill]
-                 [--id <string_id>]
-                 [--title <string>]
+                 [--id=<string_id>]
+                 [--title=<string>]
                  [branch1,[branch2,...]
              ]
 
@@ -665,17 +665,16 @@ do
             usage
             exit 0
             ;;
-        "--years")
+        "--years="*)
             [ -n "${branches}" ] && { error "--year must set before branches"; usage; exit 1; }
-            [ -z "$2" ] && { error "--year needs parameter"; usage; exit 1; }
             #TODO: check string format YYYYMMDD
-            years="$2"
-            shift
+            years="${1//*=/}"
+            [ -z "$years" ] && { error "--years parameter needs value"; usage; exit 1; }
             ;;
-        "--output-dir")
+        "--output-dir="*)
             # TODO; Check value.
-            output_dir="$2";
-            shift
+            output_dir="${1//*=/}2";
+            [ -z "${output_dir}" ] && { error "--output-dir parameter needs value"; usage; exit 1; }
             ;;
         "--color-legend")
             color_legend
@@ -693,15 +692,15 @@ do
         "--svg-fill")
             svg_fill="yes"
             ;;
-        "--id")
+        "--id="*)
             # TODO: check id format
-            id="$2"
-            shift
+            id="${1//*=/}"
+            [ -z "${id}" ] && { error "--id parameter needs value"; usage; exit 1; }
             ;;
-        "--title")
+        "--title="*)
             # TODO: check id format
-            title="$2"
-            shift
+            title="${1//*=/}"
+            [ -z "${title}" ] && { error "--title parameter needs value"; usage; exit 1; }
             ;;
         *)
             branches="$1"
