@@ -2,17 +2,52 @@
 
 import os
 import re
+import sys
+
+
+
+
+class Set(object):
+
+    def __init__(self, name), values=[]:
+        self.name = name
+        self.values = values
+
+    def __repr__(self):
+        print ("{0} {\n    {1}\n};".format(self.name, "\n    ".join(self.values)))
 
 
 
 class NamedConfig(object):
-    """bind named configuration parser"""
+    """bind named configuration parser
+
+       Parse file beautified by named-checkconf -p named.conf
+    """
     include_parser = re.compile('\s*include\s+"([^"]*)"\s*;\s*')
+    #  set "name" {
+    #
+    #  };
+    parser_set_named = re.compile('\s*(\W+)\s+"([^"]+)"\s*{\s*')
+
+    #  set {
+    #
+    #  };
+    parser_set = re.compile('\s*(\W+)\s*{\s*')
+
+    # value;
+    parser_value = re.compile('\s*(\W+)\s*;\s*')
+
+    # key value;
+    parser_key_value = re.compile('\s*(\W+)\s+(\W+)\s*;\s*')
     def __init__(self):
         self.views=[]
         self.files={}
-        self.files={}
         self.acls=[]
+        self.data={}
+
+
+        self.current_view = None
+        self.current_zone = None
 
     def addView(self, v):
         self.views.append(v)
@@ -25,10 +60,58 @@ class NamedConfig(object):
     def stringset2list(s):
         return [ a.strip() for a in s.strip().split(';') if len(a)>0]
 
-    def parse(self, filename, prefix='.'):
 
-        current_view = None
-        current_zone = None
+    def parse_file(self, filename, prexix='.'):
+        if filename[0] == os.path.sep:
+            fullname = os.path.abspath(os.path.expanduser(filename))
+        else:
+            fullname = os.path.abspath(os.path.join(prefix,filename))
+
+        try:
+            with open(fullname) as f:
+                self.parse(f,prefix)
+
+        except FileNotFoundError:
+            print("Can't access file {0}".format(fullname))
+
+        except:
+            print("Error parsing {0}".format(fullname))
+            import traceback
+            print('-'*60)
+            traceback.print_exc(file=sys.stdout)
+            print('-'*60)
+
+
+    def parse(self, f, prefix='.'):
+
+        try:
+                for l in f.readlines():
+
+                    m = self.include_parser.match(l)
+                    if m is not None:
+                        self.parse_file(m.group(1), prefix)
+                        continue
+
+                    m = self.parser_set_named(l)
+                    if m is not None:
+                        set_type = m.group(1)
+                        set_name = m.group(2)
+
+                        if set_type == 'acl':
+                            for l in f.readlines():
+
+
+
+        except:
+            print("Error parsing {0}".format(fullname))
+            import traceback
+            print('-'*60)
+            traceback.print_exc(file=sys.stdout)
+            print('-'*60)
+
+
+    def parse_prev(self, filename, prefix='.'):
+
         if filename[0] == os.path.sep:
             fullname = os.path.abspath(os.path.expanduser(filename))
         else:
@@ -43,7 +126,7 @@ class NamedConfig(object):
                         self.parse(m.group(1), prefix)
                         continue
 
-                    if current_view is None:
+                    if self.current_view is None:
                         # In file header
                         m = Acl.parser.match(l)
                         if m is not None:
@@ -53,87 +136,93 @@ class NamedConfig(object):
                     # Check view
                     m = View.parser.match(l)
                     if m is not None:
-                        if current_view is not None:
-                            if current_zone is not None:
-                                current_view.addZone(current_zone)
-                                current_zone = None
-                            self.addView(current_view)
-                        current_view = View(m.group(1))
+                        if self.current_view is not None:
+                            if self.current_zone is not None:
+                                self.current_view.addZone(self.current_zone)
+                                self.current_zone = None
+                            self.addView(self.current_view)
+                        self.current_view = View(m.group(1))
                         continue
 
-                    if current_zone is None:
+                    if self.current_zone is None:
                         m = View.match_clients_parser.match(l)
                         if m is not None:
-                            current_view.match_clients = NamedConfig.stringset2list(m.group(1))
+                            self.current_view.match_clients = NamedConfig.stringset2list(m.group(1))
                             continue
 
                     # TODO: verify if this parameter is also ini zone.
                     m = View.also_notify_parser.match(l)
                     if m is not None:
-                        if current_zone is not None:
-                            current_zone.also_notify = NamedConfig.stringset2list(m.group(1))
+                        if self.current_zone is not None:
+                            self.current_zone.also_notify = NamedConfig.stringset2list(m.group(1))
                         else:
-                            current_view.also_notify = NamedConfig.stringset2list(m.group(1))
+                            self.current_view.also_notify = NamedConfig.stringset2list(m.group(1))
                         continue
 
                     m = View.allow_transfer_parser.match(l)
                     if m is not None:
-                        if current_zone is not None:
-                            current_zone.allow_transfer = NamedConfig.stringset2list(m.group(1))
+                        if self.current_zone is not None:
+                            self.current_zone.allow_transfer = NamedConfig.stringset2list(m.group(1))
                         else:
-                            current_view.allow_transfer = NamedConfig.stringset2list(m.group(1))
+                            self.current_view.allow_transfer = NamedConfig.stringset2list(m.group(1))
                         continue
 
                     m = View.allow_query_parser.match(l)
                     if m is not None:
-                        if current_zone is not None:
-                            current_zone.allow_query = NamedConfig.stringset2list(m.group(1))
+                        if self.current_zone is not None:
+                            self.current_zone.allow_query = NamedConfig.stringset2list(m.group(1))
                         else:
-                            current_view.allow_query = NamedConfig.stringset2list(m.group(1))
+                            self.current_view.allow_query = NamedConfig.stringset2list(m.group(1))
                         continue
 
                     # check zone
                     m = Zone.parser.match(l)
                     if m is not None:
-                        if current_zone is not None:
-                            current_view.addZone(current_zone)
-                        current_zone = Zone(m.group(1))
+                        if self.current_zone is not None:
+                            self.current_view.addZone(self.current_zone)
+                        self.current_zone = Zone(m.group(1))
                         continue
 
                     # check zone type
                     m = Zone.type_parser.match(l)
                     if m is not None:
-                        current_zone.type = m.group(1)
+                        self.current_zone.type = m.group(1)
                         continue
 
                     # check zone master
                     m = Zone.masters_parser.match(l)
                     if m is not None:
                         masters = NamedConfig.stringset2list(m.group(1))
-                        if current_zone is None:
+                        if self.current_zone is None:
                             self.masters = masters
                         else:
-                            current_zone.masters = masters
+                            self.current_zone.masters = masters
                         continue
 
                     # check file
                     m = ZoneFile.parser.match(l)
-                    if m is not None and current_zone is not None:
+                    if m is not None and self.current_zone is not None:
                         f = ZoneFile(m.group(1),m.group(1))
-                        current_zone.file = f.name
-                        if current_zone.type == 'master':
+                        self.current_zone.file = f.name
+                        if self.current_zone.type == 'master':
                             f.parse(prefix)
                         self.addFile(f)
                         continue
 
 
-            if current_view is not None:
-                if current_zone is not None:
-                    current_view.addZone(current_zone)
-                self.addView(current_view)
+            if self.current_view is not None:
+                if self.current_zone is not None:
+                    self.current_view.addZone(self.current_zone)
+                self.addView(self.current_view)
+        except FileNotFoundError:
+            print("Can't access file {0}".format(fullname))
+
         except:
             print("Error parsing {0}".format(fullname))
-
+            import traceback
+            print('-'*60)
+            traceback.print_exc(file=sys.stdout)
+            print('-'*60)
 
 
 
@@ -236,50 +325,61 @@ class ZoneFile(object):
 
     def parse(self, prefix='.'):
         """Parse zone file"""
+        fullname = os.path.join(prefix,self.path)
         try:
-            with open(os.path.join(prefix,self.path)) as f:
-                pass
-                #for l in f.readlines():
-                #    print(l.strip())
+            with open(fullname) as f:
+                for l in f.readlines():
+                    print(l.strip())
+        except FileNotFoundError:
+            print("Can't access zone file {0}".format(fullname))
         except:
-            print("Error Parsing {0}".format(os.path.join(prefix,self.path)))
+            print("Error parsing zone file {0}".format(fullname))
+            import traceback
+            print('-'*60)
+            traceback.print_exc(file=sys.stdout)
+            print('-'*60)
+
+
+if __name__ == '__main__':
+
+    # TODO:
+    # - gerer le cas des retours a la ligne.
+
+    nc = NamedConfig()
+    prefix = os.path.dirname(sys.argv[1])
+    conf_file = os.path.basename(sys.argv[1])
+
+    nc.parse_file(conf_file, prefix)
 
 
 
+    print ("""
+    **********************************************************************************************
 
-# TODO:
-# - gerer le cas des retours a la ligne.
-
-nc = NamedConfig()
-nc.parse('named.conf')
-
-
-
-print ("""
-**********************************************************************************************
-
-      #    #    ##    #     #  #####  #####
-      #    #   #  #   ##   ##  #       #   #
-      ##   #  #    #  # # # #  #       #   #
-      # #  #  #    #  #  #  #  #       #   #
-      #  # #  #    #  #     #  ####    #   #
-      #   ##  ######  #     #  #       #   #
-      #    #  #    #  #     #  #       #   #
-      #    #  #    #  #     #  #       #   #
-      #    #  #    #  #     #  #####  #####
+          #    #    ##    #     #  #####  #####
+          #    #   #  #   ##   ##  #       #   #
+          ##   #  #    #  # # # #  #       #   #
+          # #  #  #    #  #  #  #  #       #   #
+          #  # #  #    #  #     #  ####    #   #
+          #   ##  ######  #     #  #       #   #
+          #    #  #    #  #     #  #       #   #
+          #    #  #    #  #     #  #       #   #
+          #    #  #    #  #     #  #####  #####
 
 
-**********************************************************************************************
-""")
+    **********************************************************************************************
+    """)
 
-for a in nc.acls:
-    print(a)
+    print(nc)
 
-print ('\n')
-
-for v in nc.views:
-    print (v)
-    for z in v.zones:
-        print ("  {0}\n".format(z))
-
+#     for a in nc.acls:
+#         print(a)
+#
+#     print ('\n')
+#
+#     for v in nc.views:
+#         print (v)
+#         for z in v.zones:
+#             print ("  {0}\n".format(z))
+#
 

@@ -43,7 +43,7 @@ Usage: ${PGM} <iso_label> <iso_source> <iso_sum> <ks_file> <tmpdir> <splash_png>
    ks_file            : kickstart file
    tmpdir             : dir used create new iso file.
    splash_png         : set the boot background.
-     
+
 EOF_USAGE
 }
 
@@ -197,7 +197,7 @@ case "${SCHEME}" in
     ;;
 
     "http"|"https"|"ftp"|"ftps")
-    
+
         if [ -x "${CURL}" ]
         then
             DOWNLOADCMD="${CURL} -s -k -O"
@@ -222,7 +222,7 @@ esac
 [ ! -f "${KS_FILE}" ] \
   && error "ks file (${KS_FILE}) does not exsts ... exiting ..." \
   && exit 1
- 
+
 
 action 'Create working environment'
 
@@ -267,8 +267,8 @@ info "${ISO_SRC}\n"
 
 if [ -n "${ISO_SUM}" ]
 then
-    CHECKSUM="$(${SUMCMD} ${ISO_SRC} | awk '{ print $1 }')" 
-    
+    CHECKSUM="$(${SUMCMD} ${ISO_SRC} | awk '{ print $1 }')"
+
     [ "${ISO_SUM}" != "${CHECKSUM}" ] && error "Checksum error (${CHECKSUM})... Exiting ..." && exit 1
 fi
 
@@ -328,7 +328,7 @@ sed -i "s/menu default//g" ${DSTDIR}/isolinux/isolinux.cfg
 
 
 cat >> ${DSTDIR}/isolinux/isolinux.cfg  <<EOF_ISO
-label ${ISO_LABEL}
+label ${ISO_LABEL} ($(date))
   menu label ^${ISO_LABEL}
   menu default
   kernel vmlinuz
@@ -337,7 +337,7 @@ EOF_ISO
 
 action "Geniso ${ISO_DST}"
 cd $DSTDIR
-
+#cat <<EOF_GENISO
 # Cas genisofs
  ${MKISOFS} -o ${ISO_DST} \
         -b isolinux/isolinux.bin \
@@ -356,6 +356,7 @@ then
    info  " Look in ${TMPDIR}/geniso.log\n"
    exit 1
 fi
+#EOF_GENISO
 
 # Si mkisofs
 # ${MKISOFS} -o ${ISO_DST} \
@@ -366,10 +367,10 @@ fi
 #         -boot-load-size 4 \
 #         -boot-info-table \
 #         -R -J -v -T isolinux/
-# 
+#
 
 
 action "Make test"
 info "Run  next cmd for test\n\n"
-info "  qemu-system-x86_64 -cdrom ${ISO_DST} -m 512\n\n" 
+info "  qemu-system-x86_64 -cdrom ${ISO_DST} -m 512\n\n"
 

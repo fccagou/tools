@@ -762,12 +762,12 @@ else
             output_filename="${output_dir}/${output_prefix}${y}.html"
             info "${output_filename}"
 
-            html_header "${title}" "${branches}" > "${output_filename}"
-            html_color_legend >> "${output_filename}"
-            html_svg_begin_div "${output_prefix}${y}" >> "${output_filename}"
+            html_header "${title}" "${branches}"        > "${output_filename}"
+            html_color_legend                          >> "${output_filename}"
+            html_svg_begin_div "${output_prefix}${y}"  >> "${output_filename}"
             git_to_svg "$y" "$branches"  "${svg_fill}" >> "${output_filename}"
-            html_svg_end_div >> "${output_filename}"
-            html_footer >> "${output_filename}"
+            html_svg_end_div                           >> "${output_filename}"
+            html_footer                                >> "${output_filename}"
         done
     fi
 fi
