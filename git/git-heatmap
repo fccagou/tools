@@ -534,6 +534,7 @@ EOF_FOOT
 #
 
 id=""
+title="Git Heatmap"
 branches=""
 svg_only="no"
 svg_fill="no"
@@ -558,7 +559,8 @@ NAME
                  [--aggregate]
                  [--svg-only]
                  [--svg-fill]
-                 [--id <string_id>
+                 [--id <string_id>]
+                 [--title <string>]
                  [branch1,[branch2,...]
              ]
 
@@ -567,6 +569,8 @@ NAME
     --id                                  : An id used to identifiy the results.
                                             The id must be a string in [A-Za-z-_]* format.
                                             The id is used in html title dans put files name.
+
+    --title                               : Set html page title. Default is "$title"
 
     --color-legend                        : display only the color legend (for debug)
 
@@ -646,6 +650,11 @@ do
             id="$2"
             shift
             ;;
+        "--title")
+            # TODO: check id format
+            title="$2"
+            shift
+            ;;
         *)
             branches="$1"
             ;;
@@ -678,7 +687,7 @@ then
             git_to_svg "$y" "$branches" "${svg_fill}"
         done
     else
-        html_header "Nb de lignes de code modifiées par jour durant l'année $years (01-01-${years} to 31-12-${years})" "${branches}"
+        html_header "${title}" "${branches}"
         html_color_legend
         for y in ${years//,/ }
         do
@@ -703,7 +712,7 @@ else
             output_filename="${output_dir}/${output_prefix}${y}.html"
             info "${output_filename}"
 
-            html_header "Nb de lignes de code modifiées par jour durant l'année $years (01-01-${years} to 31-12-${years})" "${branches}" > "${output_filename}"
+            html_header "${title}" "${branches}" > "${output_filename}"
             html_color_legend >> "${output_filename}"
             git_to_svg "$y" "$branches"  "${svg_fill}" >> "${output_filename}"
             html_footer >> "${output_filename}"
