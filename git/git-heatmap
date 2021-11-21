@@ -646,7 +646,12 @@ EXAMPLE
 
     # Current year activity for current branch.
     git heatmap > /dev/shm/somefile.html
-    firefox /dev/shm/somefile.html
+    xdg-open /dev/shm/somefile.html
+
+	# Activities sinc the firt commit
+    git heatmap --years=all --all-in-one-html --title="my repo name" > /dev/shm/all.html
+    xdg-open /dev/shm/all.html
+
 
 EOF_HELP
     exit 0
