@@ -506,7 +506,7 @@ EOF_SVG_HEADER
 
                 work_load=$(( work_load + nb_files + nb_ins + nb_del ))
                 total_nb_commits=$(( total_nb_commits + 1 ))
-                total_nb_files=$(( total_nb_files + 1 ))
+                total_nb_files=$(( total_nb_files + nb_files ))
 
             done
         done
