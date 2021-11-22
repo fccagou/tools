@@ -382,7 +382,6 @@ cat <<EOF_HEADER
           position: absolute;
           padding-top: 20px;
           padding-left: 100px;
-          align: center;
       }
       .introduction {
           font-size: 14px;
