@@ -623,7 +623,8 @@ NAME
     --color-legend                        : display only the color legend (for debug)
 
     --all-in-one-html                     : If many branches or provides, add all svg in one file
-                                            and all is send on stdout
+                                            and all is send on stdout.
+                                            Deafult is "${all_in_one}"
 
     --svg-only                            : Only generate svg. Default is "${svg_only}"
 
