@@ -623,7 +623,7 @@ GIT-HEATMAP(1)
 NAME
 
         git-heatmap [--help|help] [--color-legend |
-                 [--all-in-one-html[=<filename>]]
+                 [--all-in-one[=<filename>]]
                  [--output-dir=DIR_FOR_MULTI_FILES]
                  [--years=[ all | YYYY,[AAAA,BBBB] ] ]
                  [--aggregate]
@@ -644,7 +644,7 @@ NAME
 
     --color-legend                        : display only the color legend (for debug)
 
-    --all-in-one-html                     : If many branches are provided, add all svg in one file
+    --all-in-one                          : If many branches are provided, add all svg in one file
                                             and all is send on stdout.
                                             If a value is set, the value will be used for destinaton
                                             file. Default is "${default_output_html_filename}"
@@ -653,7 +653,7 @@ NAME
 
     --svg-only                            : Only generate svg. Default is "${svg_only}".
                                             File will be created in "${default_output_svg_filename}"
-                                            unless "--all-in-one-html" or "--outut-dir" params
+                                            unless "--all-in-one" or "--outut-dir" params
                                             are used.
 
     --svg-fill                            : Fill svg instead of using css coloration.
@@ -690,27 +690,27 @@ EXAMPLE
      |-> /dev/shm/git_heatmap/2020.html
 
     # -- Years 2021 and 2020 in one file
-    $ git heatmap  --years=2021,2020 --all-in-one-html
+    $ git heatmap  --years=2021,2020 --all-in-one
      |-> all in /dev/shm/git_heatmap/heatmap.html
 
     # -- Years 2021 and 2020 in one file
-    $ git heatmap  --years=2021,2020 --all-in-one-html=/tmp/all.html
+    $ git heatmap  --years=2021,2020 --all-in-one=/tmp/all.html
      |-> all in /tmp/all.html
 
     # -- Activities sinc the firt commit
-    git heatmap --years=all --all-in-one-html --title="my repo name"
+    git heatmap --years=all --all-in-one --title="my repo name"
 	|-> all in /dev/shm/git_heatmap/all.html
     xdg-open /dev/shm/git_heatmap/all.html
 
     # Create svg only in local dir
-    $ git heatmap  --svg-only  --all-in-one-html=heatmap.html --years=2021,2020
+    $ git heatmap  --svg-only  --all-in-one=heatmap.html --years=2021,2020
     [+] Export svg
      |-> all in one file : heatmap.html
      |-> 2021
      |-> 2020
 
    # Creates all in /dev/shm/git-heatmap-all.html
-   $ git heatmap  --all-in-one-html=/dev/shm/git-heatmap-all.html
+   $ git heatmap  --all-in-one=/dev/shm/git-heatmap-all.html
    [+] Generate css and js
     |-> inline html
    [+] Generate html pages
@@ -751,12 +751,12 @@ do
             color_legend
             exit 0
             ;;
-        "--all-in-one-html")
+        "--all-in-one")
             all_in_one="yes"
             ;;
-        "--all-in-one-html="*)
+        "--all-in-one="*)
             user_output_filename="${1//*=/}"
-            [ -z "${user_output_filename}" ] && { error "--all-in-one-html= needs value"; usage; exit 1; }
+            [ -z "${user_output_filename}" ] && { error "--all-in-one= needs value"; usage; exit 1; }
             all_in_one="yes"
             ;;
         "--aggregate")
