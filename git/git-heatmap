@@ -245,181 +245,15 @@ html_svg_end_div () {
 html_header() {
     local title="${1}"
     local branches="${2}"
-
+    local css="${3}"
+    local js="${4}"
 cat <<EOF_HEADER
 <!DOCTYPE html>
 <html lang="fr" data-color-mode="auto" data-light-theme="light" data-dark-theme="dark">
   <head>
     <meta charset="utf-8">
-    <style>
-
-      * {
-	    box-sizing: border-box;
-	  }
-
-      body {
-          font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
-          font-size: 12px;
-      }
-
-      .svg-tip {
-          position: absolute;
-          z-index: 99999;
-          padding: 8px 16px;
-          font-size: 12px;
-          color: #ffffff;
-          text-align: center;
-          background: #24292f;
-          border-radius: 6px;
-      }
-
-      .svg-tip::after {
-          position: absolute;
-          bottom: -9px;
-          left: 50%;
-          width: 5px;
-          height: 5px;
-          margin: 0 0 0 -5px;
-          content: " ";
-          border: 5px solid transparent;
-          border-top-color: #24292f;
-          border-bottom-left-radius: 6px;
-          border-bottom-right-radius: 6px;
-          border-top-left-radius: 6px;
-          border-top-right-radius: 6px
-      }
-
-      .svg-tip-one-line {
-          white-space: nowrap;
-      }
-
-      .calendar-day[data-level="0"] {
-          fill: #efefef;
-          opacity: .5;
-          outline: 1px solid rgba(27,31,35, 0.06);
-          shape-rendering: geometricPrecision;
-          outline-offset: -1px;
-      }
-      .calendar-day[data-level="1"] {
-          fill: #9be9a8;
-          opacity: .5;
-          outline: 1px solid rgba(27,31,35, 0.06);
-          shape-rendering: geometricPrecision;
-          outline-offset: -1px;
-      }
-      .calendar-day[data-level="2"] {
-          fill: #9be9a8;
-          opacity: .5;
-          outline: 1px solid rgba(27,31,35, 0.06);
-          shape-rendering: geometricPrecision;
-          outline-offset: -1px;
-      }
-      .calendar-day[data-level="3"] {
-          fill: #9be9a8;
-          opacity: .5;
-          outline: 1px solid rgba(27,31,35, 0.06);
-          shape-rendering: geometricPrecision;
-          outline-offset: -1px;
-      }
-      .calendar-day[data-level="4"] {
-          fill: #9be9a8;
-          opacity: .5;
-          outline: 1px solid rgba(27,31,35, 0.06);
-          shape-rendering: geometricPrecision;
-          outline-offset: -1px;
-      }
-      .calendar-day[data-level="5"] {
-          fill: #40c463;
-          opacity: .5;
-          outline: 1px solid rgba(27,31,35, 0.06);
-          shape-rendering: geometricPrecision;
-          outline-offset: -1px;
-      }
-      .calendar-day[data-level="6"] {
-          fill: #40c463;
-          opacity: .5;
-          outline: 1px solid rgba(27,31,35, 0.06);
-          shape-rendering: geometricPrecision;
-          outline-offset: -1px;
-      }
-      .calendar-day[data-level="7"] {
-          fill: #30a14e;
-          opacity: .5;
-          outline: 1px solid rgba(27,31,35, 0.06);
-          shape-rendering: geometricPrecision;
-          outline-offset: -1px;
-      }
-      .calendar-day[data-level="8"] {
-          fill: #30a14e;
-          opacity: .5;
-          outline: 1px solid rgba(27,31,35, 0.06);
-          shape-rendering: geometricPrecision;
-          outline-offset: -1px;
-      }
-      .calendar-day[data-level="9"] {
-          fill: #216e39;
-          opacity: .5;
-          outline: 1px solid rgba(27,31,35, 0.06);
-          shape-rendering: geometricPrecision;
-          outline-offset: -1px;
-      }
-      .calendar-day[data-level="10"] {
-          fill: #216e39;
-          opacity: .5;
-          outline: 1px solid rgba(27,31,35, 0.06);
-          shape-rendering: geometricPrecision;
-          outline-offset: -1px;
-      }
-      .calendar-day[data-level="11"] {
-          fill: #216e39;
-          opacity: .7;
-          outline: 1px solid rgba(27,31,35, 0.06);
-          shape-rendering: geometricPrecision;
-          outline-offset: -1px;
-      }
-
-      .body {
-          position: absolute;
-          padding-top: 20px;
-          padding-left: 100px;
-      }
-      .introduction {
-          font-size: 14px;
-      }
-      .current-heatmap-title {
-           font-size: 16px;
-      }
-      .current-heatmap-div {
-	       margin: 10px;
-		   padding-left: 10px;
-	       border: 1px solid #d0d7de;
-	       border-top-left-radius: 6px;
-           border-top-right-radius: 6px;
-      }
-      .current-heatmap {
-      }
-    </style>
-
-
-    <script type="text/javascript">
-        function git_tip(obj, event, show) {
-            var tip_box = document.getElementById("tip");
-            if (!show) {
-              tip_box.hidden = true;
-            } else {
-              var c_date=obj.getAttribute("data-date");
-              var c_count=obj.getAttribute("data-count");
-
-              tip_box.innerHTML = "<strong>" + c_count + " lignes de code modifiés</strong> le " + c_date;
-
-              tip_box.hidden = false;
-              tip_box.style.top  = event.clientY - tip_box.offsetHeight - 10 + "px";
-              tip_box.style.left = event.clientX - (tip_box.offsetWidth / 2 ) + "px";
-            }
-
-        }
-
-    </script>
+    ${css}
+    ${js}
   </head>
 <body>
 
@@ -438,6 +272,7 @@ EOF_HEADER
 }
 
 
+
 html_footer() {
 cat <<EOF_FOOTER
      </div> <!--  heatmap -->
@@ -447,23 +282,207 @@ cat <<EOF_FOOTER
 EOF_FOOTER
 }
 
+
+
+html_js () {
+    local js_filename
+    [ -n "$1" ] && js_filename="${1}/heatmap.js" || js_filename=/dev/stdout
+
+    cat > "${js_filename}"  <<EOF_JS
+function git_tip(obj, event, show) {
+    var tip_box = document.getElementById("tip");
+    if (!show) {
+      tip_box.hidden = true;
+    } else {
+      var c_date=obj.getAttribute("data-date");
+      var c_count=obj.getAttribute("data-count");
+
+      tip_box.innerHTML = "<strong>" + c_count + " lignes de code modifiés</strong> le " + c_date;
+
+      tip_box.hidden = false;
+      tip_box.style.top  = event.clientY - tip_box.offsetHeight - 10 + "px";
+      tip_box.style.left = event.clientX - (tip_box.offsetWidth / 2 ) + "px";
+    }
+
+}
+EOF_JS
+
+}
+
+
+
+
+html_css () {
+    local css_filename
+    [ -n "$1" ] && css_filename="${1}/heatmap.css" || css_filename=/dev/stdout
+
+    cat > "${css_filename}"  <<EOF_CSS
+* {
+  box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+    font-size: 12px;
+}
+
+.svg-tip {
+    position: absolute;
+    z-index: 99999;
+    padding: 8px 16px;
+    font-size: 12px;
+    color: #ffffff;
+    text-align: center;
+    background: #24292f;
+    border-radius: 6px;
+}
+
+.svg-tip::after {
+    position: absolute;
+    bottom: -9px;
+    left: 50%;
+    width: 5px;
+    height: 5px;
+    margin: 0 0 0 -5px;
+    content: " ";
+    border: 5px solid transparent;
+    border-top-color: #24292f;
+    border-bottom-left-radius: 6px;
+    border-bottom-right-radius: 6px;
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px
+}
+
+.svg-tip-one-line {
+    white-space: nowrap;
+}
+
+.calendar-day[data-level="0"] {
+    fill: #efefef;
+    opacity: .5;
+    outline: 1px solid rgba(27,31,35, 0.06);
+    shape-rendering: geometricPrecision;
+    outline-offset: -1px;
+}
+.calendar-day[data-level="1"] {
+    fill: #9be9a8;
+    opacity: .5;
+    outline: 1px solid rgba(27,31,35, 0.06);
+    shape-rendering: geometricPrecision;
+    outline-offset: -1px;
+}
+.calendar-day[data-level="2"] {
+    fill: #9be9a8;
+    opacity: .5;
+    outline: 1px solid rgba(27,31,35, 0.06);
+    shape-rendering: geometricPrecision;
+    outline-offset: -1px;
+}
+.calendar-day[data-level="3"] {
+    fill: #9be9a8;
+    opacity: .5;
+    outline: 1px solid rgba(27,31,35, 0.06);
+    shape-rendering: geometricPrecision;
+    outline-offset: -1px;
+}
+.calendar-day[data-level="4"] {
+    fill: #9be9a8;
+    opacity: .5;
+    outline: 1px solid rgba(27,31,35, 0.06);
+    shape-rendering: geometricPrecision;
+    outline-offset: -1px;
+}
+.calendar-day[data-level="5"] {
+    fill: #40c463;
+    opacity: .5;
+    outline: 1px solid rgba(27,31,35, 0.06);
+    shape-rendering: geometricPrecision;
+    outline-offset: -1px;
+}
+.calendar-day[data-level="6"] {
+    fill: #40c463;
+    opacity: .5;
+    outline: 1px solid rgba(27,31,35, 0.06);
+    shape-rendering: geometricPrecision;
+    outline-offset: -1px;
+}
+.calendar-day[data-level="7"] {
+    fill: #30a14e;
+    opacity: .5;
+    outline: 1px solid rgba(27,31,35, 0.06);
+    shape-rendering: geometricPrecision;
+    outline-offset: -1px;
+}
+.calendar-day[data-level="8"] {
+    fill: #30a14e;
+    opacity: .5;
+    outline: 1px solid rgba(27,31,35, 0.06);
+    shape-rendering: geometricPrecision;
+    outline-offset: -1px;
+}
+.calendar-day[data-level="9"] {
+    fill: #216e39;
+    opacity: .5;
+    outline: 1px solid rgba(27,31,35, 0.06);
+    shape-rendering: geometricPrecision;
+    outline-offset: -1px;
+}
+.calendar-day[data-level="10"] {
+    fill: #216e39;
+    opacity: .5;
+    outline: 1px solid rgba(27,31,35, 0.06);
+    shape-rendering: geometricPrecision;
+    outline-offset: -1px;
+}
+.calendar-day[data-level="11"] {
+    fill: #216e39;
+    opacity: .7;
+    outline: 1px solid rgba(27,31,35, 0.06);
+    shape-rendering: geometricPrecision;
+    outline-offset: -1px;
+}
+
+.body {
+    position: absolute;
+    padding-top: 20px;
+    padding-left: 100px;
+}
+.introduction {
+    font-size: 14px;
+}
+.current-heatmap-title {
+     font-size: 16px;
+}
+.current-heatmap-div {
+     margin: 10px;
+     padding-left: 10px;
+     border: 1px solid #d0d7de;
+     border-top-left-radius: 6px;
+     border-top-right-radius: 6px;
+}
+.current-heatmap {
+}
+EOF_CSS
+}
+
+
 #
 # Returns all years from the first commit separated from ,.
 git_all_years () {
-	local branches="$1"
-	local first_y="$(date +%Y)"
-	local last_y="${first_y}"
+    local branches="$1"
+    local first_y="$(date +%Y)"
+    local last_y="${first_y}"
 
-	for b in ${branches//,/ }
-	do
-		first_c="$(git rev-list --max-parents=0 "${b}")"
-	    first_c_year="$( git show -s --format=%ci "${first_c}" | cut -d - -f1 )"
-		[ "${first_c_year}" -lt "${first_y}" ] && first_y="${first_c_year}"
-	    last_c_year="$( git show -s --format=%ci "${b}" | cut -d - -f1 )"
-		[ "${last_c_year}" -gt "${last_y}" ] && last_y="${last_c_year}"
-	done
+    for b in ${branches//,/ }
+    do
+        first_c="$(git rev-list --max-parents=0 "${b}")"
+        first_c_year="$( git show -s --format=%ci "${first_c}" | cut -d - -f1 )"
+        [ "${first_c_year}" -lt "${first_y}" ] && first_y="${first_c_year}"
+        last_c_year="$( git show -s --format=%ci "${b}" | cut -d - -f1 )"
+        [ "${last_c_year}" -gt "${last_y}" ] && last_y="${last_c_year}"
+    done
 
-	seq "${last_y}" -1 "${first_y}" | tr ' ' ','
+    seq "${last_y}" -1 "${first_y}" | tr ' ' ','
 
 }
 
@@ -567,7 +586,7 @@ EOF_RECT
     <text text-anchor="start" class="wday" dx="-10" dy="81">Dim.</text>
   </g>
   <text x="10" y="20" class="current-heatmap-title" >
-	  [ ${year} ]  ${total_nb_commits} contributions and ${total_nb_lines} lines modified
+      [ ${year} ]  ${total_nb_commits} contributions and ${total_nb_lines} lines modified
   </text>
 </svg>
 EOF_FOOT
@@ -587,10 +606,13 @@ branches=""
 svg_only="no"
 svg_fill="no"
 aggregate="no"
+inline_html="yes"
 years="$(date +%Y)"
 all_in_one="no"
-output_dir="/dev/shm/git_heatmap"
-
+user_output_filename=""
+default_output_dir="/dev/shm/git_heatmap"
+default_output_html_filename="${default_output_dir}/heatmap.html"
+default_output_svg_filename="${default_output_dir}/heatmap.svg"
 
 # -------------------------------------------------------------------------
 usage () {
@@ -601,7 +623,7 @@ GIT-HEATMAP(1)
 NAME
 
         git-heatmap [--help|help] [--color-legend |
-                 [--all-in-one-html]
+                 [--all-in-one-html[=<filename>]]
                  [--output-dir=DIR_FOR_MULTI_FILES]
                  [--years=[ all | YYYY,[AAAA,BBBB] ] ]
                  [--aggregate]
@@ -622,18 +644,24 @@ NAME
 
     --color-legend                        : display only the color legend (for debug)
 
-    --all-in-one-html                     : If many branches or provides, add all svg in one file
+    --all-in-one-html                     : If many branches are provided, add all svg in one file
                                             and all is send on stdout.
-                                            Deafult is "${all_in_one}"
+                                            If a value is set, the value will be used for destinaton
+                                            file. Default is "${default_output_html_filename}"
+                                            Default is "${all_in_one}"
 
-    --svg-only                            : Only generate svg. Default is "${svg_only}"
+
+    --svg-only                            : Only generate svg. Default is "${svg_only}".
+                                            File will be created in "${default_output_svg_filename}"
+                                            unless "--all-in-one-html" or "--outut-dir" params
+                                            are used.
 
     --svg-fill                            : Fill svg instead of using css coloration.
                                             Usefull with --svg-only to insert svg in other web page.
                                             Default is "${svg_fill}"
 
     --output-dir                          : Creates one file by year in DIR_FOR_MULTI_FILES dir.
-                                            Default is "${output_dir}"
+                                            Default is "${default_output_dir}"
 
     --years                               : All years in YYYY format separated by ','.
                                             If not set, the current year is used.
@@ -643,17 +671,52 @@ NAME
     --aggregate                           : In case of many branches, make a graphe with the sum
                                             off all branches. Dafault is "${aggregate}"
 
+    --no-inline-html                      : Css and js will be created in external files;
+                                            Default is "${inline_html}"
+
     branch1,[branch2,...]]                : All the branches to check separated by ','.
                                             Default is current branch.
 EXAMPLE
 
-    # Current year activity for current branch.
-    git heatmap > /dev/shm/somefile.html
+    # -- Current year activity for current branch in default dir.
+    $ git heatmap
+     |-> /dev/shm/git_heatmap/2021.html
+
     xdg-open /dev/shm/somefile.html
 
-	# Activities sinc the firt commit
-    git heatmap --years=all --all-in-one-html --title="my repo name" > /dev/shm/all.html
-    xdg-open /dev/shm/all.html
+    # -- Create graphs for years 2021 and 2020
+    $ git heatmap  --years=2021,2020
+     |-> /dev/shm/git_heatmap/2021.html
+     |-> /dev/shm/git_heatmap/2020.html
+
+    # -- Years 2021 and 2020 in one file
+    $ git heatmap  --years=2021,2020 --all-in-one-html
+     |-> all in /dev/shm/git_heatmap/heatmap.html
+
+    # -- Years 2021 and 2020 in one file
+    $ git heatmap  --years=2021,2020 --all-in-one-html=/tmp/all.html
+     |-> all in /tmp/all.html
+
+    # -- Activities sinc the firt commit
+    git heatmap --years=all --all-in-one-html --title="my repo name"
+	|-> all in /dev/shm/git_heatmap/all.html
+    xdg-open /dev/shm/git_heatmap/all.html
+
+    # Create svg only in local dir
+    $ git heatmap  --svg-only  --all-in-one-html=heatmap.html --years=2021,2020
+    [+] Export svg
+     |-> all in one file : heatmap.html
+     |-> 2021
+     |-> 2020
+
+   # Creates all in /dev/shm/git-heatmap-all.html
+   $ git heatmap  --all-in-one-html=/dev/shm/git-heatmap-all.html
+   [+] Generate css and js
+    |-> inline html
+   [+] Generate html pages
+    |-> all in /dev/shm/git-heatmap-all.html
+
+   $ xdg-open /dev/shm/git-heatmap-all.html
 
 
 EOF_HELP
@@ -681,7 +744,7 @@ do
             ;;
         "--output-dir="*)
             # TODO; Check value.
-            output_dir="${1//*=/}2";
+            output_dir="${1//*=/}";
             [ -z "${output_dir}" ] && { error "--output-dir parameter needs value"; usage; exit 1; }
             ;;
         "--color-legend")
@@ -689,6 +752,11 @@ do
             exit 0
             ;;
         "--all-in-one-html")
+            all_in_one="yes"
+            ;;
+        "--all-in-one-html="*)
+            user_output_filename="${1//*=/}"
+            [ -z "${user_output_filename}" ] && { error "--all-in-one-html= needs value"; usage; exit 1; }
             all_in_one="yes"
             ;;
         "--aggregate")
@@ -710,6 +778,14 @@ do
             title="${1//*=/}"
             [ -z "${title}" ] && { error "--title parameter needs value"; usage; exit 1; }
             ;;
+        "--no-inline-html")
+            inline_html="no"
+            ;;
+        "--"*)
+            error "unknown parameter ${1}"
+            usage
+            exit 1
+            ;;
         *)
             branches="$1"
             ;;
@@ -727,56 +803,98 @@ done
 
 [ "${years}" == "all" ] && years="$(git_all_years "${branches}" )"
 
+[ -z "${output_dir}" ] && output_dir="${default_output_dir}"
+[ ! -d "${output_dir}" ] && mkdir -p "${output_dir}"
+
 # -------------------------------------------------------------------------
 #   Main
 #
 
 
 
+
+if [ "${svg_only}" == "yes" ]
+then
+
+    action "Export svg"
+
+    if [ "${all_in_one}" == "yes" ]
+    then
+        [ -z "${user_output_filename}" ] \
+            && output_filename="${default_output_svg_filename}" \
+            || output_filename="${user_output_filename}"
+
+        info "all in one file : ${output_filename}"
+
+        > "${output_filename}"
+        for y in ${years//,/ }
+        do
+            info "$y"
+            git_to_svg "$y" "$branches" "${svg_fill}" >> "${output_filename}"
+        done
+    else
+        info "output dir : ${output_dir}"
+        for y in ${years//,/ }
+        do
+            output_filename="${output_dir}/${output_prefix}${y}.svg"
+            > "${output_filename}"
+            info "$y > ${output_filename}"
+            git_to_svg "$y" "$branches" "${svg_fill}" >> "${output_filename}"
+        done
+    fi
+    exit $?
+fi
+
+
+
+action "Generate css and js"
+if [ "$inline_html" == "yes" ]
+then
+    info "inline html"
+    html_css_header="<style>$( html_css )</style>"
+    html_js_header=" <script type=\"text/javascript\">$( html_js )</script>"
+else
+    info "css > ${output_dir}/heatmap.css"
+    html_css "${output_dir}"
+    info "js  > ${output_dir}/heatmap.js"
+    html_js "${output_dir}"
+    html_css_header="<link rel=\"stylesheet\" href=\"heatmap.css\" />"
+    html_js_header="<script src=\"heatmap.js\"> </script>"
+fi
+
+
+action "Generate html pages"
+
 if [ "${all_in_one}" == "yes" ]
 then
-    # [*] Add all svg graphs in on file
-    if [ "${svg_only}" == "yes" ]
-    then
-        for y in ${years//,/ }
-        do
-            git_to_svg "$y" "$branches" "${svg_fill}"
-        done
-    else
-        html_header "${title}" "${branches}"
-        html_color_legend
-        for y in ${years//,/ }
-        do
-            html_svg_begin_div "${output_prefix}${y}"
-            git_to_svg "$y" "$branches" "${svg_fill}"
-            html_svg_end_div
-        done
-        html_footer
-    fi
+    [ -z "${user_output_filename}" ] \
+        && output_filename="${output_dir}/${output_prefix}all.html" \
+        || output_filename="${user_output_filename}"
+
+    info "all in ${output_filename}"
+    html_header "${title}" "${branches}" "${html_css_header}" "${html_js_header}" > "${output_filename}"
+    html_color_legend                                                            >> "${output_filename}"
+    for y in ${years//,/ }
+    do
+        html_svg_begin_div "${output_prefix}${y}"                                >> "${output_filename}"
+        git_to_svg "$y" "$branches" "${svg_fill}"                                >> "${output_filename}"
+        html_svg_end_div                                                         >> "${output_filename}"
+    done
+    html_footer                                                                  >> "${output_filename}"
 
 else
-    # [*] Creates one file by year in $output_dir
-    [ ! -d "${output_dir}" ] && mkdir -p "${output_dir}"
-    if [ "${svg_only}" == "yes" ]
-    then
-        for y in ${years//,/ }
-        do
-            output_filename="${output_dir}/${output_prefix}${y}.html"
-            git_to_svg "$y" "$branches" > "${output_filename}" "${svg_fill}"
-        done
-    else
-        for y in ${years//,/ }
-        do
-            output_filename="${output_dir}/${output_prefix}${y}.html"
-            info "${output_filename}"
+    for y in ${years//,/ }
+    do
+        output_filename="${output_dir}/${output_prefix}${y}.html"
+        info "${output_filename}"
 
-            html_header "${title}" "${branches}"        > "${output_filename}"
-            html_color_legend                          >> "${output_filename}"
-            html_svg_begin_div "${output_prefix}${y}"  >> "${output_filename}"
-            git_to_svg "$y" "$branches"  "${svg_fill}" >> "${output_filename}"
-            html_svg_end_div                           >> "${output_filename}"
-            html_footer                                >> "${output_filename}"
-        done
-    fi
+        html_header "${title}" "${branches}" \
+            "${html_css_header}" "${html_js_header}"   > "${output_filename}"
+        html_color_legend                             >> "${output_filename}"
+        html_svg_begin_div "${output_prefix}${y}"     >> "${output_filename}"
+        git_to_svg "$y" "$branches"  "${svg_fill}"    >> "${output_filename}"
+        html_svg_end_div                              >> "${output_filename}"
+        html_footer                                   >> "${output_filename}"
+    done
 fi
 
