@@ -117,7 +117,8 @@ todo () {
 
 # arc en ciel 0 (rouge) => 100 (rouge)
 #
-
+# return colors  based on input value taken in an interval.
+#
 value_to_rgb_arcenciel() {
     local value="$1"
     local interval="${2:-100}"
@@ -161,7 +162,8 @@ value_to_rgb_arcenciel() {
     printf -- "#%02x%02x%02x" "$r" "$g" "$b"
 }
 
-
+# returns level associates to input value
+#
 workload_to_level() {
     local work_load="$1"
     local level=0
@@ -171,6 +173,9 @@ workload_to_level() {
     printf -- "%s" "$level"
 
 }
+
+# returns color associates to input value
+#
 workload_to_color() {
 
     local work_load=$1
@@ -199,6 +204,13 @@ workload_to_color() {
 
 }
 
+
+# ---------------------------------------------------------------------------
+#   HTML functions
+# ---------------------------------------------------------------------------
+
+# -- Display legend name and a colored svg square.
+#
 html_legend() {
     local legend="$1"
     local level="$2"
@@ -212,7 +224,8 @@ EOF_DIV
 }
 
 
-
+# -- Display a div containing dolored legend for many values.
+#
 html_color_legend () {
     local interval="${1:-100}"
     local v=0
@@ -230,18 +243,20 @@ html_color_legend () {
     printf -- "</div>\n"
 }
 
-
+# -- Display the header of div containing a graph.
 html_svg_begin_div () {
     local div_id="$1"
     printf -- "<div id=\"%s\" class=\"current-heatmap-div\">\n" "${div_id}"
 }
 
+# -- Display the footer of div containing a graph.
 html_svg_end_div () {
     printf -- "</div>\n"
 }
 
 
-
+# -- Display html page header + begin of body
+#
 html_header() {
     local title="${1}"
     local branches="${2}"
@@ -272,6 +287,7 @@ EOF_HEADER
 }
 
 
+# -- Display html page footer.
 
 html_footer() {
 cat <<EOF_FOOTER
@@ -284,6 +300,9 @@ EOF_FOOTER
 
 
 
+# -- Display javascript.
+# Default is sdtout used for iniline html.
+#
 html_js () {
     local js_filename
     [ -n "$1" ] && js_filename="${1}/heatmap.js" || js_filename=/dev/stdout
@@ -312,6 +331,9 @@ EOF_JS
 
 
 
+# -- Display CSS.
+# Default is sdtout used for iniline html.
+#
 html_css () {
     local css_filename
     [ -n "$1" ] && css_filename="${1}/heatmap.css" || css_filename=/dev/stdout
@@ -467,7 +489,7 @@ EOF_CSS
 
 
 #
-# Returns all years from the first commit separated from ,.
+# -- Returns all years from the first commit separated from ,.
 git_all_years () {
     local branches="$1"
     local first_y="$(date +%Y)"
@@ -486,6 +508,10 @@ git_all_years () {
 
 }
 
+
+
+# -- Create svg heatmap graph from git logq
+#
 git_to_svg() {
     # TODO aouter le nombre de commiters et la liste (/!\ .mailmap)
     local year="$1"
