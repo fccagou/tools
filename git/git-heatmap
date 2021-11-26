@@ -605,11 +605,15 @@ title="Git Heatmap"
 branches=""
 svg_only="no"
 svg_fill="no"
+css_update="no"
+js_update="no"
+update_only="no"
 aggregate="no"
 inline_html="yes"
 years="$(date +%Y)"
 all_in_one="no"
 user_output_filename=""
+
 default_output_dir="/dev/shm/git_heatmap"
 default_output_html_filename="${default_output_dir}/heatmap.html"
 default_output_svg_filename="${default_output_dir}/heatmap.svg"
@@ -630,6 +634,8 @@ NAME
                  [--svg-only]
                  [--svg-fill]
                  [--id=<string_id>]
+                 [--css-update]
+                 [--js-update]
                  [--title=<string>]
                  [branch1,[branch2,...]
              ]
@@ -674,6 +680,10 @@ NAME
     --no-inline-html                      : Css and js will be created in external files;
                                             Default is "${inline_html}"
 
+    --css-update                          : Update css file (see --inline-html doc)
+
+    --js-update                           : Update js  file (see --inline-html doc)
+
     branch1,[branch2,...]]                : All the branches to check separated by ','.
                                             Default is current branch.
 EXAMPLE
@@ -699,7 +709,7 @@ EXAMPLE
 
     # -- Activities sinc the firt commit
     git heatmap --years=all --all-in-one --title="my repo name"
-	|-> all in /dev/shm/git_heatmap/all.html
+    |-> all in /dev/shm/git_heatmap/all.html
     xdg-open /dev/shm/git_heatmap/all.html
 
     # Create svg only in local dir
@@ -764,6 +774,7 @@ do
             ;;
         "--svg-only")
             svg_only="yes"
+            update_only="yes"
             ;;
         "--svg-fill")
             svg_fill="yes"
@@ -780,6 +791,14 @@ do
             ;;
         "--no-inline-html")
             inline_html="no"
+            ;;
+        "--css-update")
+            css_update="yes"
+            update_only="yes"
+            ;;
+        "--js-update")
+            js_update="yes"
+            update_only="yes"
             ;;
         "--"*)
             error "unknown parameter ${1}"
@@ -810,8 +829,17 @@ done
 #   Main
 #
 
+if [ "${css_update}" == "yes" ]
+then
+    info "css > ${output_dir}/heatmap.css"
+    html_css "${output_dir}"
+fi
 
-
+if [ "${js_update}" == "yes" ]
+then
+    info "js > ${output_dir}/heatmap.js"
+    html_js "${output_dir}"
+fi
 
 if [ "${svg_only}" == "yes" ]
 then
@@ -842,8 +870,10 @@ then
             git_to_svg "$y" "$branches" "${svg_fill}" >> "${output_filename}"
         done
     fi
-    exit $?
 fi
+
+
+[ "${update_only}" == "yes" ] && exit 0
 
 
 
