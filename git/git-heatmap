@@ -603,7 +603,7 @@ EOF_FOOT
 id=""
 title="Git Heatmap"
 branches=""
-svg_only="no"
+graph_update="no"
 svg_fill="no"
 css_update="no"
 js_update="no"
@@ -631,7 +631,7 @@ NAME
                  [--output-dir=DIR_FOR_MULTI_FILES]
                  [--years=[ all | YYYY,[AAAA,BBBB] ] ]
                  [--aggregate]
-                 [--svg-only]
+                 [--graph-update]
                  [--svg-fill]
                  [--id=<string_id>]
                  [--css-update]
@@ -657,13 +657,13 @@ NAME
                                             Default is "${all_in_one}"
 
 
-    --svg-only                            : Only generate svg. Default is "${svg_only}".
+    --graph-update                        : Only generate svg. Default is "${graph_update}".
                                             File will be created in "${default_output_svg_filename}"
                                             unless "--all-in-one" or "--outut-dir" params
                                             are used.
 
     --svg-fill                            : Fill svg instead of using css coloration.
-                                            Usefull with --svg-only to insert svg in other web page.
+                                            Usefull with --graph-update to insert svg in other web page.
                                             Default is "${svg_fill}"
 
     --output-dir                          : Creates one file by year in DIR_FOR_MULTI_FILES dir.
@@ -713,7 +713,7 @@ EXAMPLE
     xdg-open /dev/shm/git_heatmap/all.html
 
     # Create svg only in local dir
-    $ git heatmap  --svg-only  --all-in-one=heatmap.html --years=2021,2020
+    $ git heatmap  --graph-update  --all-in-one=heatmap.html --years=2021,2020
     [+] Export svg
      |-> all in one file : heatmap.html
      |-> 2021
@@ -772,8 +772,8 @@ do
         "--aggregate")
             aggregate="yes"
             ;;
-        "--svg-only")
-            svg_only="yes"
+        "--graph-update")
+            graph_update="yes"
             update_only="yes"
             ;;
         "--svg-fill")
@@ -841,7 +841,7 @@ then
     html_js "${output_dir}"
 fi
 
-if [ "${svg_only}" == "yes" ]
+if [ "${graph_update}" == "yes" ]
 then
 
     action "Export svg"
