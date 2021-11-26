@@ -244,13 +244,13 @@ html_color_legend () {
 }
 
 # -- Display the header of div containing a graph.
-html_svg_begin_div () {
+html_heatmap_graph_header () {
     local div_id="$1"
     printf -- "<div id=\"%s\" class=\"current-heatmap-div\">\n" "${div_id}"
 }
 
 # -- Display the footer of div containing a graph.
-html_svg_end_div () {
+html_heatmap_graph_footer () {
     printf -- "</div>\n"
 }
 
@@ -932,9 +932,9 @@ then
     html_color_legend                                                            >> "${output_filename}"
     for y in ${years//,/ }
     do
-        html_svg_begin_div "${output_prefix}${y}"                                >> "${output_filename}"
+        html_heatmap_graph_header "${output_prefix}${y}"                         >> "${output_filename}"
         git_to_svg "$y" "$branches" "${svg_fill}"                                >> "${output_filename}"
-        html_svg_end_div                                                         >> "${output_filename}"
+        html_heatmap_graph_footer                                                >> "${output_filename}"
     done
     html_footer                                                                  >> "${output_filename}"
 
@@ -945,12 +945,12 @@ else
         info "${output_filename}"
 
         html_header "${title}" "${branches}" \
-            "${html_css_header}" "${html_js_header}"   > "${output_filename}"
-        html_color_legend                             >> "${output_filename}"
-        html_svg_begin_div "${output_prefix}${y}"     >> "${output_filename}"
-        git_to_svg "$y" "$branches"  "${svg_fill}"    >> "${output_filename}"
-        html_svg_end_div                              >> "${output_filename}"
-        html_footer                                   >> "${output_filename}"
+            "${html_css_header}" "${html_js_header}"       > "${output_filename}"
+        html_color_legend                                 >> "${output_filename}"
+        html_heatmap_graph_header "${output_prefix}${y}"  >> "${output_filename}"
+        git_to_svg "$y" "$branches"  "${svg_fill}"        >> "${output_filename}"
+        html_heatmap_graph_footer                         >> "${output_filename}"
+        html_footer                                       >> "${output_filename}"
     done
 fi
 
