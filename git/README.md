@@ -5,14 +5,19 @@
 
 # git-heatmap
 
+![heatmap sample](git-heatmap.png)
+
 Generates an github like svg heatmap for the last year of changes of the current
 git repository. (see [heatmap.html](heatmap.html))
 
+
+
+
+```bash
     curl -o some/dir/in/path/git-heatmap https://raw.githubusercontent.com/fccagou/tools/master/git/git-heatmap \
     && chmod +x some/dir/in/path/git-heatmap
 
     git heatmap help
-
 
 GIT-HEATMAP(1)
 
@@ -80,8 +85,11 @@ NAME
 
     branch1,[branch2,...]]                : All the branches to check separated by ','.
                                             Default is current branch.
+```
+
 EXAMPLE
 
+```bash
     # -- Current year activity for current branch in default dir.
     $ git heatmap
      |-> /dev/shm/git_heatmap/2021.html
@@ -122,4 +130,5 @@ EXAMPLE
 
    $ xdg-open /dev/shm/git-heatmap-all.html
 
+```
 
