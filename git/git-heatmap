@@ -629,10 +629,10 @@ EOF_FOOT
 id=""
 title="Git Heatmap"
 branches=""
-graph_update="no"
 svg_fill="no"
-css_update="no"
-js_update="no"
+update_css="no"
+update_graph="no"
+update_js="no"
 update_only="no"
 aggregate="no"
 inline_html="yes"
@@ -652,29 +652,23 @@ GIT-HEATMAP(1)
 
 NAME
 
-        git-heatmap [--help|help] [--color-legend |
+        git-heatmap [--help|help]
                  [--all-in-one[=<filename>]]
-                 [--output-dir=DIR_FOR_MULTI_FILES]
-                 [--years=[ all | YYYY,[AAAA,BBBB] ] ]
                  [--aggregate]
-                 [--graph-update]
-                 [--svg-fill]
+                 [--color-legend]
                  [--id=<string_id>]
-                 [--css-update]
-                 [--js-update]
+                 [--no-inline-html]
+                 [--output-dir=DIR_FOR_MULTI_FILES]
+                 [--svg-fill]
                  [--title=<string>]
+                 [--update-css]
+                 [--update-graph]
+                 [--update-js]
+                 [--years=[ all | YYYY,[AAAA,BBBB] ]
                  [branch1,[branch2,...]
              ]
 
     --help|help                           : this help
-
-    --id                                  : An id used to identifiy the results.
-                                            The id must be a string in [A-Za-z-_]* format.
-                                            The id is used in html title dans put files name.
-
-    --title                               : Set html page title. Default is "$title"
-
-    --color-legend                        : display only the color legend (for debug)
 
     --all-in-one                          : If many branches are provided, add all svg in one file
                                             and all is send on stdout.
@@ -682,33 +676,41 @@ NAME
                                             file. Default is "${default_output_html_filename}"
                                             Default is "${all_in_one}"
 
+    --aggregate                           : In case of many branches, make a graphe with the sum
+                                            off all branches. Dafault is "${aggregate}"
 
-    --graph-update                        : Only generate svg. Default is "${graph_update}".
+    --color-legend                        : display only the color legend (for debug)
+
+    --id                                  : An id used to identifiy the results.
+                                            The id must be a string in [A-Za-z-_]* format.
+                                            The id is used in html title dans put files name.
+
+    --no-inline-html                      : Css and js will be created in external files;
+                                            Default is "${inline_html}"
+
+    --output-dir                          : Creates one file by year in DIR_FOR_MULTI_FILES dir.
+                                            Default is "${default_output_dir}"
+
+    --svg-fill                            : Fill svg instead of using css coloration.
+                                            Usefull with --update-graph to insert svg in other web page.
+                                            Default is "${svg_fill}"
+
+    --title                               : Set html page title. Default is "$title"
+
+    --update-css                          : Update css file (see --inline-html doc)
+
+    --update-graph                        : Only generate svg. Default is "${update_graph}".
                                             File will be created in "${default_output_svg_filename}"
                                             unless "--all-in-one" or "--outut-dir" params
                                             are used.
 
-    --svg-fill                            : Fill svg instead of using css coloration.
-                                            Usefull with --graph-update to insert svg in other web page.
-                                            Default is "${svg_fill}"
+    --update-js                           : Update js  file (see --inline-html doc)
 
-    --output-dir                          : Creates one file by year in DIR_FOR_MULTI_FILES dir.
-                                            Default is "${default_output_dir}"
 
     --years                               : All years in YYYY format separated by ','.
                                             If not set, the current year is used.
                                             If set to "all", all the repo years will checked since
                                             the first commit.
-
-    --aggregate                           : In case of many branches, make a graphe with the sum
-                                            off all branches. Dafault is "${aggregate}"
-
-    --no-inline-html                      : Css and js will be created in external files;
-                                            Default is "${inline_html}"
-
-    --css-update                          : Update css file (see --inline-html doc)
-
-    --js-update                           : Update js  file (see --inline-html doc)
 
     branch1,[branch2,...]]                : All the branches to check separated by ','.
                                             Default is current branch.
@@ -739,7 +741,7 @@ EXAMPLE
     xdg-open /dev/shm/git_heatmap/all.html
 
     # Create svg only in local dir
-    $ git heatmap  --graph-update  --all-in-one=heatmap.html --years=2021,2020
+    $ git heatmap  --update-graph  --all-in-one=heatmap.html --years=2021,2020
     [+] Export svg
      |-> all in one file : heatmap.html
      |-> 2021
@@ -798,8 +800,8 @@ do
         "--aggregate")
             aggregate="yes"
             ;;
-        "--graph-update")
-            graph_update="yes"
+        "--update-graph")
+            update_graph="yes"
             update_only="yes"
             ;;
         "--svg-fill")
@@ -818,12 +820,12 @@ do
         "--no-inline-html")
             inline_html="no"
             ;;
-        "--css-update")
-            css_update="yes"
+        "--update-css")
+            update_css="yes"
             update_only="yes"
             ;;
-        "--js-update")
-            js_update="yes"
+        "--update-js")
+            update_js="yes"
             update_only="yes"
             ;;
         "--"*)
@@ -855,19 +857,19 @@ done
 #   Main
 #
 
-if [ "${css_update}" == "yes" ]
+if [ "${update_css}" == "yes" ]
 then
     info "css > ${output_dir}/heatmap.css"
     html_css "${output_dir}"
 fi
 
-if [ "${js_update}" == "yes" ]
+if [ "${update_js}" == "yes" ]
 then
     info "js > ${output_dir}/heatmap.js"
     html_js "${output_dir}"
 fi
 
-if [ "${graph_update}" == "yes" ]
+if [ "${update_graph}" == "yes" ]
 then
 
     action "Export svg"
