@@ -171,7 +171,7 @@ pcre==8.43
 pep8==1.7.1 
 pexpect==4.7.0 
 pickleshare==0.7.5 
-pillow==6.1.0 
+pillow==9.0.0 
 pip==19.1.1 
 pixman==0.38.0 
 pkginfo==1.5.0.1 
