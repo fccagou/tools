@@ -47,7 +47,7 @@ dask-core==2.1.0
 dbus==1.13.6 
 decorator==4.4.0 
 defusedxml==0.6.0 
-distributed==2.1.0 
+distributed==2021.10.0 
 docutils==0.14 
 entrypoints==0.3 
 et_xmlfile==1.0.1 
