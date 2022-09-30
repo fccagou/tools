@@ -90,7 +90,7 @@ jdcal==1.4.1
 jedi==0.13.3 
 jeepney==0.4 
 jinja2==2.10.1 
-joblib==0.13.2 
+joblib==1.2.0 
 jpeg==9b 
 json5==0.8.4 
 jsonschema==3.0.1 
