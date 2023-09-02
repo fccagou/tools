@@ -47,17 +47,17 @@ now="$(date +%s )"
 
 if [ "$certdate" -gt "$now" ]
 then
-	info "Certificate will expire in $(( (certdate - now) / 3600 / 24  )) day(s) ($certinfo)"
+	info "$DOMAIN certificate will expire in $(( (certdate - now) / 3600 / 24  )) day(s) ($certinfo)"
 	exit 0
 fi
 
 if [ "$certdate" = "$now" ]
 then
-	warning "Certificate expires today"
+	warning "$DOMAIN certificate expires today"
 	exit 2
 fi
 
-error "Certificat expires $(( (now - certdate) / 3600 / 24 )) day(s) ($certinfo)"
+error "$DOMAIN certificat expires $(( (now - certdate) / 3600 / 24 )) day(s) ($certinfo)"
 exit 1
 
 
