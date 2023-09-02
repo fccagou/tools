@@ -58,7 +58,8 @@ apt  upgrade --auto-remove --assume-yes >> "$logfilename" 2>&1 || {
 
 action "Rebooting"
 
-/usr/sbin/reboot
+[ -x /usr/sbin/reboot ] && /usr/sbin/reboot
+[ -x /sbin/reboot ] && /sbin/reboot
 
 
 
