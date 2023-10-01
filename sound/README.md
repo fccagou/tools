@@ -176,15 +176,14 @@ working using BT devices. (TODO: check how the magical works)
 This
 [device](https://fr.yamaha.com/fr/products/audio_visual/sound_bar/yas-306/features.html)
 has a strange behaviour with bluetooth connection. It connects then disconnect
-and bluetoothd does nothing to retry.
+and bluetoothd (-does nothing to retry-) retry connection if the option
+`Experimental = true` is present in bluetoth's `main.conf`file.
+_(Manually `bluetoothctl connect MAC_addr` works fine too)_
 
-Manually `bluetoothctl connect MAC_addr` works fine but the device is set to
-muted.
+But the device is default set to muted.
 
 This is boring when you want to configure a pipewire virtual sink with many
 device as described abow because :
-- the device is not automatically added in the virtual sink
-- when added manually
   - the virtual sink is muted
   - if firefox playing sound, it stops
  
