@@ -1,4 +1,7 @@
-
+---
+title: Manage sound under linux terminal
+author: François Chenais
+---
 
 # Command line
 
@@ -29,29 +32,57 @@ or
 
     sed 's/.*\(XDG_RUNTIME_DIR=[^\x0]*\).*/\1\n/'  /proc/844/environ
 
+## wpctl
+
+- get informations
+
+    wpctl status
+
+
+- Set volume to 80%
+
+    wpctl
+
+- Increase volume by 5%
+
+    /usr/bin/wpctl set-volume -l 1.5 @DEFAULT_AUDIO_SINK@ 5%+
+
+- Decrease volume by 5%
+
+    /usr/bin/wpctl set-volume -l 1.5 @DEFAULT_AUDIO_SINK@ 5%-
+
+- Mute
+
+     /usr/bin/wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle
+
+- Mute microphone
+
+     /usr/bin/wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle
 
 ## amixer
 
 Has the user running sound server pipewire or pulseaudio, run amixer to change
 the volume 
 
-* Set volume to 80%
+- Set volume to 80%
 
     amixer sset Master 80%
 
-* Increase volume by 5%
+- Increase volume by 5%
 
     amixer sset Master 5%+
 
-* Decrease volume by 5%
+- Decrease volume by 5%
 
     amixer sset Master 5%-
 
+- Mute
+
+    amixer sset Master toggle
+
+
 # pipewire
 
-## cli
-
-All cli commands start with `pw-`
 
 
 
@@ -83,6 +114,26 @@ Need xmacro
              button = KEY_MUTE
              config = echo KeyStrPress XF86AudioMute KeyStrRelease XF86AudioMute | xmacroplay $DISPLAY
      end
+
+
+# Bluetooh devices
+
+
+On debian, the `libspa-0.2-bluetooth` package must be installed to get sound
+working using BT devices. (TODO: check how the magical works)
+
+    dpkg -L libspa-0.2-bluetooth
+    /usr/lib/arm-linux-gnueabihf/spa-0.2/bluez5
+    /usr/lib/arm-linux-gnueabihf/spa-0.2/bluez5/libspa-bluez5.so
+    /usr/lib/arm-linux-gnueabihf/spa-0.2/bluez5/libspa-codec-bluez5-aptx.so
+    /usr/lib/arm-linux-gnueabihf/spa-0.2/bluez5/libspa-codec-bluez5-faststream.so
+    /usr/lib/arm-linux-gnueabihf/spa-0.2/bluez5/libspa-codec-bluez5-lc3.so
+    /usr/lib/arm-linux-gnueabihf/spa-0.2/bluez5/libspa-codec-bluez5-ldac.so
+    /usr/lib/arm-linux-gnueabihf/spa-0.2/bluez5/libspa-codec-bluez5-opus.so
+    /usr/lib/arm-linux-gnueabihf/spa-0.2/bluez5/libspa-codec-bluez5-sbc.so
+    /usr/share/doc/libspa-0.2-bluetooth/changelog.Debian.gz
+    /usr/share/doc/libspa-0.2-bluetooth/copyright
+    /usr/share/spa-0.2/bluez5/bluez-hardware.conf
 
 
 
