@@ -542,7 +542,7 @@ EOF_SVG_HEADER
         work_load=0
         for b in ${branches//,/ }
         do
-            for stats  in $(git log --shortstat --after="${prev_day}" --before="${next_day}" "$b" | egrep 'file.* changed' | awk '{ print $1"-"$4"-"$6}')
+            for stats  in $(git log --shortstat --after="${prev_day}" --before="${next_day}" "$b" | grep -E 'file.* changed' | awk '{ print $1"-"$4"-"$6}')
             do
                 nb_files=${stats/-*}
                 nb_ins=${stats##-*}
