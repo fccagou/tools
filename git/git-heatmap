@@ -622,6 +622,75 @@ EOF_FOOT
 
 }
 
+# -- Creates json heatmap data from git repo
+#
+git_to_json() {
+    # TODO aouter le nombre de commiters et la liste (/!\ .mailmap)
+    local year="$1"
+    local branches="$2"
+    local svg_fill="${3:-no}"
+
+    local translate=-1
+    local x=14
+
+    local total_nb_commits=0
+    local total_nb_files=0
+	local total_nb_lines=0
+
+	printf -- " { \"dates\": {\n"
+
+    for d in $(seq 0 364 )
+    do
+        the_date=$(date --date="$year-1-1 00:00 $d day" "+%Y-%m-%d")
+        prev_day=$(date --date="${the_date} 23:59 1 day ago" "+%Y-%m-%d %H:%M")
+        next_day=$(date --date="${the_date} 00:00 1 day" "+%Y-%m-%d %H:%M")
+        the_day=$(date  --date="${the_date} 00:00" "+%u")
+        y=$(( ( ( the_day - 1 ) % 13 ) * 13 ))
+
+        work_load=0
+        for b in ${branches//,/ }
+        do
+            for stats  in $(git log --shortstat --after="${prev_day}" --before="${next_day}" "$b" | grep -E 'file.* changed' | awk '{ print $1"-"$4"-"$6}')
+            do
+                nb_files=${stats/-*}
+                nb_ins=${stats##-*}
+                nb_ins=${nb_ins/-*}
+                nb_del=${stats##*-}
+                [ -z "${nb_del}" ] && nb_del=0
+
+                work_load=$(( work_load + nb_files + nb_ins + nb_del ))
+                total_nb_commits=$(( total_nb_commits + 1 ))
+
+                total_nb_files=$(( total_nb_files + nb_files ))
+                total_nb_lines=$(( total_nb_lines + nb_ins + nb_del ))
+
+            done
+        done
+
+        # TODO: ajouter le nombre de fichier modifiés, de lignes impactés, de commiteurs
+        level="$(workload_to_level $work_load)"
+        if [ "${svg_fill}" == "yes" ]
+        then
+            fill="\"fill\": \"$(workload_to_color "${work_load}")\","
+        else
+            fill=""
+        fi
+		[ "$d" == "364" ] && virg="" || virg=","
+        cat <<EOF_LINE
+		"${the_date}": { ${fill}"level": ${level}, "count": ${work_load} }$virg
+EOF_LINE
+
+    done
+
+	cat <<EOF_FOOT
+   },
+  "title": "[ ${year} ]  ${total_nb_commits} contributions and ${total_nb_lines} lines modified"
+}
+EOF_FOOT
+
+    return "${total_nb_commits}"
+
+}
 
 # -------------------------------------------------------------------------
 #   Variables
@@ -640,6 +709,8 @@ inline_html="yes"
 years="$(date +%Y)"
 all_in_one="no"
 user_output_filename=""
+output_format="html"
+fileext="html"
 
 default_output_dir="/dev/shm/git_heatmap"
 default_output_html_filename="${default_output_dir}/heatmap.html"
@@ -681,6 +752,8 @@ NAME
                                             off all branches. Dafault is "${aggregate}"
 
     --color-legend                        : display only the color legend (for debug)
+
+    --json                                : Display in json format
 
     --id                                  : An id used to identifiy the results.
                                             The id must be a string in [A-Za-z-_]* format.
@@ -813,6 +886,10 @@ do
             id="${1//*=/}"
             [ -z "${id}" ] && { error "--id parameter needs value"; usage; exit 1; }
             ;;
+        "--json")
+            output_format="json"
+			fileext="json"
+            ;;
         "--title="*)
             # TODO: check id format
             title="${1//*=/}"
@@ -922,38 +999,49 @@ else
 fi
 
 
-action "Generate html pages"
+action "Generate ${output_format} pages"
 
 if [ "${all_in_one}" == "yes" ]
 then
     [ -z "${user_output_filename}" ] \
-        && output_filename="${output_dir}/${output_prefix}all.html" \
+        && output_filename="${output_dir}/${output_prefix}all.$fileext" \
         || output_filename="${user_output_filename}"
 
     info "all in ${output_filename}"
-    html_header "${title}" "${branches}" "${html_css_header}" "${html_js_header}" > "${output_filename}"
-    html_color_legend                                                            >> "${output_filename}"
-    for y in ${years//,/ }
-    do
-        html_heatmap_graph_header "${output_prefix}${y}"                         >> "${output_filename}"
-        git_to_svg "$y" "$branches" "${svg_fill}"                                >> "${output_filename}"
-        html_heatmap_graph_footer                                                >> "${output_filename}"
-    done
-    html_footer                                                                  >> "${output_filename}"
+	if [ "${output_format}" == "json" ]
+	then
+		git_to_json "$y" "$branches" "${svg_fill}" > "${output_filename}"
+	else
+
+        html_header "${title}" "${branches}" "${html_css_header}" "${html_js_header}" > "${output_filename}"
+        html_color_legend                                                            >> "${output_filename}"
+        for y in ${years//,/ }
+        do
+            html_heatmap_graph_header "${output_prefix}${y}"                         >> "${output_filename}"
+            git_to_svg "$y" "$branches" "${svg_fill}"                                >> "${output_filename}"
+            html_heatmap_graph_footer                                                >> "${output_filename}"
+        done
+        html_footer                                                                  >> "${output_filename}"
+	fi
 
 else
     for y in ${years//,/ }
     do
-        output_filename="${output_dir}/${output_prefix}${y}.html"
+        output_filename="${output_dir}/${output_prefix}${y}.$fileext"
         info "${output_filename}"
 
-        html_header "${title}" "${branches}" \
-            "${html_css_header}" "${html_js_header}"       > "${output_filename}"
-        html_color_legend                                 >> "${output_filename}"
-        html_heatmap_graph_header "${output_prefix}${y}"  >> "${output_filename}"
-        git_to_svg "$y" "$branches"  "${svg_fill}"        >> "${output_filename}"
-        html_heatmap_graph_footer                         >> "${output_filename}"
-        html_footer                                       >> "${output_filename}"
+	    if [ "${output_format}" == "json" ]
+	    then
+	        git_to_json "$y" "$branches" "${svg_fill}" > "${output_filename}"
+		else
+            html_header "${title}" "${branches}" \
+                "${html_css_header}" "${html_js_header}"       > "${output_filename}"
+            html_color_legend                                 >> "${output_filename}"
+            html_heatmap_graph_header "${output_prefix}${y}"  >> "${output_filename}"
+            git_to_svg "$y" "$branches"  "${svg_fill}"        >> "${output_filename}"
+            html_heatmap_graph_footer                         >> "${output_filename}"
+            html_footer                                       >> "${output_filename}"
+		fi
     done
 fi
 

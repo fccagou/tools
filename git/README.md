@@ -126,3 +126,6 @@ EXAMPLE
 
 ```
 
+[38;5;64m[+] Generate css and js[0m
+[34m |->[0m inline html
+[38;5;64m[+] Generate html pages[0m
