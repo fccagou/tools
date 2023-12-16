@@ -1,0 +1,55 @@
+#!/usr/bin/bash
+#
+# Simple script used to reload haproxy after renewal.
+#
+# We consider using a uniq certificat for certname and all domains
+# named with default haproxy configiration /etc/haproxy/<certname>.pem
+#
+# To use the script as deply hook,
+#
+#     cp haproxy /etc/letsencrypt/renewal-hooks/deploy
+#     chmod +x /etc/letsencrypt/renewal-hooks/deploy/haproxy
+#
+# Everything printed in output is logged in /var/log/letsencrypt/letsencrypt.log
+#
+#
+
+set -o pipefail
+set -o errexit
+set -o nounset
+
+exist_or_exit () {
+  local filename
+  filename="$1"
+  [ -f "$filename" ] || {
+      /usr/bin/printf -- "[-] certbot/haproxy-hook: %s doesn't exist\n" "$filename"
+      exit 1
+  }
+}
+
+# man
+#
+certname="${RENEWED_LINEAGE##*/}"
+
+haproxycertfile=/etc/haproxy/"$certname".pem
+
+exist_or_exit "$haproxycertfile"
+exist_or_exit "${RENEWED_LINEAGE}"/privkey.pem
+exist_or_exit "${RENEWED_LINEAGE}"/fullchain.pem
+
+# Backup
+backupname="$haproxycertfile"-"$(date -Iseconds)"
+/usr/bin/cp "$haproxycertfile" "$backupname"  || {
+    /usr/bin/printf -- "[-] certbot/haproxy-hook: enable to backup %s to %s\n" "$haproxycertfile" "$backupname"
+    exit 1
+}
+
+/usr/bin/cat "${RENEWED_LINEAGE}"/privkey.pem \
+    "${RENEWED_LINEAGE}"/fullchain.pem \
+    > "$haproxycertfile" || {
+    /usr/bin/printf -- "[-] certbot/haproxy-hook: enable to backup %s to %s\n" "$haproxycertfile" "$backupname"
+    exit 1
+}
+
+/usr/bin/systemctl restart haproxy
+
