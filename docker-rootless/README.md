@@ -24,9 +24,10 @@ ROOTLESSDIR="$HOME"/.local ./myrootless.sh install
 Check
 
 ```bash
-$ docker info 2>/dev/null | grep -E 'Context|Docker Root Dir' 
- Context:    rootless
- Docker Root Dir: /home/fccagou/.local/share/docker
+$ docker context ls
+NAME         DESCRIPTION                               DOCKER ENDPOINT                     ERROR
+default      Current DOCKER_HOST based configuration   unix:///var/run/docker.sock         
+rootless *   Rootless mode                             unix:///run/user/1000/docker.sock   
 ```
 Then 
 
