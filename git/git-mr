@@ -162,8 +162,9 @@ mr_log () {
     remote="$1"
     shift
 
-    [ "$#" == "1" ] && echo "$1" || mr_list "$remote" -q \
-      | while read mr; do
+	{
+		[ "$#" == "1" ] && echo "$1" || mr_list "$remote" -q
+	}  | while read mr; do
           git log --oneline --abbrev-commit main^.."$mr" | wc -l | grep -q "^0$" || {
 	             #printf -- "--------------------\n%s\n--------------------\n" "$mr"
 		         branch="$(git branch -va \
