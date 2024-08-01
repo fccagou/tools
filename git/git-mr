@@ -223,12 +223,8 @@ mr_status () {
 	{
 		[ -n "$mr" ] && echo "$mr" || mr_list "$remote" -q
 	} | while read _mr; do
-          git log --oneline --abbrev-commit main^.."$_mr" | wc -l | grep -q "^0$" || {
-		      branch="$(git branch -va \
-              | grep "$(git rev-parse --short "$_mr")" \
-              | grep "remotes/${remote}/" \
-              | awk '{ print $1 }')"
-              chapter "$_mr $branch"
+          git log --oneline --abbrev-commit "$remote"/main^.."$_mr" | wc -l | grep -q "^0$" || {
+              chapter "${_mr} $(git branch --points-at="$(git rev-parse --short "$_mr")" -a | grep "$remote" | grep -vE "^[ ]*${_mr}|HEAD" | xargs)"
               git log --color --decorate --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an (%G?)>%Creset' --abbrev-commit  "$remote"/main.."$_mr"
               git branch --list main -v
 		  }
