@@ -193,10 +193,11 @@ mr_status () {
 	{
 		[ -n "$mr" ] && echo "$mr" || mr_list "$remote" -q
 	} | while read _mr; do
-          git log --oneline --abbrev-commit "$remote"/main^.."$_mr" | wc -l | grep -q '^0$' || {
-              remote_mr_branch="$(mr_remote_branch "$remote" "$_mr")"
+
+          remote_mr_branch="$(mr_remote_branch "$remote" "$_mr")"
+          [ -z "${remote_mr_branch}" ] || {
               chapter "${_mr} -> ${remote}/${remote_mr_branch}"
-              git log --no-merges --color --pretty=format:' * %Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an (%G?)>%Creset' --abbrev-commit  "$remote"/main^.."$_mr"
+              git log --no-merges --color --pretty=format:' * %Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an (%G?)>%Creset' --abbrev-commit  "$remote"/main.."$_mr"
               if [ "$(git merge-base "$remote"/main "$_mr")" != "${remote_origin_commit}" ]; then
                   info "need rebase"
                   todo "git mr rebase ${_mr}"
