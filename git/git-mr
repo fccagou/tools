@@ -220,13 +220,23 @@ mr_status () {
         exit 1
     }
 
+	remote_origin_commit="$(git rev-parse "$remote"/main)"
+
 	{
 		[ -n "$mr" ] && echo "$mr" || mr_list "$remote" -q
 	} | while read _mr; do
-          git log --oneline --abbrev-commit "$remote"/main^.."$_mr" | wc -l | grep -q "^0$" || {
-              chapter "${_mr} $(git branch --points-at="$(git rev-parse --short "$_mr")" -a | grep "$remote" | grep -vE "^[ ]*${_mr}|HEAD" | xargs)"
-              git log --color --decorate --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an (%G?)>%Creset' --abbrev-commit  "$remote"/main.."$_mr"
-              git branch --list main -v
+          git log --oneline --abbrev-commit "$remote"/main^.."$_mr" | wc -l | grep -q '^0$' || {
+              remote_mr_branch="$(git branch --list --remote --points-at="$(git rev-parse --short "$_mr")" | grep "$remote" | cut -d/ -f2- )"
+              chapter "${_mr} -> ${remote}/${remote_mr_branch}"
+              git log --no-merges --color --pretty=format:' * %Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an (%G?)>%Creset' --abbrev-commit  "$remote"/main^.."$_mr"
+              if [ "$(git merge-base "$remote"/main "$_mr")" != "${remote_origin_commit}" ]; then
+                  info "need rebase"
+              else
+                  printf -- "/\n"
+                  git branch --list --format="* %(refname:short)    %(subject)" main
+              fi
+
+#              git branch --list main -v
 		  }
         done
 }
