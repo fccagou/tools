@@ -139,7 +139,11 @@ mr_remote_branch () {
 
     remote="$1"
     mr="$2"
-    git branch --list --remote --points-at="$(git rev-parse --short "$mr")" | grep "$remote" | cut -d/ -f2-
+    git branch --list --remote --points-at="$(git rev-parse --short "$mr")" \
+        | grep "$remote" \
+        | cut -d/ -f2- \
+        | grep -vE '^(HEAD|main)' \
+    || echo ""
 }
 
 mr_list () {
