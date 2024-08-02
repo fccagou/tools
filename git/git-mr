@@ -153,13 +153,13 @@ mr_list () {
 
 mr_fetch () {
     local remote
-	local ref
+    local ref
     remote="$1"
 
 	fetchpattern='+refs/merge-requests/*/head:refs/heads/mr/'"$remote"'/*'
-	git config get --all remote."$remote".fetch \
+        git config --get-all remote."$remote".fetch \
 		| grep -qF "${fetchpattern}" \
-		|| git config set --append remote."$remote".fetch "$fetchpattern"
+		|| git config --add remote."$remote".fetch "$fetchpattern"
 
 	git fetch "$remote" --prune
 }
