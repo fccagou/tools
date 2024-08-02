@@ -179,55 +179,8 @@ mr_status () {
     local mr
     local _mr
 
-    # remote <nb>
-    # mr/remote/nb
-    # remote/nb
-    # nb
-    if git remote | grep -q "^${1}$"; then
-        # first parameer is a remote
-        remote="$1"
-        [ "$#" -ge "2" ] && mr="mr/$remote/$2" || mr=""
-    else
-        remote=""
-        mr="$1"
-    fi
-
-    if [ -n "$mr" ]; then
-        # check if mr format is  mr/<remote>/nb
-        IFS=/ read -r -a tmp <<<"$mr"
-
-        case ${#tmp[@]} in
-            1)
-                remote="origin"
-                mr=mr/origin/"${tmp[0]}"
-                ;;
-            2)
-                remote="${tmp[0]}"
-                mr=mr/"${tmp[0]}"/"${tmp[1]}"
-                ;;
-            3)
-                remote="${tmp[1]}"
-                mr=mr/"${tmp[1]}"/"${tmp[2]}"
-                ;;
-            *)
-                error "Bad branch format ($mr)"
-                usage
-                exit 1
-                ;;
-        esac
-        git branch | grep -q "^[ ]*${mr}$" || {
-            error "bad mr ($mr)"
-            mr_list "$remote"
-            usage
-            exit 1
-        }
-    fi
-
-    git remote | grep -q "^${remote}$" || {
-        error "bad remote ($remote)"
-        git remotes
-        exit 1
-    }
+    remote="$1"
+    mr="$2"
 
 	remote_origin_commit="$(git rev-parse "$remote"/main)"
 
@@ -255,9 +208,65 @@ main () {
 
 
     case "$action" in
-        list|fetch|status)
+        list|fetch)
             [ "$#" == "0" ] && remote="origin" || { remote="$1"; shift; }
             mr_"$action" "$remote" "$@"
+            ;;
+        status)
+            if [ "$#" == "0" ]; then
+                remote=origin
+                mr=""
+            else
+                # remote <nb>
+                # mr/remote/nb
+                # remote/nb
+                # nb
+                if git remote | grep -q "^${1}$"; then
+                    remote="$1"
+                    [ "$#" -ge "2" ] && mr="mr/$remote/$2" || mr=""
+                else
+                    remote=""
+                    mr="$1"
+                fi
+
+                if [ -n "$mr" ]; then
+                    # check if mr format is  mr/<remote>/nb
+                    IFS=/ read -r -a tmp <<<"$mr"
+
+                    case ${#tmp[@]} in
+                        1)
+                            remote="origin"
+                            mr=mr/origin/"${tmp[0]}"
+                            ;;
+                        2)
+                            remote="${tmp[0]}"
+                            mr=mr/"${tmp[0]}"/"${tmp[1]}"
+                            ;;
+                        3)
+                            remote="${tmp[1]}"
+                            mr=mr/"${tmp[1]}"/"${tmp[2]}"
+                            ;;
+                        *)
+                            error "Bad branch format ($mr)"
+                            usage
+                            exit 1
+                            ;;
+                    esac
+                    git branch | grep -q "^[ ]*${mr}$" || {
+                        error "bad mr ($mr)"
+                        mr_list "$remote"
+                        usage
+                        exit 1
+                    }
+                fi
+
+                git remote | grep -q "^${remote}$" || {
+                    error "bad remote ($remote)"
+                    git remotes
+                    exit 1
+                }
+            fi
+            mr_"$action" "$remote" "$mr"
             ;;
         help)
             mr_help
