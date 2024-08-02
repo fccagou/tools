@@ -255,7 +255,6 @@ main () {
                     git branch | grep -q "^[ ]*${mr}$" || {
                         error "bad mr ($mr)"
                         mr_list "$remote"
-                        usage
                         exit 1
                     }
                 fi
