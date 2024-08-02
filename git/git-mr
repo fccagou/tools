@@ -133,6 +133,15 @@ mr_get_remote () {
 		| awk '{ print $2 }'
 }
 
+mr_remote_branch () {
+	local remote
+    local mr
+
+    remote="$1"
+    mr="$2"
+    git branch --list --remote --points-at="$(git rev-parse --short "$mr")" | grep "$remote" | cut -d/ -f2-
+}
+
 mr_list () {
     local remote
     local verbose
@@ -226,7 +235,7 @@ mr_status () {
 		[ -n "$mr" ] && echo "$mr" || mr_list "$remote" -q
 	} | while read _mr; do
           git log --oneline --abbrev-commit "$remote"/main^.."$_mr" | wc -l | grep -q '^0$' || {
-              remote_mr_branch="$(git branch --list --remote --points-at="$(git rev-parse --short "$_mr")" | grep "$remote" | cut -d/ -f2- )"
+              remote_mr_branch="$(mr_remote_branch "$remote" "$_mr")"
               chapter "${_mr} -> ${remote}/${remote_mr_branch}"
               git log --no-merges --color --pretty=format:' * %Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an (%G?)>%Creset' --abbrev-commit  "$remote"/main^.."$_mr"
               if [ "$(git merge-base "$remote"/main "$_mr")" != "${remote_origin_commit}" ]; then
