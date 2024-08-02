@@ -211,25 +211,44 @@ mr_status () {
 mr_rebase () {
     local remote
     local mr
-    local _mr
+    local remote_mr_branch
 
     remote="$1"
     mr="$2"
 
-    info "rebase $remote $mr"
-    todo "implementation"
+    {
+        [ -n "$mr" ] && echo "$mr" || mr_list "$remote" -q
+    } | while read _mr; do
+            remote_mr_branch="$(mr_remote_branch "$remote" "$_mr")"
+            action "rebase ${remote_mr_branch} on $remote/main"
+            todo "implementation"
+        done
 }
 
 mr_push () {
     local remote
     local mr
-    local _mr
+
+    local remote_mr_branch
+    local remote_origin_commit
 
     remote="$1"
     mr="$2"
-
-    info "push $remote $mr"
-    todo "implementation"
+	remote_origin_commit="$(git rev-parse "$remote"/main)"
+    {
+        [ -n "$mr" ] && echo "$mr" || mr_list "$remote" -q
+    } | while read _mr; do
+            remote_mr_branch="$(mr_remote_branch "$remote" "$_mr")"
+            if [ -z "${remote_mr_branch}" ]; then
+               : # no branch => no current work or maybe achived
+            elif [ "$(git merge-base "$remote"/main "$_mr")" != "${remote_origin_commit}" ]; then
+                error "${_mr} nead rebase"
+                todo "git mr rebase ${_mr}"
+            else
+                action "${_mr} push ${remote_mr_branch} to $remote"
+                todo "implementation"
+            fi
+        done
 }
 
 main () {
