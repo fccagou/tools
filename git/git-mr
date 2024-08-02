@@ -108,7 +108,7 @@ CMD
 
 LIST OPTIONS
 
-    -q                 : quiet mode
+    --without-branch   : list all mr
 
 STATUS-REBASE-PUSH  OPTIONS
 
@@ -141,6 +141,7 @@ mr_remote_branch () {
 
     remote="$1"
     mr="$2"
+
     git branch --list --remote --points-at="$(git rev-parse --short "$mr")" \
         | grep "$remote" \
         | cut -d/ -f2- \
@@ -153,17 +154,25 @@ mr_list () {
     local verbose
 
     remote="$1"
-    verbose="-v"
+    showbranch="yes"
 
-    [ "$remote" == "-q" ] && { remote=origin; verbose=""; }
+    [ "$remote" == "--without-branch" ] && { remote=origin; showbranch="no"; }
 
     git remote | grep -q "^${remote}$" || {
         error "Unknown remote ${remote}"
         exit 1
     }
 
-    [ "$#" -ge "2" ] && [ "$2" == "-q" ] && verbose="" || verbose="-v"
-    git branch --list "mr/${remote}/*" $verbose
+    [ "$#" -ge "2" ] && [ "$2" == "--without-branch" ] && showbranch="no"
+
+    if [ "$showbranch" == "no" ]; then
+        git branch --list "mr/${remote}/*"
+    else
+        git branch --list "mr/${remote}/*" | while read mr; do
+            remote_mr_branch="$(mr_remote_branch "$remote" "$mr")"
+            printf -- "%s %s\n" "$mr" "${remote_mr_branch}"
+        done
+    fi
 }
 
 mr_fetch () {
@@ -191,7 +200,7 @@ mr_status () {
 	remote_origin_commit="$(git rev-parse "$remote"/main)"
 
 	{
-		[ -n "$mr" ] && echo "$mr" || mr_list "$remote" -q
+		[ -n "$mr" ] && echo "$mr" || mr_list "$remote" --without-branch
 	} | while read _mr; do
 
           remote_mr_branch="$(mr_remote_branch "$remote" "$_mr")"
@@ -218,7 +227,7 @@ mr_rebase () {
     mr="$2"
 
     {
-        [ -n "$mr" ] && echo "$mr" || mr_list "$remote" -q
+        [ -n "$mr" ] && echo "$mr" || mr_list "$remote" --without-branch
     } | while read _mr; do
             remote_mr_branch="$(mr_remote_branch "$remote" "$_mr")"
             action "rebase ${remote_mr_branch} on $remote/main"
@@ -237,7 +246,7 @@ mr_push () {
     mr="$2"
 	remote_origin_commit="$(git rev-parse "$remote"/main)"
     {
-        [ -n "$mr" ] && echo "$mr" || mr_list "$remote" -q
+        [ -n "$mr" ] && echo "$mr" || mr_list "$remote" --without-branch
     } | while read _mr; do
             remote_mr_branch="$(mr_remote_branch "$remote" "$_mr")"
             if [ -z "${remote_mr_branch}" ]; then
