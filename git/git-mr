@@ -103,21 +103,23 @@ CMD
     list               : list all mr for a remote (default: origin)
     fetch              : fetch all mr for a remote (default: origin)
     status             : show commit list between <remote>/main and <remote>/#mr
+    rebase             : rebase mr to <remote>/main
+    push               : push mr to <remote>
 
 LIST OPTIONS
 
     -q                 : quiet mode
 
-STATUS OPTIONS
+STATUS-REBASE-PUSH  OPTIONS
 
-    no option          : show all mr from remote origin
-    <remote>           : show all mr from remote <remote>
+    no option          : all mr from remote origin
+    <remote>           : all mr from remote <remote>
 
-    <remote> #mr       : all format
-    mr/<remote>/#mr    :        to get status
-    <remote>/#mr       :              of mr/<remote>/#mr
+    <remote> #mr       : \\
+    mr/<remote>/#mr    : |-  common format
+    <remote>/#mr       : /
 
-    #mr                : status for mr/origin/#mr
+    #mr                : link to mr/origin/#mr
 
 EOF_USAGE
 }
@@ -197,15 +199,39 @@ mr_status () {
               git log --no-merges --color --pretty=format:' * %Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an (%G?)>%Creset' --abbrev-commit  "$remote"/main^.."$_mr"
               if [ "$(git merge-base "$remote"/main "$_mr")" != "${remote_origin_commit}" ]; then
                   info "need rebase"
+                  todo "git mr rebase ${_mr}"
               else
                   printf -- "/\n"
                   git branch --list --format="* %(refname:short)    %(subject)" main
               fi
-
-#              git branch --list main -v
 		  }
         done
 }
+
+mr_rebase () {
+    local remote
+    local mr
+    local _mr
+
+    remote="$1"
+    mr="$2"
+
+    info "rebase $remote $mr"
+    todo "implementation"
+}
+
+mr_push () {
+    local remote
+    local mr
+    local _mr
+
+    remote="$1"
+    mr="$2"
+
+    info "push $remote $mr"
+    todo "implementation"
+}
+
 main () {
 
     [ "$#" == "0" ] && action=list || { action="$1"; shift; }
@@ -216,7 +242,7 @@ main () {
             [ "$#" == "0" ] && remote="origin" || { remote="$1"; shift; }
             mr_"$action" "$remote" "$@"
             ;;
-        status)
+        status|rebase|push)
             if [ "$#" == "0" ]; then
                 remote=origin
                 mr=""
