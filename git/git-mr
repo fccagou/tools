@@ -103,6 +103,7 @@ CMD
     list               : list all mr for a remote (default: origin)
     fetch              : fetch all mr for a remote (default: origin)
     status             : show commit list between <remote>/main and <remote>/#mr
+    show               : show commits between <remote>/main and <remote>/#mr
     rebase             : rebase mr to <remote>/main
     push               : push mr to <remote>
 
@@ -114,6 +115,14 @@ STATUS-REBASE-PUSH  OPTIONS
 
     no option          : all mr from remote origin
     <remote>           : all mr from remote <remote>
+
+    <remote> #mr       : \\
+    mr/<remote>/#mr    : |-  common format
+    <remote>/#mr       : /
+
+    #mr                : link to mr/origin/#mr
+
+SHOW OPTIONS
 
     <remote> #mr       : \\
     mr/<remote>/#mr    : |-  common format
@@ -218,6 +227,28 @@ mr_status () {
         done
 }
 
+
+mr_show () {
+    local remote
+    local mr
+    local _mr
+
+    remote="$1"
+    mr="$2"
+
+	if [ -z "$mr" ]; then
+		error "You must provide the review number"
+	else
+       remote_mr_branch="$(mr_remote_branch "$remote" "$mr")"
+       [ -z "${remote_mr_branch}" ] || {
+           chapter "${mr} -> ${remote}/${remote_mr_branch}"
+           git show "$remote"/main.."$mr"
+	   }
+
+	fi
+}
+
+
 mr_rebase () {
     local remote
     local mr
@@ -271,7 +302,7 @@ main () {
             [ "$#" == "0" ] && remote="origin" || { remote="$1"; shift; }
             mr_"$action" "$remote" "$@"
             ;;
-        status|rebase|push)
+        status|show|rebase|push)
             if [ "$#" == "0" ]; then
                 remote=origin
                 mr=""
