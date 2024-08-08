@@ -1,5 +1,5 @@
 #!/usr/bin/bash
-
+# vim: tabstop=4 shiftwidth=4 expandtab
 set -eu
 set -o pipefail
 
@@ -109,7 +109,10 @@ CMD
 
 LIST OPTIONS
 
-    --without-branch   : list all mr
+  By default, list shows only opened mr with branch created.
+
+    --without-branch   : list only mr reference
+    --all              : list all mr
 
 STATUS-REBASE-PUSH  OPTIONS
 
@@ -161,27 +164,38 @@ mr_remote_branch () {
 mr_list () {
     local remote
     local verbose
+    local showbranch
+    local showallmr
 
-    remote="$1"
+    remote="origin"
     showbranch="yes"
+    showallmr="no"
 
-    [ "$remote" == "--without-branch" ] && { remote=origin; showbranch="no"; }
+    while [ "$#" -gt "0" ]; do
+        case "$1" in
+            --without-branch) showbranch="no";;
+            --all) showallmr="yes";;
+            *)
+                [ "$remote" == "origin" ] && remote="$1" || warning "unknown parameter ($1)" ;;
+        esac
+        shift
+    done
 
     git remote | grep -q "^${remote}$" || {
         error "Unknown remote ${remote}"
         exit 1
     }
 
-    [ "$#" -ge "2" ] && [ "$2" == "--without-branch" ] && showbranch="no"
-
-    if [ "$showbranch" == "no" ]; then
-        git branch --list "mr/${remote}/*"
-    else
-        git branch --list "mr/${remote}/*" | while read mr; do
-            remote_mr_branch="$(mr_remote_branch "$remote" "$mr")"
-            printf -- "%s %s\n" "$mr" "${remote_mr_branch}"
-        done
-    fi
+    git branch --list "mr/${remote}/*" | while read mr; do
+        remote_mr_branch="$(mr_remote_branch "$remote" "$mr")"
+        if [ -n "${remote_mr_branch}" ] || [ "$showallmr" == "yes" ]; then
+            [ "$showbranch" == "yes" ] \
+                && printf -- "%s %s\n" "$mr" "${remote_mr_branch}" \
+                || printf -- "%s\n" "$mr"
+        else
+            :
+        fi
+    done
 }
 
 mr_fetch () {
@@ -295,7 +309,6 @@ mr_push () {
 main () {
 
     [ "$#" == "0" ] && action=list || { action="$1"; shift; }
-
 
     case "$action" in
         list|fetch)
