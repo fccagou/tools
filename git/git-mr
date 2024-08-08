@@ -190,7 +190,7 @@ mr_list () {
         remote_mr_branch="$(mr_remote_branch "$remote" "$mr")"
         if [ -n "${remote_mr_branch}" ] || [ "$showallmr" == "yes" ]; then
             [ "$showbranch" == "yes" ] \
-                && printf -- "%s %s\n" "$mr" "${remote_mr_branch}" \
+                && printf -- "%s %-60s %s\n" "$mr" "${remote_mr_branch}" "$(git log --reverse --format="%ar"   .."$mr" | head -1)" \
                 || printf -- "%s\n" "$mr"
         else
             :
