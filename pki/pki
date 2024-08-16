@@ -1,0 +1,15 @@
+#!/usr/bin/bash
+
+# For security
+set -euo pipefail
+prefix="$(readlink -f "$(dirname "$0")")"
+cmd="pki"
+
+while [ "$#" -gt "0" ]; do
+	cmd="$cmd"-"$1"
+	shift
+	[ -f "$prefix"/"$cmd".sh ] && exec "$prefix"/"$cmd".sh "$@"
+done
+
+echo "Unknown command ${cmd/pki-}"
+exit 1
