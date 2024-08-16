@@ -5,7 +5,7 @@ set -euo pipefail
 # Variables de configuration
 CA_DIR="${CA_DIR:-./myCA}"
 CONFIG_FILE="${CA_DIR}/openssl.cnf"
-DAYS=365
+DAYS="${DAYS:-365}"
 
 # Paramètres d'entrée
 CERT_NAME=$1
