@@ -22,3 +22,4 @@ openssl req -x509 -new -nodes -key "${CA_KEY}" -sha256 -days 3650 -out "${CA_CER
 
 # Message de fin
 echo "Infrastructure PKI initialisée avec succès."
+echo "Vous devez maintenant créer le fichier de configuration ${CONFIG_FILE}"

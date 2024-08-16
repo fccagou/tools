@@ -7,13 +7,15 @@ CA_DIR="${CA_DIR:-./myCA}"
 CONFIG_FILE="${CA_DIR}/openssl.cnf"
 DAYS="${DAYS:-365}"
 
-# Paramètres d'entrée
-CERT_NAME=$1
+[ -f "${CONFIG_FILE}" ] || { echo "Erreur, le fichier de configuration ${CONFIG_FILE} est absent." >&2; exit 1; }
 
-if [ -z "${CERT_NAME}" ]; then
+# Paramètres d'entrée
+if [ "$#" == "0" ]; then
     echo "Usage: $0 <certificate_name>"
     exit 1
 fi
+
+CERT_NAME="$1"
 
 # Vérification si le fichier de clé privée existe
 if [ ! -f "${CERT_NAME}.key" ]; then
