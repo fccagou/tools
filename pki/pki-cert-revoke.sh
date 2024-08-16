@@ -3,7 +3,7 @@
 set -euo pipefail
 
 # Variables de configuration
-CA_DIR="/root/myCA"
+CA_DIR="${CA_DIR:-./myCA}"
 CONFIG_FILE="$CA_DIR/openssl.cnf"
 CRL_FILE="$CA_DIR/crl/ca.crl"
 
