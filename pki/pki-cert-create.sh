@@ -22,7 +22,7 @@ openssl genpkey -algorithm RSA -out "${CERT_NAME}".key || { echo "Erreur lors de
 openssl req -new -key "${CERT_NAME}".key -out "${CERT_NAME}".csr || { echo "Erreur lors de la création de la CSR pour ${CERT_NAME}." >&2; exit 1; }
 
 # Signature de la CSR par le CA
-openssl ca -config "${CONFIG_FILE}" -in "${CERT_NAME}".csr -out "${CERT_NAME}".crt -days "${S}" || { echo "Erreur lors de la signature du certificat ${CERT_NAME}." >&2; exit 1; }
+openssl ca -config "${CONFIG_FILE}" -in "${CERT_NAME}".csr -out "${CERT_NAME}".crt -days "${DAYS}" || { echo "Erreur lors de la signature du certificat ${CERT_NAME}." >&2; exit 1; }
 
 # Message de fin
 echo "Certificat pour ${CERT_NAME} créé avec succès."
