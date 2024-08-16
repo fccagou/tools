@@ -8,12 +8,6 @@ CA_KEY="${CA_DIR}/private/ca.key"
 CA_CERT="${CA_DIR}/certs/ca.crt"
 CONFIG_FILE="${CA_DIR}/openssl.cnf"
 
-# Vérification des droits root
-if [ "$(id -u)" -ne 0 ]; then
-    echo "Ce script doit être exécuté en tant que root." >&2
-    exit 1
-fi
-
 # Création des répertoires et fichiers nécessaires
 mkdir -p "${CA_DIR}"/{certs,crl,newcerts,private} || { echo "Erreur lors de la création des répertoires." >&2; exit 1; }
 chmod 700 "${CA_DIR}"/private || { echo "Erreur lors du changement des permissions." >&2; exit 1; }
