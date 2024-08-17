@@ -17,12 +17,12 @@ CONFIG_FILE="${CA_DIR}/openssl.cnf"
 DAYS="${DAYS:-3650}"
 INITFILE="${INITFILE:-""}"
 
-C=VU
-ST=Efate
-L=Port-Vila
-O="Test org"
-OU="IT of $O"
-CN="CA of $O"
+C="${C:-VU}"
+ST="${ST:-Efate}"
+L="${L:-Port-Vila}"
+O="${O:-"Test org"}"
+OU="${OU:-"IT of $O"}"
+CN="${CN:-"CA of $O"}"
 
 BATCHMODE="${BATCHMODE:-no}"
 
