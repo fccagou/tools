@@ -9,7 +9,6 @@ EOF
 }
 
 
-
 # Variables de configuration
 CA_DIR="${CA_DIR:-./myCA}"
 CA_KEY="${CA_DIR}/private/cakey.pem"
@@ -25,6 +24,8 @@ O="Test org"
 OU="IT of $O"
 CN="CA of $O"
 
+BATCHMODE="${BATCHMODE:-no}"
+
 
 
 while [ "$#" -gt 0 ]; do
@@ -33,6 +34,7 @@ while [ "$#" -gt 0 ]; do
 			usage
 			exit 0
 			;;
+		--batch) BATCHMODE=yes ;;
 		--initfile)
 			if [ "$#" == 2 ]; then
 			    INITFILE="$2"
@@ -59,6 +61,69 @@ if [ -n "$INITFILE" ]; then
         exit 1
     }
 	source "$INITFILE"
+fi
+
+if [ "$BATCHMODE" != "yes" ]; then
+	cat <<-EOF_BANNER
+Création d'une CA avec les informations suivantes:
+
+CA_DIR=${CA_DIR}
+CA_KEY=${CA_DIR}/private/cakey.pem"
+CA_CERT=${CA_DIR}/cacert.pem"
+CONFIG_FILE=${CA_DIR}/openssl.cnf"
+DAYS=${DAYS}
+INITFILE=${INITFILE}
+
+C=$C
+ST=$ST
+L=$L
+O=$O
+OU=$OU
+CN=$CN
+
+EOF_BANNER
+
+    rep=""
+    while :; do
+	    read -rp "Voulez-vous poursuivre avec ces informations ? [O/n]" rep
+
+		case "$rep" in
+			N|n)
+				echo "Annulation par l'utilisateur"
+				exit 0
+				;;
+			O|o|Y|y|'')
+				break
+				;;
+			*)
+				echo "Réponse inconnue $rep";
+		esac
+	done
+
+
+	[ -d "${CA_DIR}" ] && {
+		rep=""
+	    while :; do
+	        read -rp "ATTENTION: ${CA_DIR} existe déjà, voulez-vous poursuivre tout de même ? [O/n]" rep
+			case "$rep" in
+				N|n)
+					echo "Annulation par l'utilisateur"
+					exit 0
+					;;
+				O|o|Y|y|'')
+					break
+					;;
+				*)
+					echo "Réponse inconnue $rep";
+			esac
+		done
+	}
+fi
+
+if [ -d "${CA_DIR}" ]; then
+	[ -d "${CA_DIR}"_backup ] && rm -rf "${CA_DIR}"_backup
+	mv "${CA_DIR}" "${CA_DIR}"_backup
+	echo "Backup ancienne configuration dans ${CA_DIR}_backup"
 fi
 
 # Création des répertoires et fichiers nécessaires
