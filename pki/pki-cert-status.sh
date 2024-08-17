@@ -2,15 +2,31 @@
 
 set -euo pipefail
 
+usage () {
+	local cmd
+	cmd="${0##*/}"
+	cmd="${cmd//-/ }"
+    cmd="${cmd%%.sh}"
+    echo "Usage: $cmd <chemin vers le fichier certificat|serial|--help|help>"
+}
+
 # Paramètres d'entrée
 CA_DIR="${CA_DIR:-myCA}"
-CERT_NAME=$1
 serial="unknown"
 
-if [ -z "${CERT_NAME}" ]; then
-    echo "Usage: $0 <certificate_name.crt|serial>"
+# Paramètres d'entrée
+if [ "$#" == "0" ]; then
+	usage
     exit 1
 fi
+
+if [ "$1" == "--help" ] || [ "$1" == "help" ]; then
+	usage
+	exit 0
+fi
+
+
+CERT_NAME=$1
 
 # Vérification si le fichier existe
 if [ ! -f "${CERT_NAME}" ]; then

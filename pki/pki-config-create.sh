@@ -1,6 +1,39 @@
 #!/bin/bash
 set -euo pipefail
 
+usage () {
+	local cmd
+	cmd="${0##*/}"
+	cmd="${cmd//-/ }"
+    cmd="${cmd%%.sh}"
+	cat <<-EOF_USAGE
+Usage: $cmd [--help]
+
+Génère le fichier de configuration "${CONFIG_FILE}"
+
+Liste des variables surchargeables:
+
+  Commun:
+	CA_DIR                       : Chemin de la CA (${CA_DIR})
+	DAYS                         : Durée de validité en jours ($DAYS)
+
+  Requêtes:
+
+	REQ_COUNTRYNAME_DEFAULT      : Pays par défaut pour les requêtes (${REQ_COUNTRYNAME_DEFAULT})
+	REQ_STATE_DEFAULT            : état par défaut  (${REQ_STATE_DEFAULT})
+	REQ_ORGANIZATIONNAME_DEFAULT : nom de l'organisation par défaut (${REQ_ORGANIZATIONNAME_DEFAULT})
+
+  Challenge mdp:
+
+	CHALLENGEPASSWORD_MIN         : Taille minimale (${CHALLENGEPASSWORD_MIN})
+	CHALLENGEPASSWORD_MAX         : Taille maximale (${CHALLENGEPASSWORD_MAX})
+
+
+EOF_USAGE
+}
+
+
+
 # Variables de configuration
 CA_DIR="${CA_DIR:-./myCA}"
 DAYS="${DAYS:-365}"

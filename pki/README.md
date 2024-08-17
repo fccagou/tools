@@ -24,3 +24,9 @@ pki cert status myhost.local.pem
 pki cert status 1000
 ```
 
+More help
+
+```bash
+pki help any command
+```
+

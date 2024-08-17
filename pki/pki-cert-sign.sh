@@ -2,6 +2,15 @@
 
 set -euo pipefail
 
+usage () {
+	local cmd
+	cmd="${0##*/}"
+	cmd="${cmd//-/ }"
+    cmd="${cmd%%.sh}"
+    echo "Usage: $cmd <chemin vers le fichier csr|--help|help>"
+}
+
+
 # Variables de configuration
 CA_DIR="${CA_DIR:-./myCA}"
 CONFIG_FILE="${CA_DIR}/openssl.cnf"
@@ -14,12 +23,16 @@ CERT_TYPE=server
 
 # Paramètres d'entrée
 if [ "$#" == "0" ]; then
-    echo "Usage: $0 <chemin vers le fichier csr>"
+	usage
     exit 1
 fi
 
-CSR_FILENAME="$1"
+if [ "$1" == "--help" ] || [ "$1" == "help" ]; then
+	usage
+	exit 0
+fi
 
+CSR_FILENAME="$1"
 [ -f "${CSR_FILENAME}" ] || {
 	echo "Erreur, le fichier csr ${CSR_FILENAME} est absent." >&2
 	exit 1

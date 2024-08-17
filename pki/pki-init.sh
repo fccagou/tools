@@ -3,8 +3,12 @@
 set -euo pipefail
 
 usage () {
+	local cmd
+	cmd="${0##*/}"
+	cmd="${cmd//-/ }"
+    cmd="${cmd%%.sh}"
 	cat <<-EOF
-Usage: $0 [--initfile filename]
+Usage: $cmd [--initfile filename]
 EOF
 }
 

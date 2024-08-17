@@ -2,6 +2,14 @@
 
 set -euo pipefail
 
+usage () {
+	local cmd
+	cmd="${0##*/}"
+	cmd="${cmd//-/ }"
+    cmd="${cmd%%.sh}"
+    echo "Usage: $cmd <certificate_name|--help|help>"
+}
+
 # Variables de configuration
 CA_DIR="${CA_DIR:-./myCA}"
 CONFIG_FILE="${CA_DIR}/openssl.cnf"
@@ -11,8 +19,13 @@ DAYS="${DAYS:-365}"
 
 # Paramètres d'entrée
 if [ "$#" == "0" ]; then
-    echo "Usage: $0 <certificate_name>"
+	usage
     exit 1
+fi
+
+if [ "$1" == "--help" ] || [ "$1" == "help" ]; then
+	usage
+	exit 0
 fi
 
 CERT_NAME="$1"

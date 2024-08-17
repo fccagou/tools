@@ -1,6 +1,35 @@
+usage () {
+	local cmd
+	cmd="${0##*/}"
+	cat <<-EOF
+Usage:
+
+   source $cmd
+
+EOF
+}
+
+if [ "$#" -ge "1" ] && [ "$1" == "--help" ]; then
+	usage
+    exit 0
+fi
+
 __cmd_list () {
 	local cmd
+
 	cmd="${1:-""}"
+
+	case "$cmd" in
+		help)
+			cmd=""
+			;;
+		help-*)
+			cmd="${cmd/help-}"
+			;;
+		*)
+			:
+			;;
+	esac
 	ls pki-"$cmd"*.sh | sed -e "s/pki-$cmd[-]*//" -e 's/\.sh$//' | cut -d\- -f1 | sort | uniq
 }
 

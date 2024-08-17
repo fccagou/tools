@@ -2,6 +2,15 @@
 
 set -euo pipefail
 
+usage () {
+	local cmd
+	cmd="${0##*/}"
+	cmd="${cmd//-/ }"
+    cmd="${cmd%%.sh}"
+    echo "Usage: $cmd <Nom du certificat|--help|help>"
+}
+
+
 # Variables de configuration
 CA_DIR="${CA_DIR:-./myCA}"
 CONFIG_FILE="${CA_DIR}/openssl.cnf"
@@ -9,13 +18,19 @@ CRL_FILE="${CA_DIR}/crl/ca.crl"
 
 [ -f "${CONFIG_FILE}" ] || { echo "Erreur, le fichier de configuration ${CONFIG_FILE} est absent." >&2; exit 1; }
 
+
 # Paramètres d'entrée
 if [ "$#" == "0" ]; then
-    echo "Usage: $0 <certificate_name>"
+	usage
     exit 1
 fi
 
-CERT_NAME="$1"
+if [ "$1" == "--help" ] || [ "$1" == "help" ]; then
+	usage
+	exit 0
+fi
+
+CERT_NAME="${1// /-}"
 
 
 # Vérification si le fichier du certificat existe

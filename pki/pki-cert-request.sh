@@ -2,6 +2,16 @@
 
 set -euo pipefail
 
+
+usage () {
+	local cmd
+	cmd="${0##*/}"
+	cmd="${cmd//-/ }"
+    cmd="${cmd%%.sh}"
+    echo "Usage: $cmd <nom du certificat|--help|help>"
+}
+
+
 # Variables de configuration
 CA_DIR="${CA_DIR:-./myCA}"
 CONFIG_FILE="${CA_DIR}/openssl.cnf"
@@ -14,11 +24,16 @@ CERT_TYPE=server
 
 # Paramètres d'entrée
 if [ "$#" == "0" ]; then
-    echo "Usage: $0 <certificate_name>"
+	usage
     exit 1
 fi
 
-CERT_NAME="$1"
+if [ "$1" == "--help" ] || [ "$1" == "help" ]; then
+	usage
+	exit 0
+fi
+
+CERT_NAME="${1// /-}"
 
 # Génération de la clé privée pour le certificat
 openssl genpkey -algorithm RSA \
