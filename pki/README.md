@@ -16,4 +16,11 @@ pki init
 pki cert request myhost.local
 # Sign certificat
 pki cert sign myhost.local.csr
+# List pki knowns certificats
+pki certs
+# verify certificat status using path to filename
+pki cert status myhost.local.pem
+# or use a serial number
+pki cert status 1000
 ```
+
