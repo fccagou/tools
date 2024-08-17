@@ -8,7 +8,7 @@ usage () {
 	cmd="${cmd//-/ }"
     cmd="${cmd%%.sh}"
 	cat <<-EOF
-Usage: $cmd [--initfile filename]
+Usage: $cmd [--initfile filename] [ca_dir]
 EOF
 }
 
@@ -30,7 +30,7 @@ CN="${CN:-"CA of $O"}"
 
 BATCHMODE="${BATCHMODE:-no}"
 
-
+cafromparam=""
 
 while [ "$#" -gt 0 ]; do
 	case "$1" in
@@ -50,14 +50,18 @@ while [ "$#" -gt 0 ]; do
 			fi
 			;;
 		*)
-			echo "Parametre inconnu ($1)"
-			usage
-			exit 1
+			[ -z "$cafromparam" ] || {
+			  echo "Parametre inconnu ($1)"
+			  usage
+			  exit 1
+		    }
+			cafromparam="${1// /-}"
 			;;
 	esac
 	shift
 done
 
+[ -z "$cafromparam" ] || CA_DIR="$cafromparam"
 
 if [ -n "$INITFILE" ]; then
 	[ ! -f "$INITFILE" ] && {
