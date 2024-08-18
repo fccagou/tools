@@ -14,19 +14,19 @@ Génère le fichier de configuration "${CONFIG_FILE}"
 Liste des variables surchargeables:
 
   Commun:
-	CA_DIR                       : Chemin de la CA (${CA_DIR})
-	DAYS                         : Durée de validité en jours ($DAYS)
+    CA_DIR                       : Chemin de la CA (${CA_DIR})
+    DAYS                         : Durée de validité en jours ($DAYS)
 
   Requêtes:
 
-	REQ_COUNTRYNAME_DEFAULT      : Pays par défaut pour les requêtes (${REQ_COUNTRYNAME_DEFAULT})
-	REQ_STATE_DEFAULT            : état par défaut  (${REQ_STATE_DEFAULT})
-	REQ_ORGANIZATIONNAME_DEFAULT : nom de l'organisation par défaut (${REQ_ORGANIZATIONNAME_DEFAULT})
+    REQ_COUNTRYNAME_DEFAULT      : Pays par défaut pour les requêtes (${REQ_COUNTRYNAME_DEFAULT})
+    REQ_STATE_DEFAULT            : état par défaut  (${REQ_STATE_DEFAULT})
+    REQ_ORGANIZATIONNAME_DEFAULT : nom de l'organisation par défaut (${REQ_ORGANIZATIONNAME_DEFAULT})
 
   Challenge mdp:
 
-	CHALLENGEPASSWORD_MIN         : Taille minimale (${CHALLENGEPASSWORD_MIN})
-	CHALLENGEPASSWORD_MAX         : Taille maximale (${CHALLENGEPASSWORD_MAX})
+    CHALLENGEPASSWORD_MIN         : Taille minimale (${CHALLENGEPASSWORD_MIN})
+    CHALLENGEPASSWORD_MAX         : Taille maximale (${CHALLENGEPASSWORD_MAX})
 
 
 EOF_USAGE
@@ -46,6 +46,13 @@ REQ_ORGANIZATIONNAME_DEFAULT="${REQ_ORGANIZATIONNAME_DEFAULT:-Personnal}"
 
 CHALLENGEPASSWORD_MIN="${CHALLENGEPASSWORD_MIN:-4}"
 CHALLENGEPASSWORD_MAX="${CHALLENGEPASSWORD_MAX:-20}"
+
+
+[ "$#" -ge "1" ] && [ "$1" == "--help" ] && {
+    usage
+    exit 1
+} || :
+
 
 
 cat > "${CONFIG_FILE}" <<EOF_CONFIG
