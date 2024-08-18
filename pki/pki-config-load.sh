@@ -17,6 +17,24 @@ EOF_USAGE
 }
 
 
+_config_default_ca() {
+	local section
+	section="${1:-ca}"
+
+	printf -- '%s'  "${pki_config[$section.default_ca]}"
+}
+
+_config_get () {
+	local key
+	local val
+	local _dir
+	key="$1"
+	val="${pki_config[$key]}"
+	printf -- '%s' "${val//\$dir/${CA_DIR}}"
+
+}
+
+
 # Variables de configuration
 CA_DIR="${CA_DIR:-./myCA}"
 CONFIG_FILE="${CA_DIR}/openssl.cnf"
@@ -55,3 +73,8 @@ done <<<$( sed -e 's/[[:space:]]*#.*//' \
 	        "${CONFIG_FILE}" \
 	        | grep -vE '^[[:space:]]*$' \
 		)
+
+## Global configuration
+_ca="$(_config_default_ca)"
+_privatedir="${CA_DIR}"/private
+_requestdir="${CA_DIR}"/req
