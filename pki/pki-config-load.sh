@@ -51,7 +51,7 @@ while read -r l; do
 	esac
 done <<<$( sed -e 's/[[:space:]]*#.*//' \
 	        -e 's/\[ *\([^ ]*\) *\]/[\1/' \
-	        -e 's/[[:space:]]*=[[:space:]]*\(.*\)[[:space:]]*$/="\1"/' \
+	        -e 's/[[:space:]]*=[[:space:]]*\(.*\)[[:space:]]*$/=\1/' \
 	        "${CONFIG_FILE}" \
 	        | grep -vE '^[[:space:]]*$' \
 		)
