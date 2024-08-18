@@ -24,7 +24,7 @@ CONFIG_FILE="${CA_DIR}/openssl.cnf"
 [ "$#" -ge "1" ] && [ "$1" == "--help" ] && {
 	usage
     exit 1
-} || :
+} || :
 
 
 [ -f "${CONFIG_FILE}" ] || {
