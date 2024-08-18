@@ -23,12 +23,25 @@ if [ "$#" -ge "1" ] && [ "$1" == "--help" ]; then
 fi
 
 # Variables de configuration
+prefix="$(readlink -f "$(dirname "$0")")"
+confloader="$prefix"/pki-config-load.sh
 CA_DIR="${CA_DIR:-./myCA}"
 
-for f in "${CA_DIR}"/newcerts/*.pem;  do
-	echo "-------"
-	tmp="${f##*/}"
-	echo "serial=${tmp%%.pem}"
-	openssl x509 -in "$f" -subject -issuer -dates -noout
-done
+[ -f "$confloader" ] || {
+    echo "Erreur, le fichier de chargement de configuration $confloader est absent." >&2
+	exit 1
+}
+source "$confloader"
+newcertsdir="$(_config_get "${_ca}.new_certs_dir")"
+
+if [ "$(ls -1 "$newcertsdir"/*.pem 2>/dev/null| wc -l)" -eq "0" ]; then
+	echo "Aucun certifiat pour l'instant"
+else
+	for f in "$(ls -1 "$newcertsdir"/*.pem 2>/dev/null)"; do
+		echo "------- ($f)"
+		tmp="${f##*/}"
+		echo "serial=${tmp%%.pem}"
+		openssl x509 -in "$f" -subject -issuer -dates -noout
+	done
+fi
 
