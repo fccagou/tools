@@ -135,7 +135,7 @@ if [ -d "${CA_DIR}" ]; then
 fi
 
 # Création des répertoires et fichiers nécessaires
-mkdir -p "${CA_DIR}"/{certs,crl,newcerts,private} || { echo "Erreur lors de la création des répertoires." >&2; exit 1; }
+mkdir -p "${CA_DIR}"/{certs,crl,newcerts,private,req} || { echo "Erreur lors de la création des répertoires." >&2; exit 1; }
 chmod 700 "${CA_DIR}"/private || { echo "Erreur lors du changement des permissions." >&2; exit 1; }
 touch "${CA_DIR}"/index.txt || { echo "Erreur lors de la création du fichier index.txt." >&2; exit 1; }
 echo 1000 > "${CA_DIR}"/serial || { echo "Erreur lors de la création du fichier serial." >&2; exit 1; }
