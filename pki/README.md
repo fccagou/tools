@@ -13,7 +13,7 @@ Simple bash scripts to manage CA using openssl
 # Initialize CA
 pki init
 # Creates certificat request for myhost.local
-pki cert request myhost.local
+pki request new myhost.local
 # Sign certificat
 pki cert sign myhost.local.csr
 # List pki knowns certificats
