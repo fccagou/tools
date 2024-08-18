@@ -5,6 +5,8 @@ set -euo pipefail
 prefix="$(readlink -f "$(dirname "$0")")"
 cmd="pki"
 
+[ "$#" == "0" ] && exec $0 help
+
 while [ "$#" -gt "0" ]; do
 	cmd="$cmd"-"$1"
 	shift

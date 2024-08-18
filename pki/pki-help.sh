@@ -8,9 +8,30 @@ usage () {
 	cmd="${cmd//-/ }"
     cmd="${cmd%%.sh}"
     cat <<EOF_USAGE
+
+--------------------------------------------------------------------------------
+
+       @@@@   @  @   @@@
+       @   @  @ @     @
+       @@@@   @@      @
+       @      @ @     @
+       @      @  @    @
+       @      @   @  @@@        Ensemble de commandes pour gérer une PKI.
+
+--------------------------------------------------------------------------------
+
+ATTENTION:
+
+  Ces scripts servent à étudier le fonctionnement d'une pki et ne prennent pas
+  en compte les précautions de sécurité concernant la gestion de la clé privée
+  de la CA. Dans ce contexte, ils peuvent être utilisés pour monter des infras
+  de tests.
+
+--------------------------------------------------------------------------------
+
 Usage: $cmd COMMAND
 
-COMMAND:
+COMMANDs:
 
 $(
   cd "$prefix" \
