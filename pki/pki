@@ -31,28 +31,39 @@ done
 #    build the help dynamically.
 #
 
-# Get the existing scripts with same prefix as current cmd.
-cmds=( $(cd "$prefix" && ls -1 "$cmd"-*.sh) )
+cmdlonguestprefix="$cmd"
+badoptions=( )
 
 
-# If there is no script, this is an error.
-if [ "${#cmds[@]}" -eq "0" ]; then
-    echo "Commande inconnue ${cmd/pki-}"
-    exit 1
-fi
+while [ -n "$cmdlonguestprefix" ]; do
+    # Get the existing scripts with same prefix as current cmd.
+    cmds=( $(cd "$prefix" && ls -1 "$cmdlonguestprefix"-*.sh 2>/dev/null || echo "") )
+    if [ "${#cmds[@]}" -gt "0" ]; then
 
-# There is a script so just build the help.
-cat <<EOF_HEADER
-Usage: ${cmd//-/ } SUBCOMMAND
+        [ "${#badoptions[@]}" -gt "0" ] && {
+            echo ""
+            echo "* Erreur: option(s) inconnue(s) ${badoptions[@]}"
+        }
+
+	    cat <<EOF_HEADER
+
+Usage: ${cmdlonguestprefix//-/ } SUBCOMMAND
 
 SUBCOMMANS:
 
 EOF_HEADER
 
-for c in "${cmds[@]}"; do
-    tmp="${c%%.sh}"
-	tmp="${tmp/$cmd}"
-	echo "    ${tmp//-/ }"
+        for c in "${cmds[@]}"; do
+	       tmp="${c%%.sh}"
+	       tmp="${tmp/$cmd}"
+	       echo "    ${tmp//-/ }"
+	    done
+		echo ""
+	    exit 1
+	fi
+	badoptions+=( "${cmdlonguestprefix//*-}" )
+	cmdlonguestprefix="${cmdlonguestprefix%-*}"
 done
 
-echo ""
+# If there is no script, this is an error.
+echo "Error ${cmdlonguestprefix//-/ }"
