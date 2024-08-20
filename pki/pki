@@ -5,13 +5,54 @@ set -euo pipefail
 prefix="$(readlink -f "$(dirname "$0")")"
 cmd="pki"
 
+# No option, display help
 [ "$#" == "0" ] && exec $0 help
 
+# If command is `pki xxx yyy zz`
+# check if one of `pki-xxx.sh` `pki-xxx-yyy.sh` or `pki-xxx-yyy-zz.sh` exists
+# then run it with last parameters.
 while [ "$#" -gt "0" ]; do
 	cmd="$cmd"-"$1"
 	shift
 	[ -f "$prefix"/"$cmd".sh ] && exec "$prefix"/"$cmd".sh "$@"
 done
 
-echo "Unknown command ${cmd/pki-}"
-exit 1
+# If no script exists using parameters, build the list of parameters using
+# existing scripts with the same prefix.
+#
+# Exemple:
+#
+#    pki-doc-en.sh and pki-doc-fr.sh exists which means that the known commands
+#    are
+#      - pki doc en
+#      - pki doc fr
+#
+#    If the user ask for `pki doc` and `pki-doc.sh` doesn't exist, the we can
+#    build the help dynamically.
+#
+
+# Get the existing scripts with same prefix as current cmd.
+cmds=( $(cd "$prefix" && ls -1 "$cmd"-*.sh) )
+
+
+# If there is no script, this is an error.
+if [ "${#cmds[@]}" -eq "0" ]; then
+    echo "Commande inconnue ${cmd/pki-}"
+    exit 1
+fi
+
+# There is a script so just build the help.
+cat <<EOF_HEADER
+Usage: ${cmd//-/ } SUBCOMMAND
+
+SUBCOMMANS:
+
+EOF_HEADER
+
+for c in "${cmds[@]}"; do
+    tmp="${c%%.sh}"
+	tmp="${tmp/$cmd}"
+	echo "    ${tmp//-/ }"
+done
+
+echo ""
