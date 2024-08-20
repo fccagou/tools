@@ -29,6 +29,10 @@ ATTENTION:
 
 --------------------------------------------------------------------------------
 
+Pour commencer, ajouter la completion à votre environnement
+
+    . ./pki-completion.sh
+
 Usage: $cmd COMMAND
 
 COMMANDs:
@@ -41,6 +45,10 @@ $(
 	 | sed -e 's/^pki-//' -e 's/-/ /g' -e 's/.sh$//'  \
 	 | awk '{ print "     "$0 }'
 )
+
+Pour aller plus loin
+
+    pki doc <fr|en>
 
 EOF_USAGE
 }
