@@ -1,6 +1,14 @@
-# PKI
+#!/bin/bash
 
-[English version](README-en.md)
+set -euo pipefail
+
+# Variables de configuration
+prefix="$(readlink -f "$(dirname "$0")")"
+confloader="$prefix"/pki-config-load.sh
+CA_DIR="${CA_DIR:-./myCA}"
+
+cat <<'EOF_DOC' | less
+# PKI
 
 ## Description
 
@@ -39,11 +47,11 @@ générer des environnements de tests ou de qualification.
     # Vérifier l'état d'un certificat en donnat le chemin du fichier
     pki cert status ./myCA/certs/myhost.local.pem
 
-    # or use a serial number
+    # Ou en utiisant le numéro de série.
     pki cert status 1000
 
     # Pour avoir une vision globale
-	  pki status
+    pki status
 
 ```
 
@@ -53,3 +61,4 @@ Plus d'aide
     pki help <TAB> <TAB>
 ```
 
+EOF_DOC
