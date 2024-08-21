@@ -4,7 +4,7 @@ prefix="$(readlink -f "$(dirname "$0")")"
 
 
 export BATCHMODE=yes
-export CA_DIR=/tmp/mytest
+export CA_DIR="$prefix"/tmp/mytest
 export C="VU"
 export ST="Tanna"
 export L="Lenakel"
