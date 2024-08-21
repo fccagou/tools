@@ -1,0 +1,8 @@
+stages:
+  - test
+
+test-pki:
+  stage: test
+  script:
+    - pki/tests/test-batch
+
