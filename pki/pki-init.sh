@@ -13,6 +13,7 @@ EOF
 }
 
 
+prefix="$(readlink -f "$(dirname "$0")")"
 # Variables de configuration
 CA_DIR="${CA_DIR:-./myCA}"
 CA_KEY="${CA_DIR}/private/cakey.pem"
@@ -161,7 +162,7 @@ echo 1000 > "${CA_DIR}"/serial || { echo "Erreur lors de la création du fichier
 
 echo "Création du fichier de configuration ${CONFIG_FILE}"
 
-source ./pki-config-create.sh
+source "$prefix"/pki-config-create.sh
 
 # Génération de la clé privée pour le CA
 # TODO: vérifier la force de l'aes256
