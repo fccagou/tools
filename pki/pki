@@ -61,7 +61,7 @@ EOF_HEADER
 		echo ""
 	    exit 1
 	fi
-	badoptions+=( "${cmdlonguestprefix//*-}" )
+	badoptions=( "${cmdlonguestprefix//*-}" "${badoptions[@]}" )
 	cmdlonguestprefix="${cmdlonguestprefix%-*}"
 done
 
