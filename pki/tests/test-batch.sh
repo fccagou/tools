@@ -40,7 +40,11 @@ subject=C=VU, ST=Tanna, O=Kava Inc, OU=IT blong Kava Inc, CN=host3.local
 issuer=C=VU, ST=Tanna, L=Lenakel, O=Kava Inc, OU=IT blong Kava Inc, CN=CA blong Kava Inc
 EOF_REF
 
-diff "${CA_DIR}"/test-status "${CA_DIR}"/test-status-ref >/dev/null 2>&1 && echo "status OK" || {
+diff "${CA_DIR}"/test-status "${CA_DIR}"/test-status-ref >/dev/null 2>&1 || {
 	echo "status ERROR" >&2
     diff "${CA_DIR}"/test-status "${CA_DIR}"/test-status-ref >&2
+	exit 1
 }
+
+echo "status OK"
+exit 0
