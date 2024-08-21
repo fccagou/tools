@@ -8,7 +8,7 @@ usage () {
 	cmd="${cmd//-/ }"
     cmd="${cmd%%.sh}"
 	cat <<-EOF
-Usage: $cmd [--initfile filename] [ca_dir]
+Usage: $cmd [--batch] [--initfile filename] [ca_dir]
 EOF
 }
 
@@ -71,25 +71,44 @@ if [ -n "$INITFILE" ]; then
 	source "$INITFILE"
 fi
 
-if [ "$BATCHMODE" != "yes" ]; then
-	cat <<-EOF_BANNER
+
+
+
+cat <<-EOF_BANNER
 Création d'une CA avec les informations suivantes:
 
-CA_DIR=${CA_DIR}
-CA_KEY=${CA_DIR}/private/cakey.pem"
-CA_CERT=${CA_DIR}/cacert.pem"
-CONFIG_FILE=${CA_DIR}/openssl.cnf"
-DAYS=${DAYS}
-INITFILE=${INITFILE}
+    CA_DIR=${CA_DIR}
+    CA_KEY=${CA_DIR}/private/cakey.pem"
+    CA_CERT=${CA_DIR}/cacert.pem"
+    CONFIG_FILE=${CA_DIR}/openssl.cnf"
+    DAYS=${DAYS}
+    INITFILE=${INITFILE}
 
-C=$C
-ST=$ST
-L=$L
-O=$O
-OU=$OU
-CN=$CN
+    C=$C
+    ST=$ST
+    L=$L
+    O=$O
+    OU=$OU
+    CN=$CN
 
 EOF_BANNER
+
+
+if [ "$BATCHMODE" == "yes" ]; then
+    batchopt='-batch'
+	encopt=''
+
+	echo "******************************************************************"
+	echo "*"
+	echo "*    Création en mode batch."
+	echo "*"
+	echo "*       => PAS DE CHIFFREMENT POUR LA CLEF PRIVEE DE LA CA"
+	echo "*"
+	echo "******************************************************************"
+
+else
+    batchopt=''
+	encopt='-aes256'
 
     rep=""
     while :; do
@@ -146,10 +165,12 @@ source ./pki-config-create.sh
 
 # Génération de la clé privée pour le CA
 # TODO: vérifier la force de l'aes256
-openssl genpkey -algorithm RSA -out "${CA_KEY}" -aes256 || { echo "Erreur lors de la génération de la clé privée." >&2; exit 1; }
+echo "Création de la clef privéee ${CA_KEY}"
+openssl genpkey -quiet -algorithm RSA -out "${CA_KEY}" $encopt || { echo "Erreur lors de la génération de la clé privée." >&2; exit 1; }
 
 # Génération du certificat racine pour le CA
-openssl req -x509 -new -nodes -sha256 -days "$DAYS" \
+echo "Création du certificat ${CA_CERT}"
+openssl req -x509 -new -nodes -sha256 -days "$DAYS" $batchopt \
 	-config "${CONFIG_FILE}" \
 	--extensions v3_ca \
 	-subj "/C=$C/ST=$ST/L=$L/O=$O/OU=$OU/CN=$CN" \
