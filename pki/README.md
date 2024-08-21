@@ -39,11 +39,11 @@ générer des environnements de tests ou de qualification.
     # Vérifier l'état d'un certificat en donnat le chemin du fichier
     pki cert status ./myCA/certs/myhost.local.pem
 
-    # or use a serial number
+    # Ou en utiisant le numéro de série.
     pki cert status 1000
 
     # Pour avoir une vision globale
-	  pki status
+    pki status
 
 ```
 
@@ -53,3 +53,22 @@ Plus d'aide
     pki help <TAB> <TAB>
 ```
 
+## Automatisation pour des tests
+
+```bash
+   export BATCHMODE=yes
+   export C="FR"
+   export ST="Bourgogne"
+   export L="Dijon"
+   export O="Ma petit entreprise de Mayonnaise"
+   export OU="IT de $O"
+   export CN="CA de $O"
+
+   hosts=( host1.local host2.local, host3.local)
+   pki init
+   for h in "${hosts[@]}"; do
+       pki request new "$h"
+       pki cert sign "$h"
+   done
+   pki status
+```

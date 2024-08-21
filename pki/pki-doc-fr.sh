@@ -10,6 +10,8 @@ CA_DIR="${CA_DIR:-./myCA}"
 cat <<'EOF_DOC' | less
 # PKI
 
+[English version](README-en.md)
+
 ## Description
 
 De simples scripts bash pour gérer PKI avec openssl.
@@ -61,4 +63,23 @@ Plus d'aide
     pki help <TAB> <TAB>
 ```
 
+## Automatisation pour des tests
+
+```bash
+   export BATCHMODE=yes
+   export C="FR"
+   export ST="Bourgogne"
+   export L="Dijon"
+   export O="Ma petit entreprise de Mayonnaise"
+   export OU="IT de $O"
+   export CN="CA de $O"
+
+   hosts=( host1.local host2.local, host3.local)
+   pki init
+   for h in "${hosts[@]}"; do
+       pki request new "$h"
+       pki cert sign "$h"
+   done
+   pki status
+```
 EOF_DOC

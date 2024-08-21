@@ -49,3 +49,23 @@ More help
 ```bash
     pki help <TAB> <TAB>
 ```
+
+## Automation for tests
+
+```bash
+   export BATCHMODE=yes
+   export C="AU"
+   export ST="Queensland"
+   export L="Brisbane"
+   export O="Lamington's Inc."
+   export OU="IT of $O"
+   export CN="CA of $O"
+
+   hosts=( host1.local host2.local, host3.local)
+   pki init
+   for h in "${hosts[@]}"; do
+       pki request new "$h"
+       pki cert sign "$h"
+   done
+   pki status
+```
