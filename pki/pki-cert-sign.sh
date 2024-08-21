@@ -20,9 +20,6 @@ DAYS="${DAYS:-365}"
 
 CERT_TYPE=server
 
-
-[ -f "${CONFIG_FILE}" ] || { echo "Erreur, le fichier de configuration ${CONFIG_FILE} est absent." >&2; exit 1; }
-
 # Paramètres d'entrée
 if [ "$#" == "0" ]; then
 	usage
