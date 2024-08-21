@@ -37,7 +37,7 @@ newcertsdir="$(_config_get "${_ca}.new_certs_dir")"
 if [ "$(ls -1 "$newcertsdir"/*.pem 2>/dev/null| wc -l)" -eq "0" ]; then
 	echo "Aucun certifiat pour l'instant"
 else
-	for f in "$(ls -1 "$newcertsdir"/*.pem 2>/dev/null)"; do
+	for f in $(ls -1 "$newcertsdir"/*.pem 2>/dev/null); do
 		echo "------- ($f)"
 		tmp="${f##*/}"
 		echo "serial=${tmp%%.pem}"
