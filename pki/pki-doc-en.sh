@@ -71,7 +71,7 @@ More help
    export OU="IT of $O"
    export CN="CA of $O"
 
-   hosts=( host1.local host2.local, host3.local)
+   hosts=( host1.local host2.local host3.local)
    pki init
    for h in "${hosts[@]}"; do
        pki request new "$h"
