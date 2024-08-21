@@ -6,7 +6,6 @@ openssl version
 
 prefix="$(readlink -f "$(dirname "$0")")"
 
-
 export BATCHMODE=yes
 export CA_DIR="$prefix"/tmp/mytest
 export C="VU"
@@ -18,7 +17,7 @@ export CN="CA blong $O"
 
 export PATH="$prefix"/..:"$PATH"
 
-hosts=( host1.local host2.local, host3.local)
+hosts=( host1.local host2.local host3.local)
 
 pki init
 for h in "${hosts[@]}"; do
@@ -30,7 +29,7 @@ pki status
 # The sed is needed depending of openssl version :(
 pki status \
 	| grep -E '^(------- |serial=|subject=|issuer=)' \
-	| sed 's/ =/=/g' \
+	| sed -e 's/ = /=/g' \
 	 > "${CA_DIR}"/test-status
 
 cat -> ${CA_DIR}/test-status-ref <<EOF_REF
@@ -40,7 +39,7 @@ subject=C=VU, ST=Tanna, O=Kava Inc, OU=IT blong Kava Inc, CN=host1.local
 issuer=C=VU, ST=Tanna, L=Lenakel, O=Kava Inc, OU=IT blong Kava Inc, CN=CA blong Kava Inc
 ------- (${CA_DIR}/newcerts/1001.pem)
 serial=1001
-subject=C=VU, ST=Tanna, O=Kava Inc, OU=IT blong Kava Inc, CN=host2.local,
+subject=C=VU, ST=Tanna, O=Kava Inc, OU=IT blong Kava Inc, CN=host2.local
 issuer=C=VU, ST=Tanna, L=Lenakel, O=Kava Inc, OU=IT blong Kava Inc, CN=CA blong Kava Inc
 ------- (${CA_DIR}/newcerts/1002.pem)
 serial=1002
