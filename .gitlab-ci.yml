@@ -4,5 +4,5 @@ stages:
 test-pki:
   stage: test
   script:
-    - pki/tests/test-batch
+    - pki/tests/test-batch.sh
 
