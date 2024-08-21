@@ -1,5 +1,9 @@
 #!/usr/bin/bash
 
+set -eux
+
+openssl version
+
 prefix="$(readlink -f "$(dirname "$0")")"
 
 
@@ -23,8 +27,12 @@ for h in "${hosts[@]}"; do
 done
 pki status
 
-pki status | \
-	grep -E '^(------- |serial=|subject=|issuer=)' > "${CA_DIR}"/test-status
+# The sed is needed depending of openssl version :(
+pki status \
+	| grep -E '^(------- |serial=|subject=|issuer=)' \
+	| sed 's/ =/=/g' \
+	 > "${CA_DIR}"/test-status
+
 cat -> ${CA_DIR}/test-status-ref <<EOF_REF
 ------- (${CA_DIR}/newcerts/1000.pem)
 serial=1000
