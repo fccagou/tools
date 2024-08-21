@@ -3,4 +3,6 @@
 *.csr
 *.crt
 *.cert
+myCA
+myCA_backup
 tests/tmp
