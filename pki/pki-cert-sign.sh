@@ -17,6 +17,7 @@ confloader="$prefix"/pki-config-load.sh
 CA_DIR="${CA_DIR:-./myCA}"
 CONFIG_FILE="${CA_DIR}/openssl.cnf"
 DAYS="${DAYS:-365}"
+BATCHMODE="${BATCHMODE:-no}"
 
 CERT_TYPE=server
 
@@ -73,9 +74,10 @@ else
 fi
 
 
+[ "$BATCHMODE" == "yes" ] && batchopt='-batch' || batchopt=''
 # -extensions tls_"${CERT_TYPE}" \
 # Signature de la CSR par le CA
-openssl ca -days "${DAYS}" \
+openssl ca -days "${DAYS}" $batchopt \
 	-config "${CONFIG_FILE}" \
 	-in "${csrrealname}" \
 	-out "$certsdir"/"$certname" \
