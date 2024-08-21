@@ -38,7 +38,7 @@ source "$confloader"
 if [ "$(ls -1 "$_requestdir"/*.csr 2>/dev/null| wc -l)" -eq "0" ]; then
 	echo "Aucune requête en cours"
 else
-	for f in "$(ls -1 "$_requestdir"/*.csr 2>/dev/null)"; do
+	for f in $(ls -1 "$_requestdir"/*.csr 2>/dev/null); do
 		echo "------- [$f]"
 		{
 		  openssl req -in "$f" -subject -noout | sed -e 's/^subject=/subject: /'
