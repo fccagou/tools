@@ -1,0 +1,5 @@
+# ignore all
+*
+# Expect all commands that begin with pki
+!pki
+!pki-*.sh
