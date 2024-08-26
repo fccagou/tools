@@ -79,4 +79,33 @@ More help
    done
    pki status
 ```
+
+## Containers
+
+Build
+
+```bash
+     docker build -t . pki
+```
+
+Simple usage creating default myCA in current dir
+
+```bash
+    docker run -ti --rm  -v.:/pki pki init
+```
+
+Use Docker or Podman's `-e | --env`parameters to set pki configurations
+
+```bash
+    docker run -ti --rm  -v.:/pki \
+       --env CA_DIR=/pki/lamingtonCA \
+       --env BATCHMODE=yes \
+       --env C="AU" \
+       --env ST="Queensland" \
+       --env L="Brisbane" \
+       --env O="Lamington's Inc." \
+       --env OU="IT of Lamington's Inc." \
+       --env CN="CA of Lamington's Inc." \
+	   pki init
+```
 EOF_DOC

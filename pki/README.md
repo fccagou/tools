@@ -72,3 +72,34 @@ Plus d'aide
    done
    pki status
 ```
+
+## Conteneur
+
+Build
+
+```bash
+     docker build -t . pki
+```
+
+Usage simple créé myCA dans le dossier courant
+
+```bash
+    docker run -ti --rm  -v.:/pki pki init
+```
+
+Pour passer les paramètres de configuration de la pki, utiliser l'option
+`-e | --env` de docker ou podman.
+
+```bash
+    docker run -ti --rm  -v.:/pki \
+       --env CA_DIR=/pki/mayoCA \
+       --env BATCHMODE=yes \
+       --env C="FR" \
+       --env ST="Bourgogne" \
+       --env L="Dijon" \
+       --env O="Ma petit entreprise de Mayonnaise" \
+       --env OU="IT de Ma petit entreprise de Mayonnaise" \
+       --env CN="CA de Ma petit entreprise de Mayonnaise" \
+	   pki init
+```
+
