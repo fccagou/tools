@@ -13,8 +13,8 @@ set +u
 ROOTLESSDIR="${ROOTLESSDIR:-docker-rootless}"
 set -u
 
-NEWUSER="${NEWUSER:-1}"
-COMMENT="${COMMENT:-2}"
+NEWUSER="${NEWUSER:-$1}"
+COMMENT="${COMMENT:-$2}"
 
 useradd --system --comment "$COMMENT" --create-home "$NEWUSER"
 
