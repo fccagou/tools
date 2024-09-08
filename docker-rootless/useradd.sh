@@ -24,6 +24,7 @@ userenv="$ROOTLESSDIR"/user.env
   # Ficher d'env
   cat > "$userenv <<EOF
 export XDG_RUNTIME_DIR=/run/user/"\$(id -u)"
+export DBUS_SESSION_BUS_ADDRESS=unix:path="${XDG_RUNTIME_DIR}"/bus
 export DOCKER_HOST=unix://"\${XDG_RUNTIME_DIR}"/docker.sock
 export PATH="$(pwd)"/bin:"\$PATH"
 EOF
