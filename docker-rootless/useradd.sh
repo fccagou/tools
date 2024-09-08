@@ -53,5 +53,5 @@ grep -q "^${NEWUSER}:" /etc/subuid || echo "$NEWUSER:$usersubuid:65536" >> /etc/
 # Add subgid entry for NEWUSER
 grep -q "^${NEWUSER}:" /etc/subgid || echo "$NEWUSER:$usersubgid:65536" >> /etc/subgid
 
-su - "$NEWUSER" -c "USER=$NEWUSER; sleep 3; dockerd-rootless-setuptool.sh install --skip-iptables && docker images"
+su - "$NEWUSER" -c "USER=$NEWUSER; sleep 3; dockerd-rootless-setuptool.sh install && docker images"
 
