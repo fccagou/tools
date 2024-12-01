@@ -27,3 +27,8 @@ paython3 path/to/gitlabci-to-dockerfiles.py
 The Dockerfiles are generated in current dir with name
 `Dockerfile_{stage_name}_{job_name}`
 
+Then build from Docker.
+
+```bash
+docker build -t imagename:tagname -f Dockerfile_{stage_name}_{job_name} .
+```

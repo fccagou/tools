@@ -11,34 +11,46 @@ def parse_gitlab_ci(file_path):
     with open(file_path, 'r') as file:
         return yaml.safe_load(file)
 
-def generate_dockerfile(stage_name, stage_info):
+def generate_dockerfile(stage_name, job_name, job_info):
     """Generate a Dockerfile based on the stage's configuration."""
     dockerfile_lines = [
-        f"# Dockerfile for stage: {stage_name}",
-        f"FROM {stage_info['image']}",
+        "# ------------------------------------------------------------------------",
+        "# Dockerfile generated from .gitlabci.yaml using gitlabci_to-dockerfiles.py",
+        "#",
+        f"#     {job_name}",
+        "".join(("#      ", yaml.dump(job_info).replace("\n", "\n#      "))),
+        "# ------------------------------------------------------------------------",
+        "#",
+        f"FROM {job_info['image']} AS builder",
         "",
+        "WORKDIR /build",
+        "COPY . .",
         "# Install dependencies if necessary",
     ]
 
     # Add before_script commands if present
-    if 'before_script' in stage_info:
+    if 'before_script' in job_info:
         dockerfile_lines.append("# Before script:")
-        dockerfile_lines.append(f"RUN {stage_info['before_script']}")
+        dockerfile_lines.append(f"RUN {job_info['before_script']}")
 
     # Add script commands (the main commands for the stage)
     dockerfile_lines.append("# Main script:")
-    for command in stage_info.get('script', []):
-        dockerfile_lines.append(f"RUN {command}")
+    dockerfile_lines.append("RUN <<EOF_SCRIPT")
+    dockerfile_lines.append("set -euo pipefail")
+
+    for command in job_info.get('script', []):
+        dockerfile_lines.append(f"{command}")
 
     # Add after_script commands if present
-    if 'after_script' in stage_info:
+    if 'after_script' in job_info:
         dockerfile_lines.append("# After script:")
-        dockerfile_lines.append(f"RUN {stage_info['after_script']}")
+        dockerfile_lines.append(f"{job_info['after_script']}")
+    dockerfile_lines.append("EOF_SCRIPT")
 
     # Handle services (e.g., databases) if necessary
-    if 'services' in stage_info:
+    if 'services' in job_info:
         dockerfile_lines.append("# Services:")
-        for service in stage_info['services']:
+        for service in job_info['services']:
             dockerfile_lines.append(f"RUN docker-compose up -d {service}")
 
     return "\n".join(dockerfile_lines)
@@ -49,22 +61,27 @@ def create_dockerfiles_for_all_stages(ci_data):
 
 
     for stage_name in ci_data['stages']:
-        for stage_info in ci_data:
-            if "stage" in ci_data[stage_info] and ci_data[stage_info]["stage"] == stage_name:
-                dockerfile = generate_dockerfile(stage_name, ci_data[stage_info])
-                dockerfiles[f"{stage_name}_{stage_info}"] = dockerfile
+        for job_name in ci_data:
+            if "stage" in ci_data[job_name] and ci_data[job_name]["stage"] == stage_name:
+                dockerfile = generate_dockerfile(stage_name, job_name, ci_data[job_name])
+                dockerfiles[f"{stage_name}_{job_name}"] = dockerfile
 
     return dockerfiles
 
 def save_dockerfiles(dockerfiles):
     """Save Dockerfiles to individual files."""
     for stage, dockerfile in dockerfiles.items():
-        with open(f"Dockerfile_{stage}", 'w') as file:
+        _filename = f"Dockerfile_{stage}"
+        print(f"[+] {_filename}")
+        with open(_filename, 'w') as file:
             file.write(dockerfile)
 
 if __name__ == "__main__":
+
     # Path to your .gitlab-ci.yml file
     gitlab_ci_file = '.gitlab-ci.yml'
+
+    print("[*] Creating docker files from {gitlab_ci_file}")
 
     # Parse the .gitlab-ci.yml file
     ci_data = parse_gitlab_ci(gitlab_ci_file)
@@ -75,4 +92,4 @@ if __name__ == "__main__":
     # Save Dockerfiles
     save_dockerfiles(dockerfiles)
 
-    print("Dockerfiles have been generated and saved.")
+    print("[*] Dockerfiles have been generated and saved.")
