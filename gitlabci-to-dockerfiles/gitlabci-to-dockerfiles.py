@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+import os
 import yaml
 
 #
@@ -58,6 +59,20 @@ def generate_dockerfile(stage_name, job_name, job_info):
         dockerfile_lines.append("# Services:")
         for service in job_info['services']:
             dockerfile_lines.append(f"RUN docker-compose up -d {service}")
+
+    if "artifacts" in job_info:
+        if "paths" in job_info["artifacts"]:
+            dockerfile_lines.append("# Copy artefects:")
+            dockerfile_lines.append("RUN <<EOF_ARTEFACTS")
+            dockerfile_lines.append("set -euxo pipefail")
+            dockerfile_lines.append("mkdir /artefacts")
+            for p in job_info["artifacts"]["paths"]:
+                if not p.startswith("/"):
+                    p = os.path.join("/build", p)
+                dockerfile_lines.append(f"cp -a '{p}' /artefacts")
+
+            dockerfile_lines.append("EOF_ARTEFACTS")
+
 
     return "\n".join(dockerfile_lines)
 
