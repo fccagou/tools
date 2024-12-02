@@ -31,21 +31,27 @@ def generate_dockerfile(stage_name, job_name, job_info):
     # Add before_script commands if present
     if 'before_script' in job_info:
         dockerfile_lines.append("# Before script:")
-        dockerfile_lines.append(f"RUN {job_info['before_script']}")
+        dockerfile_lines.append("RUN <<EOF_BEFORE_SCRIPT")
+        dockerfile_lines.append("set -euxo pipefail")
+        dockerfile_lines.append(f"{job_info['before_script']}")
+        dockerfile_lines.append("EOF_BEFORE_SCRIPT")
 
     # Add script commands (the main commands for the stage)
     dockerfile_lines.append("# Main script:")
     dockerfile_lines.append("RUN <<EOF_SCRIPT")
-    dockerfile_lines.append("set -euo pipefail")
+    dockerfile_lines.append("set -euxo pipefail")
 
     for command in job_info.get('script', []):
         dockerfile_lines.append(f"{command}")
+    dockerfile_lines.append("EOF_SCRIPT")
 
     # Add after_script commands if present
     if 'after_script' in job_info:
         dockerfile_lines.append("# After script:")
+        dockerfile_lines.append("RUN <<EOF_AFTER_SCRIPT")
+        dockerfile_lines.append("set -euxo pipefail")
         dockerfile_lines.append(f"{job_info['after_script']}")
-    dockerfile_lines.append("EOF_SCRIPT")
+        dockerfile_lines.append("EOF_AFTER_SCRIPT")
 
     # Handle services (e.g., databases) if necessary
     if 'services' in job_info:
