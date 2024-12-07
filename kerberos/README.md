@@ -32,4 +32,12 @@ Admin
     user@EXAMPLE.COM
 
 
-Enjoy    
+Enjoy
+
+## Persistent data
+
+    docker volume create mykdc
+    docker run -d --name mykdc  \
+        --mount src=mykdc,destination=/var/krb5kdc,volume-subpath=conf\
+        --mount src=mykdc,destination=/var/lib/krb5kdc,volume-subpath=db\
+        -p 8888:88 kerberos:alpine 
