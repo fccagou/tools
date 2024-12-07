@@ -1,0 +1,79 @@
+FROM alpine
+
+ARG KDC_PORT=88
+ARG HTTP_PORT=80
+ARG KADMIN_PORT=749
+
+RUN apk update \
+    && apk add apache2 apache-mod-auth-kerb
+
+COPY <<EOF_KRB5_CONF /etc/krb5.conf
+[logging]
+default = FILE:/var/log/krb5libs.log
+kdc = FILE:/var/log/krb5kdc.log
+admin_server = FILE:/var/log/kadmind.log
+
+[libdefaults]
+ dns_lookup_realm = false
+ ticket_lifetime = 24h
+ renew_lifetime = 7d
+ forwardable = true
+ rdns = false
+ default_realm = EXAMPLE.COM
+
+[realms]
+EXAMPLE.COM = {
+ kdc = kerberos.example.com:${KDC_PORT}
+ admin_server = kerberos.exemple.com:${KADMIN_PORT}
+}
+
+[domain_realm]
+.example.com = EXAMPLE.COM
+example.com = EXAMPLE.COM
+EOF_KRB5_CONF
+
+COPY <<EOF_MOD_AUTH_KERBEROS /etc/apache2/conf.d/mod-auth-kerb.conf
+#
+# The mod_auth_kerb module implements Kerberos authentication over
+# HTTP, following the "Negotiate" protocol.
+#
+
+LoadModule auth_kerb_module modules/mod_auth_kerb.so
+
+#
+# Sample configuration: Kerberos authentication must only be
+# used over SSL to prevent replay attacks.  The keytab file
+# configured must be readable only by the "apache" user, and
+# must contain service keys for "HTTP/www.example.com", where
+# "www.example.com" is the FQDN of this server.
+#
+
+<Location /private>
+#  SSLRequireSSL
+  AuthType Kerberos
+  AuthName "Kerberos Login"
+  KrbMethodNegotiate On
+  KrbMethodK5Passwd Off
+  KrbAuthRealms EXAMPLE.COM
+  Krb5KeyTab /etc/apache2/keytabs/http-localhost.keytab
+  require valid-user
+</Location>
+EOF_MOD_AUTH_KERBEROS
+
+RUN mkdir /var/www/localhost/htdocs/private \
+    && echo "Private acces OK" > /var/www/localhost/htdocs/private/test.txt
+
+COPY --chmod=755 <<EOF_ENTRYPOINT /entrypoint.sh
+#!/bin/sh
+chown apache:apache /etc/apache2/keytabs/http-localhost.keytab
+/usr/sbin/httpd "\$@" &
+sleep 3
+tail -f /var/log/apache2/*.log
+EOF_ENTRYPOINT
+
+EXPOSE ${HTTP_PORT}
+
+ENTRYPOINT ["/entrypoint.sh"]
+CMD ["-C", "ServerName www.example.com" ]
+
+
