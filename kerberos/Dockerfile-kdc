@@ -1,0 +1,69 @@
+FROM alpine
+
+ARG KDC_PORT=88
+ARG KADMIN_PORT=749
+
+RUN apk update \
+    && apk add krb5-server
+
+
+COPY <<EOF_KDC /var/krb5kdc/kdc.conf
+kdcdefaults]
+    kdc_listen = ${KDC_PORT}
+    kdc_tcp_listen = ${KDC_PORT}
+
+[realms]
+    EXAMPLE.COM = {
+        kadmind_port = ${KADMIN_PORT}
+        max_life = 12h 0m 0s
+        max_renewable_life = 7d 0h 0m 0s
+        master_key_type = aes256-cts
+        supported_enctypes = aes256-cts:normal aes128-cts:normal
+        # If the default location does not suit your setup,
+        # explicitly configure the following values:
+        database_name = /var/lib/krb5kdc/principal
+        key_stash_file = /var/lib/krb5kdc/.k5.EXAMPLE.COM
+        acl_file = /var/lib/krb5kdc/kadm5.acl
+    }
+
+[logging]
+    # By default, the KDC and kadmind will log output using
+    # syslog.  You can instead send log output to files like this:
+    kdc = FILE:/var/log/krb5kdc.log
+    admin_server = FILE:/var/log/kadmin.log
+    default = FILE:/var/log/krb5lib.log
+EOF_KDC
+
+
+COPY <<EOF_KRB5_CONF /etc/krb5.conf
+[logging]
+default = FILE:/var/log/krb5libs.log
+kdc = FILE:/var/log/krb5kdc.log
+admin_server = FILE:/var/log/kadmind.log
+
+[libdefaults]
+ dns_lookup_realm = false
+ ticket_lifetime = 24h
+ renew_lifetime = 7d
+ forwardable = true
+ rdns = false
+ default_realm = EXAMPLE.COM
+
+[realms]
+EXAMPLE.COM = {
+ kdc = 127.0.0.1:${KDC_PORT}
+ admin_server = 127.0.0.1:${KADMIN_PORT}
+}
+
+[domain_realm]
+.example.com = EXAMPLE.COM
+example.com = EXAMPLE.COM
+EOF_KRB5_CONF
+
+RUN  kdb5_util create -r EXAMPLE.COM -s -P P@ssword
+RUN kadmin.local addprinc -pw useruser user
+
+EXPOSE ${KDC_PORT}
+
+ENTRYPOINT ["/usr/sbin/krb5kdc", "-n"]
+
