@@ -27,8 +27,6 @@ kdcdefaults]
     }
 
 [logging]
-    # By default, the KDC and kadmind will log output using
-    # syslog.  You can instead send log output to files like this:
     default = CONSOLE
     default = STDERR
 EOF_KDC
@@ -58,10 +56,23 @@ EXAMPLE.COM = {
 example.com = EXAMPLE.COM
 EOF_KRB5_CONF
 
-RUN  kdb5_util create -r EXAMPLE.COM -s -P P@ssword
-RUN kadmin.local addprinc -pw useruser user
+
+COPY --chmod=755 <<EOF_ENTRYPOINT /usr/local/bin/entrypoint.sh
+#!/bin/sh
+set -e
+
+if [ ! -f /var/lib/krb5kdc/principal ]; then
+  kdb5_util create -r EXAMPLE.COM -s -P P@ssword
+  kadmin.local addprinc -pw useruser user
+  [ -d /srv/keytabs ] || mkdir /srv/keytabs
+  kadmin.local addprinc -randkey HTTP/localhost@EXAMPLE.COM
+  kadmin.local ktadd -k /srv/keytabs/http-localhost.keytab  HTTP/localhost@EXAMPLE.COM
+fi
+exec /usr/sbin/krb5kdc -n "\$@"
+EOF_ENTRYPOINT
+
 
 EXPOSE ${KDC_PORT}
 
-ENTRYPOINT ["/usr/sbin/krb5kdc", "-n"]
+ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
 

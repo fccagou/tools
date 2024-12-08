@@ -1,9 +1,19 @@
 volumes:
   mykdc:
-    external: true
+    #external: false
 
 services:
-  kdc:
+  init_volumes:
+    image: kerberos:alpine
+    restart: no
+    entrypoint: /bin/sh
+    command: -c 'mkdir -p /mnt/conf /mnt/db /mnt/keytabs'
+    volumes:
+      - type: volume
+        source: mykdc
+        target: /mnt
+
+  kerberos:
     image: kerberos:alpine
     build:
       context: .
@@ -11,6 +21,9 @@ services:
     ports:
       - "8888:88/tcp"
       - "8888:88/udp"
+    depends_on:
+      init_volumes:
+        condition: service_completed_successfully
     volumes:
       - type: volume
         source: mykdc
@@ -30,6 +43,14 @@ services:
         volume:
           nocopy: true
           subpath: keytabs
+
+  check_keytab:
+    image: alpine
+    entrypoint: /bin/sh
+    command: -c 'while :; do [ -f /srv/keytabs/http-localhost.keytab ] && exit 0; sleep 1; done'
+    volumes_from:
+      - kerberos:ro
+
   www:
     image: apache:keberos
     build:
@@ -38,6 +59,9 @@ services:
     command: -C 'serverName localhost'
     ports:
       - "8880:80/tcp"
+    depends_on:
+      check_keytab:
+        condition: service_completed_successfully
     volumes:
       - type: volume
         source: mykdc

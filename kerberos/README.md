@@ -2,13 +2,32 @@
 
 ## Abstract
 
-Some kermeros tools in docker for tests
+Some kerberos tools in docker for tests
 
 
 ## Quickstart
 
-Build image
+Clone repository and compose up
 
+```bash
+git clone https://gitlab.com/fccagou/tools
+cd kerberos
+docker compose build
+docker compose up -d
+```
+
+Test
+
+    export KRB5_CONFIG="$(pwd)"/krb5.conf
+    export KRB5CCNAME=/dev/shm/kerberos_user_cache
+    kinit user@EXAMPLE.COM
+    curl  --negotiate -u : http://localhost:8880/private/test.txt
+    Private acces OK
+
+
+## Kerberos server
+
+Build image
 
     docker build -t kerberos:alpine -f Dockerfile-kdc .
 
@@ -51,12 +70,12 @@ Create keytab
     docker exec -ti mykdc  kadmin.local addprinc -randkey HTTP/localhost@EXAMPLE.COM
     docker exec -ti mykdc  kadmin.local ktadd -k /srv/keytabs/http-localhost.keytab  HTTP/localhost@EXAMPLE.COM
 
-## Apache kerberso server
+
+## Apache kerberos server
 
 Build image
 
     docker build -t apache:krb -f Dockerfile-http .
-
 
 Run web server
 
@@ -88,4 +107,6 @@ Show kerberos tickets
             renew until 07/12/2024 18:26:36
             Ticket server: HTTP/localhost@EXAMPLE.COM
 
+## TODO
 
+-[ ] add args and .env feature to build other realm.

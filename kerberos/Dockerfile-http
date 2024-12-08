@@ -22,8 +22,8 @@ default = STDERR
 
 [realms]
 EXAMPLE.COM = {
- kdc = kerberos.example.com:${KDC_PORT}
- admin_server = kerberos.exemple.com:${KADMIN_PORT}
+ kdc = kerberos:${KDC_PORT}
+ admin_server = kerberos:${KADMIN_PORT}
 }
 
 [domain_realm]
@@ -70,7 +70,7 @@ RUN mkdir /var/www/localhost/htdocs/private \
 COPY --chmod=755 <<EOF_ENTRYPOINT /entrypoint.sh
 #!/bin/sh
 chown apache:apache /etc/apache2/keytabs/http-localhost.keytab
-/usr/sbin/httpd -DFOREGROUND "\$@"
+exec /usr/sbin/httpd -DFOREGROUND "\$@"
 EOF_ENTRYPOINT
 
 EXPOSE ${HTTP_PORT}
