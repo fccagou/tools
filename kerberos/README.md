@@ -11,7 +11,7 @@ Clone repository and compose up
 
 ```bash
 git clone https://gitlab.com/fccagou/tools
-cd kerberos
+cd tools/kerberos
 docker compose build
 docker compose up -d
 ```
