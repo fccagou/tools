@@ -29,17 +29,15 @@ kdcdefaults]
 [logging]
     # By default, the KDC and kadmind will log output using
     # syslog.  You can instead send log output to files like this:
-    kdc = FILE:/var/log/krb5kdc.log
-    admin_server = FILE:/var/log/kadmin.log
-    default = FILE:/var/log/krb5lib.log
+    default = CONSOLE
+    default = STDERR
 EOF_KDC
 
 
 COPY <<EOF_KRB5_CONF /etc/krb5.conf
 [logging]
-default = FILE:/var/log/krb5libs.log
-kdc = FILE:/var/log/krb5kdc.log
-admin_server = FILE:/var/log/kadmind.log
+default = CONSOLE
+default = STDERR
 
 [libdefaults]
  dns_lookup_realm = false

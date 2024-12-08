@@ -9,9 +9,8 @@ RUN apk update \
 
 COPY <<EOF_KRB5_CONF /etc/krb5.conf
 [logging]
-default = FILE:/var/log/krb5libs.log
-kdc = FILE:/var/log/krb5kdc.log
-admin_server = FILE:/var/log/kadmind.log
+default = CONSOLE
+default = STDERR
 
 [libdefaults]
  dns_lookup_realm = false
@@ -31,6 +30,11 @@ EXAMPLE.COM = {
 .example.com = EXAMPLE.COM
 example.com = EXAMPLE.COM
 EOF_KRB5_CONF
+
+COPY <<EOF_MOD_LOG /etc/apache2/conf.d/logs.conf
+ErrorLog /proc/self/fd/2
+CustomLog /proc/self/fd/1 combined
+EOF_MOD_LOG
 
 COPY <<EOF_MOD_AUTH_KERBEROS /etc/apache2/conf.d/mod-auth-kerb.conf
 #
@@ -66,9 +70,7 @@ RUN mkdir /var/www/localhost/htdocs/private \
 COPY --chmod=755 <<EOF_ENTRYPOINT /entrypoint.sh
 #!/bin/sh
 chown apache:apache /etc/apache2/keytabs/http-localhost.keytab
-/usr/sbin/httpd "\$@" &
-sleep 3
-tail -f /var/log/apache2/*.log
+/usr/sbin/httpd -DFOREGROUND "\$@"
 EOF_ENTRYPOINT
 
 EXPOSE ${HTTP_PORT}

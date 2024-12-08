@@ -1,0 +1,49 @@
+volumes:
+  mykdc:
+    external: true
+
+services:
+  kdc:
+    image: kerberos:alpine
+    build:
+      context: .
+      dockerfile: Dockerfile-kdc
+    ports:
+      - "8888:88/tcp"
+      - "8888:88/udp"
+    volumes:
+      - type: volume
+        source: mykdc
+        target: /var/krb5kdc
+        volume:
+          nocopy: true
+          subpath: conf
+      - type: volume
+        source: mykdc
+        target: /var/lib/krb5kdc
+        volume:
+          nocopy: true
+          subpath: db
+      - type: volume
+        source: mykdc
+        target: /srv/keytabs
+        volume:
+          nocopy: true
+          subpath: keytabs
+  www:
+    image: apache:keberos
+    build:
+      context: .
+      dockerfile: Dockerfile-http
+    command: -C 'serverName localhost'
+    ports:
+      - "8880:80/tcp"
+    volumes:
+      - type: volume
+        source: mykdc
+        target: /etc/apache2/keytabs
+        volume:
+          nocopy: true
+          subpath: keytabs
+
+
