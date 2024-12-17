@@ -1,0 +1,74 @@
+#!/usr/bin/bash
+
+set -euo pipefail
+
+usage () {
+	cat <<EOF_USAGE
+Usage: git localmirror [COMMAND|URL]
+
+    If no parameter used   : list all local repos
+    URL                    : git mirror url to $localdir
+
+COMMANDS:
+
+    help          : this help
+    update        : update all local mirror found in $localdir
+
+
+EOF_USAGE
+}
+
+
+localdir="$HOME"/repositories/Public
+
+if [ "$#" == 0 ]; then
+	cd "$localdir"
+	for d in $(find . -type d -name "*.git"); do
+		printf -- "%s %s\n" "$(cat "$d"/description)" "${d//.git}"
+	done
+	exit $?
+fi
+url="$1"
+
+case "$url" in
+    "--help"|"-h"|"help")
+		usage
+		exit 0
+		;;
+	"themes")
+	    cd "$localdir"
+	    ls -1 | grep -vE '\.git|^\.$'
+	    exit $?
+		;;
+	"update")
+	    cd "$localdir"
+		for d in $(find . -type d -name '*.git'); do
+			printf -- "[*] updating %s\n" "$d"
+			( cd "$d" && "$0" "$(git remote get-url origin)" )
+		done
+		exit $?
+		;;
+esac
+
+
+if [ "$#" == "2" ];
+then
+    subdir="$localdir"/"$2"/"$(dirname "${url#*://}")"
+else
+    subdir="$localdir"/"$(dirname "${url#*://}")"
+fi
+
+reponame="${url##*/}"
+localrepodir="$subdir"/"${reponame//.git}".git
+
+[ -d "$subdir" ] || mkdir -p "$subdir"
+
+if [ -d "$localrepodir" ]; then
+	cd "$localrepodir"
+	git fetch origin
+else
+	git clone --mirror "$url" "$localrepodir"
+fi
+
+reposize="$(du -ksh "$localrepodir"|awk '{print $1}')"
+printf -- "%s size=%s %s\n" "$(date +"%Y-%m-%d %X")" "$reposize" "$url" > "$localrepodir"/description
