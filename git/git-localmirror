@@ -23,6 +23,33 @@ EOF_USAGE
 }
 
 
+repo_info () {
+    local repo
+    local repodir
+
+    repo="$1"
+    repodir="$localdir"/"$repo"
+
+    if ! git rev-parse --resolve-git-dir "$repodir" >/dev/null 2>&1 ; then
+        printf -- "[-] error not a git repo %s" "$repodir"
+        exit 1
+    fi
+
+    echo "name: $repo"
+    echo "fullpath: $repodir"
+    echo "remotes:"
+	git --git-dir="$repodir" remotes \
+		|grep '(fetch)'\
+		|sed \
+		    -e 's/\t/: /'\
+			-e 's/ (fetch)//'\
+		|awk '{print "  "$0}'
+	git --git-dir="$repodir" branch --remotes
+	echo "refs:"
+	git --git-dir="$repodir" for-each-ref refs/heads  --format='  %(refname): %(subject)'
+	echo "last commits:"
+	git --git-dir="$repodir" log --oneline --pretty=format:'  - (%cr) <%an> %s' -10
+}
 
 repo_list () {
     local filter
