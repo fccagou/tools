@@ -16,6 +16,8 @@ COMMANDS:
     list          : all local repos with remote url
                     --quiet list only local repo
                     --remotes list only remotes
+    rm|del|delete : remove local repo defined in next parameter
+                    parameter can be remote url or local repo name.
     update        : update all local mirror found in $localdir
 
 
@@ -83,6 +85,86 @@ repo_list () {
     esac
 }
 
+sanitize_path () {
+    local path="$1"
+    path="${path//\.\.}"
+    echo "$path"
+}
+
+
+repo_del () {
+    local todel
+    local repo
+    local repodir
+    todel="$1"
+    repo=""
+
+    if [ "$todel" != "$(sanitize_path "$todel")" ]; then
+        printf -- "[-] SECURITY ALERT bad repo name (%s)\n" "$todel"
+        exit 256
+    fi
+
+    if [ -d "$localdir"/"$todel" ]; then
+        # User pass local repo name
+        repo="$todel"
+    else
+        # User pass remote url
+        # try to find repo
+        repo=( $(repo_list|grep "$todel"|awk '{print $1}'||:) )
+        if [ "${#repo[@]}" == "0" ]; then
+            printf -- "[-] repo %s not found\n" "$todel"
+            exit 1
+        elif [ "${#repo[@]}" == "1" ]; then
+            repo="$repo"
+        else
+            printf -- "[*] To many results, select one in the list:\n\n"
+            for d in "${repo[@]}"; do
+                printf -- "  - %s\n" "$d"
+            done
+            exit 1
+        fi
+    fi
+
+    echo "----------------------------------------------------------"
+    echo " DELETE REPO"
+    echo "----------------------------------------------------------"
+    echo
+    repo_info "$repo"
+
+    rep="n"
+    read -p "Are you sure  (y/N) ?:" rep
+
+    case "$rep" in
+        o|O|y|Y)
+            repodir="$(readlink -f "$localdir"/"$repo")"
+            if [ -z "$(git --git-dir="$repodir" remotes)" ]; then
+                echo ""
+                echo " ===== WARNING =================="
+                echo ""
+                echo "  The repo has no remote, you will lost ALL the code."
+                echo ""
+                rep="n"
+                read -p "Are you REALY sure (y/N) ?:" rep
+                case "$rep" in
+                    o|O|y|Y) : ;;
+                    *) exit 0
+                esac
+            fi
+
+            printf -- "[+] Delete repo %s..." "$repo"
+			/bin/rm -rf "$repodir"
+
+            ;;
+        n|N|"")
+            printf -- "[*] abort\n"
+            exit 0
+            ;;
+        *)
+            printf -- "[-] error unknown value (%s)\n" "$rep"
+            exit 1
+            ;;
+    esac
+}
 # ----------------------------------------------------------------------------
 #  main
 # ----------------------------------------------------------------------------
@@ -124,6 +206,15 @@ case "$url" in
 		done
 
 		exit $?
+		;;
+    "rm"|"del"|"delete")
+        if [ "$#" -lt "2" ]; then
+            printf -- "[-] error, %s needs parameter\n" "$url"
+            usage
+            exit 1
+        fi
+        repo_del "$2"
+        exit $?
 		;;
 	"themes")
 	    cd "$localdir"
