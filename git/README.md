@@ -195,7 +195,7 @@ remotes:
   gitlab.com: 2
 
 
-# -- Update all repos
+# -- Update all repos (how about using it in a crontab !?)
 $ git localmirror update 
 [*] updating ./gitlab.com/fccagou/tools.git : https://gitlab.com/fccagou/tools.git
 remote: Enumerating objects: 7, done.
