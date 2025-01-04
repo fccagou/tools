@@ -7,7 +7,13 @@ usage () {
 Usage: git localmirror [COMMAND|URL]
 
     If no parameter used   : list
-    URL                    : git mirror url to $localdir
+    URL                    : git mirror url to $LOCALMIRRORDIR
+
+ENV VARIABLES:
+
+    LOCALMIRRORDIR : local directory where repos are cloned
+                     default: $HOME/repositories/Public
+                     Current value: $LOCALMIRRORDIR
 
 COMMANDS:
 
@@ -18,7 +24,7 @@ COMMANDS:
                     --remotes list only remotes
     rm|del|delete : remove local repo defined in next parameter
                     parameter can be remote url or local repo name.
-    update        : update all local mirror found in $localdir
+    update        : update all local mirror found in $LOCALMIRRORDIR
 
 
 EOF_USAGE
@@ -30,7 +36,7 @@ repo_info () {
     local repodir
 
     repo="$1"
-    repodir="$localdir"/"$repo"
+    repodir="$LOCALMIRRORDIR"/"$repo"
 
     if ! git rev-parse --resolve-git-dir "$repodir" >/dev/null 2>&1 ; then
         printf -- "[-] error not a git repo %s" "$repodir"
@@ -63,7 +69,7 @@ repo_list () {
     local filter
     [ "$#" == "0" ] && filter="" || filter="$1"
 
-    cd "$localdir"
+    cd "$LOCALMIRRORDIR"
     case "$filter" in
         --remotes)
             find . -type d -name "*.git" | xargs -I{} git --git-dir="{}" remote get-url origin
@@ -105,7 +111,7 @@ repo_del () {
         exit 256
     fi
 
-    if [ -d "$localdir"/"$todel" ]; then
+    if [ -d "$LOCALMIRRORDIR"/"$todel" ]; then
         # User pass local repo name
         repo="$todel"
     else
@@ -137,7 +143,7 @@ repo_del () {
 
     case "$rep" in
         o|O|y|Y)
-            repodir="$(readlink -f "$localdir"/"$repo")"
+            repodir="$(readlink -f "$LOCALMIRRORDIR"/"$repo")"
             if [ -z "$(git --git-dir="$repodir" remotes)" ]; then
                 echo ""
                 echo " ===== WARNING =================="
@@ -170,7 +176,7 @@ repo_del () {
 #  main
 # ----------------------------------------------------------------------------
 
-localdir="$(readlink -f "$HOME"/repositories/Public)"
+LOCALMIRRORDIR="${LOCALMIRRORDIR:-$(readlink -f "$HOME"/repositories/Public)}"
 
 if [ "$#" == 0 ]; then
     url="list"
@@ -192,8 +198,8 @@ case "$url" in
 		exit $?
 		;;
 	"info")
-		echo "local mirror dir: $localdir"
-		cd "$localdir"
+		echo "local mirror dir: $LOCALMIRRORDIR"
+		cd "$LOCALMIRRORDIR"
 		echo "nb repos: $(find . -type d -name "*.git" | wc -l)"
 
 		latest="$(ls -t $(find . -name last-modified ) |head -1||:)"
@@ -218,12 +224,12 @@ case "$url" in
         exit $?
 		;;
 	"themes")
-	    cd "$localdir"
+	    cd "$LOCALMIRRORDIR"
 	    ls -1 | grep -vE '\.git|^\.$'
 	    exit $?
 		;;
 	"update")
-	    cd "$localdir"
+	    cd "$LOCALMIRRORDIR"
 		for d in $(find . -type d -name '*.git'); do
 			printf -- "[*] updating %s : " "$d"
 			( cd "$d" && git remote get-url origin && "$0" "$(git remote get-url origin)" )
@@ -232,12 +238,13 @@ case "$url" in
 		;;
 esac
 
+## Clone or update repo
 
 if [ "$#" == "2" ];
 then
-    subdir="$localdir"/"$2"/"$(dirname "${url#*://}")"
+    subdir="$LOCALMIRRORDIR"/"$2"/"$(dirname "${url#*://}")"
 else
-    subdir="$localdir"/"$(dirname "${url#*://}")"
+    subdir="$LOCALMIRRORDIR"/"$(dirname "${url#*://}")"
 fi
 
 reponame="${url##*/}"
