@@ -35,7 +35,7 @@ repo_info () {
         exit 1
     fi
 
-    echo "fullpath: $repodir"
+	echo "fullpath: $(readlink -f $repodir)"
     echo "name: $repo"
 
     if [ -z "$(git --git-dir="$repodir" remotes 2>/dev/null)" ]; then
@@ -87,7 +87,7 @@ repo_list () {
 #  main
 # ----------------------------------------------------------------------------
 
-localdir="$HOME"/repositories/Public
+localdir="$(readlink -f "$HOME"/repositories/Public)"
 
 if [ "$#" == 0 ]; then
     url="list"
