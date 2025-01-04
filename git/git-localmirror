@@ -43,6 +43,7 @@ repo_info () {
     if [ -z "$(git --git-dir="$repodir" remotes 2>/dev/null)" ]; then
         echo "remotes: none"
     else
+        echo "remotes:"
         git --git-dir="$repodir" remotes \
             |grep '(fetch)'\
             |sed \
