@@ -193,7 +193,8 @@ case "$url" in
         if [ "$#" -le "1" ]; then
             repo_list
         else
-            repo_list "$2"
+            shift
+            repo_list "$@"
         fi
 		exit $?
 		;;
@@ -209,7 +210,7 @@ case "$url" in
 
 		echo "remotes:"
 		for r in $(ls -1d *); do
-			echo "  ${r/.}: $(find "$r" -type d -name "*.git" | wc -l)"
+			echo "  ${r/^.}: $(find "$r" -type d -name "*.git" | wc -l)"
 		done
 
 		exit $?
