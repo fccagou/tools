@@ -80,7 +80,7 @@ repo_list () {
         "")
             {
                 for d in $(find . -type d -name "*.git"); do
-                    printf -- "%s %s\n" "$d" "$(git --git-dir="$d" remote get-url origin)"
+                    printf -- "%s %s\n" "$d" "$(git --git-dir="$d" remote get-url origin 2>/dev/null||echo "noremote")"
                 done
             } |column -t
             ;;
@@ -159,7 +159,8 @@ repo_del () {
             fi
 
             printf -- "[+] Delete repo %s..." "$repo"
-			/bin/rm -rf "$repodir"
+            /bin/rm -rf "$repodir" || { printf -- "ko\n"; exit 1; }
+            printf -- "ok\n"
 
             ;;
         n|N|"")
