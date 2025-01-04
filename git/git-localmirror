@@ -13,13 +13,47 @@ COMMANDS:
 
     help          : this help
     info          : display mirror infos
-    list          : all local repos
+    list          : all local repos with remote url
+                    --quiet list only local repo
+                    --remotes list only remotes
     update        : update all local mirror found in $localdir
 
 
 EOF_USAGE
 }
 
+
+
+repo_list () {
+    local filter
+    [ "$#" == "0" ] && filter="" || filter="$1"
+
+    cd "$localdir"
+    case "$filter" in
+        --remotes)
+            find . -type d -name "*.git" | xargs -I{} git --git-dir="{}" remote get-url origin
+            ;;
+        --quiet)
+            find . -type d -name "*.git"
+            ;;
+        "")
+            {
+                for d in $(find . -type d -name "*.git"); do
+                    printf -- "%s %s\n" "$d" "$(git --git-dir="$d" remote get-url origin)"
+                done
+            } |column -t
+            ;;
+        *)
+            printf -- "[-] error, unknown list parameter %s\n" "$filter"
+            usage
+            exit 1
+            ;;
+    esac
+}
+
+# ----------------------------------------------------------------------------
+#  main
+# ----------------------------------------------------------------------------
 
 localdir="$HOME"/repositories/Public
 
@@ -35,12 +69,11 @@ case "$url" in
 		exit 0
 		;;
 	"list")
-		cd "$localdir"
-		{
-			for d in $(find . -type d -name "*.git"); do
-				printf -- "%s %s\n" "$d" "$(git --git-dir="$d" remote get-url origin)"
-			done
-		} |column -t
+        if [ "$#" == "1" ]; then
+            repo_list
+        else
+            repo_list "$2"
+        fi
 		exit $?
 		;;
 	"info")
