@@ -64,11 +64,13 @@ localrepodir="$subdir"/"${reponame//.git}".git
 [ -d "$subdir" ] || mkdir -p "$subdir"
 
 if [ -d "$localrepodir" ]; then
-	cd "$localrepodir"
-	git fetch origin
+	git --git-dir="$localrepodir" fetch origin
 else
 	git clone --mirror "$url" "$localrepodir"
 fi
 
-reposize="$(du -ksh "$localrepodir"|awk '{print $1}')"
-printf -- "%s size=%s %s\n" "$(date +"%Y-%m-%d %X")" "$reposize" "$url" > "$localrepodir"/description
+cd "$localrepodir"
+# Update Description file in repo
+lastcommitref="$(git for-each-ref --sort=-authordate --count=1 --format='%(refname)')"
+git log --abbrev-commit --pretty=format:"%s" "$lastcommitref" -1 > "$localrepodir"/description
+echo " - Cloned from : $url" >> "$localrepodir"/description
