@@ -35,20 +35,25 @@ repo_info () {
         exit 1
     fi
 
-    echo "name: $repo"
     echo "fullpath: $repodir"
-    echo "remotes:"
-	git --git-dir="$repodir" remotes \
-		|grep '(fetch)'\
-		|sed \
-		    -e 's/\t/: /'\
-			-e 's/ (fetch)//'\
-		|awk '{print "  "$0}'
+    echo "name: $repo"
+
+    if [ -z "$(git --git-dir="$repodir" remotes 2>/dev/null)" ]; then
+        echo "remotes: none"
+    else
+        git --git-dir="$repodir" remotes \
+            |grep '(fetch)'\
+            |sed \
+                -e 's/\t/: /'\
+                -e 's/ (fetch)//'\
+            |awk '{print "  "$0}'
+    fi
 	git --git-dir="$repodir" branch --remotes
 	echo "refs:"
 	git --git-dir="$repodir" for-each-ref refs/heads  --format='  %(refname): %(subject)'
 	echo "last commits:"
 	git --git-dir="$repodir" log --oneline --pretty=format:'  - (%cr) <%an> %s' -10
+
 }
 
 repo_list () {
