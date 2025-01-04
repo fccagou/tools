@@ -6,12 +6,14 @@ usage () {
 	cat <<EOF_USAGE
 Usage: git localmirror [COMMAND|URL]
 
-    If no parameter used   : list all local repos
+    If no parameter used   : list
     URL                    : git mirror url to $localdir
 
 COMMANDS:
 
     help          : this help
+    info          : display mirror infos
+    list          : all local repos
     update        : update all local mirror found in $localdir
 
 
@@ -22,18 +24,41 @@ EOF_USAGE
 localdir="$HOME"/repositories/Public
 
 if [ "$#" == 0 ]; then
-	cd "$localdir"
-	for d in $(find . -type d -name "*.git"); do
-		printf -- "%s %s\n" "$(cat "$d"/description)" "${d//.git}"
-	done
-	exit $?
+    url="list"
+else
+    url="$1"
 fi
-url="$1"
 
 case "$url" in
     "--help"|"-h"|"help")
 		usage
 		exit 0
+		;;
+	"list")
+		cd "$localdir"
+		{
+			for d in $(find . -type d -name "*.git"); do
+				printf -- "%s %s\n" "$d" "$(git --git-dir="$d" remote get-url origin)"
+			done
+		} |column -t
+		exit $?
+		;;
+	"info")
+		echo "local mirror dir: $localdir"
+		cd "$localdir"
+		echo "nb repos: $(find . -type d -name "*.git" | wc -l)"
+
+		latest="$(ls -t $(find . -name last-modified ) |head -1||:)"
+		oldest="$(ls -tr $(find . -name last-modified )|head -1||:)"
+		echo "last   update: $(stat -L -c '%y' "$latest"|sed 's/\..*//') ($(git --git-dir="${latest%%/info/web/last-modified}" remote get-url origin))"
+		echo "oldest update: $(stat -L -c '%y' "$oldest"|sed 's/\..*//') ($(git --git-dir="${oldest%%/info/web/last-modified}" remote get-url origin))"
+
+		echo "remotes:"
+		for r in $(ls -1d *); do
+			echo "  $r: $(find "$r" -type d -name "*.git" | wc -l)"
+		done
+
+		exit $?
 		;;
 	"themes")
 	    cd "$localdir"
