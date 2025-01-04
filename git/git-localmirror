@@ -88,7 +88,7 @@ case "$url" in
 
 		echo "remotes:"
 		for r in $(ls -1d *); do
-			echo "  $r: $(find "$r" -type d -name "*.git" | wc -l)"
+			echo "  ${r/.}: $(find "$r" -type d -name "*.git" | wc -l)"
 		done
 
 		exit $?
