@@ -43,8 +43,8 @@ case "$url" in
 	"update")
 	    cd "$localdir"
 		for d in $(find . -type d -name '*.git'); do
-			printf -- "[*] updating %s\n" "$d"
-			( cd "$d" && "$0" "$(git remote get-url origin)" )
+			printf -- "[*] updating %s : " "$d"
+			( cd "$d" && git remote get-url origin && "$0" "$(git remote get-url origin)" )
 		done
 		exit $?
 		;;
