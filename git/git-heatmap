@@ -408,7 +408,10 @@ function git_tip(obj, event, show) {
       var c_workload=obj.getAttribute("data-workload");
       var c_contributors=obj.getAttribute("data-contributors");
 
-      tip_box.innerHTML = "<strong>" + c_contributors + " contributeur(s) / " + c_count + " commit(0) / " + c_workload + " ligne(s) de code modifié(es)</strong> le " + c_date;
+	  tip_box.innerHTML = "<pre>[" + c_date + "]"
+            + " &#x1F465; " + c_contributors
+            + " &#x2705; " + c_count
+            + " &#x1F4DD; " + c_workload + "</pre>";
 
       tip_box.hidden = ( c_count == 0 ); // display only if there is data
       tip_box.style.top  = event.pageY - tip_box.offsetHeight - 10 + "px";
@@ -448,7 +451,8 @@ body {
     padding: 8px 16px;
     font-size: 12px;
     color: #ffffff;
-    text-align: center;
+	opacity: .8;
+    text-align: left;
     background: #24292f;
     border-radius: 6px;
 }
@@ -460,7 +464,7 @@ body {
     width: 5px;
     height: 5px;
     margin: 0 0 0 -5px;
-    content: " ";
+    #content: " ";
     border: 5px solid transparent;
     border-top-color: #24292f;
     border-bottom-left-radius: 6px;
@@ -650,7 +654,7 @@ EOF_RECT
     <text text-anchor="start" class="wday" dx="-10" dy="81">Dim.</text>
   </g>
   <text x="10" y="20" class="current-heatmap-title" >
-      [ ${year} ] &#x1F465 ${total_contributors} / ${total_nb_commits} contributions / ${total_nb_lines} lignes modifiées
+      [ ${year} ] &#x1F465 ${total_contributors} / &#x2705; ${total_nb_commits} / &#x1F4DD; ${total_nb_lines}
   </text>
 </svg>
 EOF_FOOT
