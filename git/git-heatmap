@@ -366,8 +366,10 @@ function git_tip(obj, event, show) {
     } else {
       var c_date=obj.getAttribute("data-date");
       var c_count=obj.getAttribute("data-count");
+      var c_workload=obj.getAttribute("data-workload");
+      var c_contributors=obj.getAttribute("data-contributors");
 
-      tip_box.innerHTML = "<strong>" + c_count + " lignes de code modifiées</strong> le " + c_date;
+      tip_box.innerHTML = "<strong>" + c_contributors + " contributeur(s) / " + c_count + " commit(0) / " + c_workload + " ligne(s) de code modifié(es)</strong> le " + c_date;
 
       tip_box.hidden = ( c_count == 0 ); // display only if there is data
       tip_box.style.top  = event.pageY - tip_box.offsetHeight - 10 + "px";
@@ -527,6 +529,8 @@ EOF_SVG_HEADER
 
     for d in $(seq 0 364 )
     do
+        local commit_by_day=0
+        local contributors_by_day=0
         the_date=$(date --date="$year-1-1 00:00 $d day" "+%Y-%m-%d")
         prev_day=$(date --date="${the_date} 23:59 1 day ago" "+%Y-%m-%d %H:%M")
         next_day=$(date --date="${the_date} 00:00 1 day" "+%Y-%m-%d %H:%M")
@@ -546,11 +550,15 @@ EOF_SVG_HEADER
 
                 work_load=$(( work_load + nb_files + nb_ins + nb_del ))
                 total_nb_commits=$(( total_nb_commits + 1 ))
+                commit_by_day=$(( commit_by_day + 1 ))
 
                 total_nb_files=$(( total_nb_files + nb_files ))
                 total_nb_lines=$(( total_nb_lines + nb_ins + nb_del ))
 
             done
+
+            contributors_by_day=$(( contributors_by_day + $(git shortlog --summary --numbered --after="${prev_day}" --before="${next_day}" "$b" | wc -l) ))
+
         done
 
         if [ ${translate} -eq -1 ]
@@ -573,7 +581,7 @@ EOF_SVG_HEADER
             fill=""
         fi
         cat <<EOF_RECT
-    <rect class="calendar-day" width="10" height="10" x="${x}" y="${y}" ${fill} data-count="${work_load}" data-date="${the_date}" data-level="${level}" onmouseover="git_tip(this, event, true);" onmouseout="git_tip(this, event, false);" />
+    <rect class="calendar-day" width="10" height="10" x="${x}" y="${y}" ${fill} data-count="${commit_by_day}" data-contributors="${contributors_by_day}" data-workload="${work_load}" data-date="${the_date}" data-level="${level}" onmouseover="git_tip(this, event, true);" onmouseout="git_tip(this, event, false);" />
 EOF_RECT
 
         if [ ${the_day} -eq 7 ]
