@@ -168,9 +168,68 @@ workload_to_level() {
     local work_load="$1"
     local level=0
 
-    [ $work_load -le 100 ] && level=$(( work_load / 10 )) || level=11
-
+    if [ $work_load -eq 0 ]; then
+		level=0
+    elif [ $work_load -lt 10 ]; then
+		level=10
+    elif [ $work_load -lt 100 ]; then
+		level=$(( (work_load / 10 ) * 10 ))
+		(( work_load % 10 )) || level=$(( level + 10 ))
+    elif [ $work_load -lt 500 ]; then
+		 level=500
+	else
+		level=10000
+	fi
     printf -- "%s" "$level"
+
+}
+
+level_to_color() {
+
+    local level=$1
+    #value_to_rgb "$1" 1024
+
+    if [ $level -eq 0 ]
+    then
+        color="#efefef"
+    elif [ $level -eq 10 ]
+    then
+        color="#82c4c6"
+    elif [ $level -eq 20 ]
+    then
+        color="#82c4c6"
+    elif [ $level -eq 30 ]
+    then
+        color="#87e990"
+    elif [ $level -eq 40 ]
+    then
+        color="#7fdd4c"
+    elif [ $level -eq 50 ]
+    then
+        color="#82c46c"
+    elif [ $level -eq 60 ]
+    then
+        color="#22780f"
+    elif [ $level -eq 70 ]
+    then
+        color="#148414"
+    elif [ $level -eq 80 ]
+    then
+        color="#00561b"
+    elif [ $level -eq 90 ]
+    then
+        color="#003300"
+    elif [ $level -eq 100 ]
+    then
+        color="#003300"
+    elif [ $level -eq 500 ]
+    then
+        color="#003300"
+    else
+        color="#550000"
+    fi
+
+    printf -- "%s" "$color"
 
 }
 
@@ -184,20 +243,41 @@ workload_to_color() {
     if [ ${work_load} -eq 0 ]
     then
         color="#efefef"
+    elif [ ${work_load} -lt 10 ]
+    then
+        color="#82c4c6"
+    elif [ ${work_load} -lt 20 ]
+    then
+        color="#82c4c6"
+    elif [ ${work_load} -lt 30 ]
+    then
+        color="#87e990"
     elif [ ${work_load} -lt 40 ]
     then
-        color="#9be9a8"
+        color="#7fdd4c"
+    elif [ ${work_load} -lt 50 ]
+    then
+        color="#82c46c"
     elif [ ${work_load} -lt 60 ]
     then
-        color="#41b6c4"
+        color="#22780f"
+    elif [ ${work_load} -lt 70 ]
+    then
+        color="#148414"
     elif [ ${work_load} -lt 80 ]
     then
-        color="#40c463"
-    elif [ ${work_load} -le 100 ]
+        color="#00561b"
+    elif [ ${work_load} -lt 90 ]
     then
-        color="#216e39"
+        color="#003300"
+    elif [ ${work_load} -lt 100 ]
+    then
+        color="#003300"
+    elif [ ${work_load} -lt 500 ]
+    then
+        color="#003300"
     else
-        color="#217f39"
+        color="#550000"
     fi
 
     printf -- "%s" "$color"
@@ -227,19 +307,20 @@ EOF_DIV
 # -- Display a div containing dolored legend for many values.
 #
 html_color_legend () {
-    local interval="${1:-100}"
+    local interval="${1:-500}"
     local v=0
-    local level="$(workload_to_level "$v" "$interval" )"
+    local level="$(workload_to_level "$v")"
     printf -- "<div id=\"legend\">\n"
     printf -- "Nb commit\n"
     html_legend "0" "$level"
-    for v in 40 60 80 100
+	for v in $(seq 9 10 99) 499
     do
-        level="$(workload_to_level "$v" "$interval" )"
-        html_legend "&lt;$v" "$level"
+		level="$(workload_to_level "$v" )"
+		# Because value less then
+		html_legend "&lt;$(( v + 1 ))" "$level"
     done
-    level="$(workload_to_level "$(( interval + 1 ))" "$interval" )"
-    html_legend "&gt;$interval" "$level"
+    level="$(workload_to_level "$interval" )"
+    html_legend "&gt;=$interval" "$level"
     printf -- "</div>\n"
 }
 
@@ -336,6 +417,8 @@ EOF_JS
 #
 html_css () {
     local css_filename
+	local _color
+	local _opacity
     [ -n "$1" ] && css_filename="${1}/heatmap.css" || css_filename=/dev/stdout
 
     cat > "${css_filename}"  <<EOF_CSS
@@ -379,91 +462,6 @@ body {
     white-space: nowrap;
 }
 
-.calendar-day[data-level="0"] {
-    fill: #efefef;
-    opacity: .5;
-    outline: 1px solid rgba(27,31,35, 0.06);
-    shape-rendering: geometricPrecision;
-    outline-offset: -1px;
-}
-.calendar-day[data-level="1"] {
-    fill: #9be9a8;
-    opacity: .5;
-    outline: 1px solid rgba(27,31,35, 0.06);
-    shape-rendering: geometricPrecision;
-    outline-offset: -1px;
-}
-.calendar-day[data-level="2"] {
-    fill: #9be9a8;
-    opacity: .5;
-    outline: 1px solid rgba(27,31,35, 0.06);
-    shape-rendering: geometricPrecision;
-    outline-offset: -1px;
-}
-.calendar-day[data-level="3"] {
-    fill: #9be9a8;
-    opacity: .5;
-    outline: 1px solid rgba(27,31,35, 0.06);
-    shape-rendering: geometricPrecision;
-    outline-offset: -1px;
-}
-.calendar-day[data-level="4"] {
-    fill: #9be9a8;
-    opacity: .5;
-    outline: 1px solid rgba(27,31,35, 0.06);
-    shape-rendering: geometricPrecision;
-    outline-offset: -1px;
-}
-.calendar-day[data-level="5"] {
-    fill: #40c463;
-    opacity: .5;
-    outline: 1px solid rgba(27,31,35, 0.06);
-    shape-rendering: geometricPrecision;
-    outline-offset: -1px;
-}
-.calendar-day[data-level="6"] {
-    fill: #40c463;
-    opacity: .5;
-    outline: 1px solid rgba(27,31,35, 0.06);
-    shape-rendering: geometricPrecision;
-    outline-offset: -1px;
-}
-.calendar-day[data-level="7"] {
-    fill: #30a14e;
-    opacity: .5;
-    outline: 1px solid rgba(27,31,35, 0.06);
-    shape-rendering: geometricPrecision;
-    outline-offset: -1px;
-}
-.calendar-day[data-level="8"] {
-    fill: #30a14e;
-    opacity: .5;
-    outline: 1px solid rgba(27,31,35, 0.06);
-    shape-rendering: geometricPrecision;
-    outline-offset: -1px;
-}
-.calendar-day[data-level="9"] {
-    fill: #216e39;
-    opacity: .5;
-    outline: 1px solid rgba(27,31,35, 0.06);
-    shape-rendering: geometricPrecision;
-    outline-offset: -1px;
-}
-.calendar-day[data-level="10"] {
-    fill: #216e39;
-    opacity: .5;
-    outline: 1px solid rgba(27,31,35, 0.06);
-    shape-rendering: geometricPrecision;
-    outline-offset: -1px;
-}
-.calendar-day[data-level="11"] {
-    fill: #216e39;
-    opacity: .7;
-    outline: 1px solid rgba(27,31,35, 0.06);
-    shape-rendering: geometricPrecision;
-    outline-offset: -1px;
-}
-
 .body {
     position: absolute;
     padding-top: 20px;
@@ -485,6 +483,30 @@ body {
 .current-heatmap {
 }
 EOF_CSS
+
+for v in $(seq 0 10 100) 500 10000; do
+	_color="$(level_to_color "$v")"
+	if [ $v -eq 10 ]; then
+		_opacity='.2'
+	elif [ $v -eq 90 ]; then
+		_opacity='.7'
+	elif [ $v -eq 100 ]; then
+		_opacity='.8'
+	elif [ $v -gt 100 ]; then
+		_opacity='1'
+	else
+		_opacity='.4'
+	fi
+    cat >> "${css_filename}"  <<EOF_COLOR
+.calendar-day[data-level="$v"] {
+    fill: ${_color};
+    opacity: ${_opacity};
+    outline: 1px solid rgba(27,31,35, 0.06);
+    shape-rendering: geometricPrecision;
+    outline-offset: -1px;
+}
+EOF_COLOR
+done
 }
 
 
