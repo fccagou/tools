@@ -369,10 +369,10 @@ function git_tip(obj, event, show) {
 
       tip_box.innerHTML = "<strong>" + c_count + " lignes de code modifiées</strong> le " + c_date;
 
-      tip_box.hidden = false;
-      tip_box.style.top  = event.clientY - tip_box.offsetHeight - 10 + "px";
-      tip_box.style.left = event.clientX - (tip_box.offsetWidth / 2 ) + "px";
-    }
+      tip_box.hidden = ( c_count == 0 ); // display only if there is data
+      tip_box.style.top  = event.pageY - tip_box.offsetHeight - 10 + "px";
+      tip_box.style.left = event.pageX - (tip_box.offsetWidth / 2 ) + "px";
+  }
 
 }
 EOF_JS
