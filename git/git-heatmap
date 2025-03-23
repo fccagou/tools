@@ -642,7 +642,7 @@ EOF_RECT
         x=$(( x + 60 ))
     done
 
-	total_contributors="$(git shortlog --summary --numbered --after=$(( year - 1 )) --before=$(( year + 1 )) | wc -l)"
+	total_contributors="$(git shortlog --summary --numbered --after=24-12-$(( year - 1 )) --before=01-01-$(( year + 1 )) | wc -l)"
 
     cat <<EOF_FOOT
     <text text-anchor="start" class="wday" dx="-10" dy="8" >Lun.</text>
