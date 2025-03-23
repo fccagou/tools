@@ -397,7 +397,7 @@ function git_tip(obj, event, show) {
       var c_date=obj.getAttribute("data-date");
       var c_count=obj.getAttribute("data-count");
 
-      tip_box.innerHTML = "<strong>" + c_count + " lignes de code modifiés</strong> le " + c_date;
+      tip_box.innerHTML = "<strong>" + c_count + " lignes de code modifiées</strong> le " + c_date;
 
       tip_box.hidden = false;
       tip_box.style.top  = event.clientY - tip_box.offsetHeight - 10 + "px";
