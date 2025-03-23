@@ -185,53 +185,22 @@ workload_to_level() {
 
 }
 
-level_to_color() {
+level_to_color () {
+    local level="$1"
+    local color
 
-    local level=$1
-    #value_to_rgb "$1" 1024
-
-    if [ $level -eq 0 ]
-    then
+    if (( level == 0 )); then
         color="#efefef"
-    elif [ $level -eq 10 ]
-    then
-        color="#82c4c6"
-    elif [ $level -eq 20 ]
-    then
-        color="#82c4c6"
-    elif [ $level -eq 30 ]
-    then
-        color="#87e990"
-    elif [ $level -eq 40 ]
-    then
-        color="#7fdd4c"
-    elif [ $level -eq 50 ]
-    then
-        color="#82c46c"
-    elif [ $level -eq 60 ]
-    then
-        color="#22780f"
-    elif [ $level -eq 70 ]
-    then
-        color="#148414"
-    elif [ $level -eq 80 ]
-    then
-        color="#00561b"
-    elif [ $level -eq 90 ]
-    then
-        color="#003300"
-    elif [ $level -eq 100 ]
-    then
-        color="#003300"
-    elif [ $level -eq 500 ]
-    then
-        color="#003300"
+    elif (( level <= 100 )); then
+        color=$(( 255 - level ))
+        color="$(printf -- "#00%02x00" "$color")"
+    elif (( level == 500 )) ;then
+        color="#00aa00"
     else
-        color="#550000"
+        color="#009900"
     fi
 
     printf -- "%s" "$color"
-
 }
 
 # returns color associates to input value
