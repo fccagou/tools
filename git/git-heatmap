@@ -497,7 +497,7 @@ git_all_years () {
 
     for b in ${branches//,/ }
     do
-        first_c="$(git rev-list --max-parents=0 "${b}")"
+        first_c="$(git rev-list --max-parents=0 "${b}"|tail -1)"
         first_c_year="$( git show -s --format=%ci "${first_c}" | cut -d - -f1 )"
         [ "${first_c_year}" -lt "${first_y}" ] && first_y="${first_c_year}"
         last_c_year="$( git show -s --format=%ci "${b}" | cut -d - -f1 )"
