@@ -185,19 +185,58 @@ workload_to_level() {
 
 }
 
+commit_to_level () {
+    local commits="$1"
+    local max="${2:-100}"
+    local level=0
+
+    if [ $commits -eq 0 ]; then
+		level=0
+    elif [ $commits -lt $max ]; then
+        level=$(( (commits / 10 ) * 10 + 10 ))
+    else
+		level=10000
+	fi
+    printf -- "%s" "$level"
+
+}
+
 level_to_color () {
     local level="$1"
     local color
 
-    if (( level == 0 )); then
+    if (( level <= 0 )); then
         color="#efefef"
-    elif (( level <= 100 )); then
-        color=$(( 255 - level ))
-        color="$(printf -- "#00%02x00" "$color")"
-    elif (( level == 500 )) ;then
-        color="#00aa00"
+    elif ((level < 10 )); then
+        color="#9be9a8"
+    elif ((level < 20 )); then
+        color="#40c463"
+    elif ((level < 30 )); then
+        color="#30a14e"
     else
-        color="#009900"
+        color="#216e39"
+    fi
+
+    printf -- "%s" "$color"
+}
+
+
+level_to_color2 () {
+    local level="$1"
+    local nb_level="${2:-100}"
+
+    local step=$(( 255 / ( nb_level + 10 ) ))
+    local color
+
+    printf -- "level=%s step=%s nb_level=%s\n" "$level" "$step" "$nb_level" >/dev/stderr
+    if (( level <= 0 )); then
+        color="#efefef"
+    elif (( level < nb_level )); then
+        color=$(( 255 - (level * step) ))
+        color="$(printf -- "#00%02x00" "$color" )"
+    else
+        color=$(( 255 - (nb_level + 1 ) * step  ))
+        color="$(printf -- "#00%02x55" "$color")"
     fi
 
     printf -- "%s" "$color"
@@ -277,20 +316,20 @@ EOF_DIV
 # -- Display a div containing dolored legend for many values.
 #
 html_color_legend () {
-    local interval="${1:-500}"
+    local max="${1:-100}"
     local v=0
-    local level="$(workload_to_level "$v")"
+    local level="$(commit_to_level "$v" "$max" )"
     printf -- "<div id=\"legend\">\n"
     printf -- "Nb commit\n"
     html_legend "0" "$level"
-	for v in $(seq 9 10 99) 499
+	for v in 9 19 29
     do
-		level="$(workload_to_level "$v" )"
+		level="$(commit_to_level "$v" "$max" )"
 		# Because value less then
 		html_legend "&lt;$(( v + 1 ))" "$level"
     done
-    level="$(workload_to_level "$interval" )"
-    html_legend "&gt;=$interval" "$level"
+    level="$(commit_to_level "$max" "$max")"
+    html_legend "+$max" "$level"
     printf -- "</div>\n"
 }
 
@@ -456,19 +495,13 @@ body {
 }
 EOF_CSS
 
-for v in $(seq 0 10 100) 500 10000; do
-	_color="$(level_to_color "$v")"
-	if [ $v -eq 10 ]; then
-		_opacity='.2'
-	elif [ $v -eq 90 ]; then
-		_opacity='.7'
-	elif [ $v -eq 100 ]; then
-		_opacity='.8'
-	elif [ $v -gt 100 ]; then
-		_opacity='1'
-	else
-		_opacity='.4'
-	fi
+for v in $(seq 0 10 30) 10000; do
+    _color="$(level_to_color "$((v - 1))" 30)"
+    #if (( v >= 30 )); then
+        _opacity="1"
+    # else
+    #    _opacity=".$(( 3 * v ))"
+    #fi
     cat >> "${css_filename}"  <<EOF_COLOR
 .calendar-day[data-level="$v"] {
     fill: ${_color};
@@ -574,7 +607,7 @@ EOF_SVG_HEADER
 
         # TODO: ajouter le nombre de fichier modifiés, de lignes impactés, de commiteurs
         #level="$(workload_to_level $work_load)"
-        level="$(workload_to_level ${commit_by_day} )"
+        level="$(commit_to_level "${commit_by_day}" 30 )"
         if [ "${svg_fill}" == "yes" ]
         then
             fill="fill=\"$(workload_to_color "${work_load}")\""
@@ -1018,7 +1051,7 @@ then
 	else
 
         html_header "${title}" "${branches}" "${html_css_header}" "${html_js_header}" > "${output_filename}"
-        html_color_legend                                                            >> "${output_filename}"
+        html_color_legend 30                                                         >> "${output_filename}"
         for y in ${years//,/ }
         do
             html_heatmap_graph_header "${output_prefix}${y}"                         >> "${output_filename}"
@@ -1040,7 +1073,7 @@ else
 		else
             html_header "${title}" "${branches}" \
                 "${html_css_header}" "${html_js_header}"       > "${output_filename}"
-            html_color_legend                                 >> "${output_filename}"
+            html_color_legend 30                              >> "${output_filename}"
             html_heatmap_graph_header "${output_prefix}${y}"  >> "${output_filename}"
             git_to_svg "$y" "$branches"  "${svg_fill}"        >> "${output_filename}"
             html_heatmap_graph_footer                         >> "${output_filename}"
