@@ -531,6 +531,8 @@ EOF_SVG_HEADER
     local total_nb_files=0
     local total_nb_lines=0
 
+	local total_contributors=0
+
     for d in $(seq 0 364 )
     do
         the_date=$(date --date="$year-1-1 00:00 $d day" "+%Y-%m-%d")
@@ -602,6 +604,7 @@ EOF_RECT
         x=$(( x + 60 ))
     done
 
+	total_contributors="$(git shortlog --summary --numbered --after=$(( year - 1 )) --before=$(( year + 1 )) | wc -l)"
 
     cat <<EOF_FOOT
     <text text-anchor="start" class="wday" dx="-10" dy="8" >Lun.</text>
@@ -613,7 +616,7 @@ EOF_RECT
     <text text-anchor="start" class="wday" dx="-10" dy="81">Dim.</text>
   </g>
   <text x="10" y="20" class="current-heatmap-title" >
-      [ ${year} ]  ${total_nb_commits} contributions and ${total_nb_lines} lines modified
+      [ ${year} ] &#x1F465 ${total_contributors} / ${total_nb_commits} contributions / ${total_nb_lines} lignes modifiées
   </text>
 </svg>
 EOF_FOOT
