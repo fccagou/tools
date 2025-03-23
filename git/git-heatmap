@@ -573,7 +573,8 @@ EOF_SVG_HEADER
         fi
 
         # TODO: ajouter le nombre de fichier modifiés, de lignes impactés, de commiteurs
-        level="$(workload_to_level $work_load)"
+        #level="$(workload_to_level $work_load)"
+        level="$(workload_to_level ${commit_by_day} )"
         if [ "${svg_fill}" == "yes" ]
         then
             fill="fill=\"$(workload_to_color "${work_load}")\""
