@@ -78,3 +78,4 @@ done <<<$( sed -e 's/[[:space:]]*#.*//' \
 _ca="$(_config_default_ca)"
 _privatedir="${CA_DIR}"/private
 _requestdir="${CA_DIR}"/req
+_certsdir="$(_config_get "${_ca}.certs")"
