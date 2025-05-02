@@ -9,6 +9,8 @@ Usage:
 EOF
 }
 
+prefix="$(dirname "$(readlink -f "${BASH_SOURCE}")")"
+
 if [ "$#" -ge "1" ] && [ "$1" == "--help" ]; then
 	usage
     exit 0
@@ -30,6 +32,7 @@ __cmd_list () {
 			:
 			;;
 	esac
+	cd "$prefix"
 	ls pki-"$cmd"*.sh | sed -e "s/pki-$cmd[-]*//" -e 's/\.sh$//' | cut -d\- -f1 | sort | uniq
 }
 
@@ -52,3 +55,4 @@ _pki_completion () {
 
 complete -F _pki_completion pki.sh
 complete -F _pki_completion pki
+complete -F _pki_completion mypki
