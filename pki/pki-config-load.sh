@@ -34,6 +34,24 @@ _config_get () {
 
 }
 
+_req_get_san() {
+	local certname
+	certname="$1"
+
+	openssl req -in "$_requestdir"/"$certname".csr -text \
+		| grep -A1 'Subject Alternative Name:' \
+		| tail -1
+}
+
+_cert_get_san() {
+	local certname
+	certname="$1"
+
+	openssl x509 -in "$certname" -text \
+		| grep -A1 'Subject Alternative Name:' \
+		| tail -1 \
+		| sed -e 's/^[ ]*//' -e 's/[ ]*$//'
+}
 
 # Variables de configuration
 CA_DIR="${CA_DIR:-./myCA}"
@@ -79,3 +97,4 @@ _ca="$(_config_default_ca)"
 _privatedir="${CA_DIR}"/private
 _requestdir="${CA_DIR}"/req
 _certsdir="$(_config_get "${_ca}.certs")"
+_newcertsdir="$(_config_get "${_ca}.new_certs_dir")"
