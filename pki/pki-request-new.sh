@@ -51,10 +51,14 @@ source "$confloader"
 
 CERT_NAME="${1// /-}"
 
-# Génération de la clé privée pour le certificat
-openssl genpkey -algorithm RSA -quiet \
-	-out "$_privatedir"/"${CERT_NAME}".key \
-	|| { echo "Erreur lors de la génération de la clé privée pour ${CERT_NAME}." >&2; exit 1; }
+if [ -f "$_privatedir"/"${CERT_NAME}".key ]; then
+	echo "Clef existante => RENEW"
+else
+	# Génération de la clé privée pour le certificat
+	openssl genpkey -algorithm RSA -quiet \
+		-out "$_privatedir"/"${CERT_NAME}".key \
+		|| { echo "Erreur lors de la génération de la clé privée pour ${CERT_NAME}." >&2; exit 1; }
+fi
 
 # Création de la CSR (Certificate Signing Request)
 openssl req -new \
