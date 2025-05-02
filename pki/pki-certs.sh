@@ -23,7 +23,7 @@ if [ "$#" -ge "1" ] && [ "$1" == "--help" ]; then
 fi
 
 # Variables de configuration
-prefix="$(readlink -f "$(dirname "$0")")"
+prefix="$(dirname "$(readlink -f "$0")")"
 confloader="$prefix"/pki-config-load.sh
 CA_DIR="${CA_DIR:-./myCA}"
 

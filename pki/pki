@@ -2,7 +2,7 @@
 
 # For security
 set -euo pipefail
-prefix="$(readlink -f "$(dirname "$0")")"
+prefix="$(dirname "$(readlink -f "$0")")"
 cmd="pki"
 
 # No option, display help

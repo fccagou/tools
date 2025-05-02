@@ -13,7 +13,7 @@ EOF
 }
 
 
-prefix="$(readlink -f "$(dirname "$0")")"
+prefix="$(dirname "$(readlink -f "$0")")"
 # Variables de configuration
 CA_DIR="${CA_DIR:-./myCA}"
 CA_KEY="${CA_DIR}/private/cakey.pem"

@@ -16,7 +16,7 @@ EOF_USAGE
 
 
 # Variables de configuration
-prefix="$(readlink -f "$(dirname "$0")")"
+prefix="$(dirname "$(readlink -f "$0")")"
 
 CA_DIR="${CA_DIR:-./myCA}"
 CONFIG_FILE="${CA_DIR}/openssl.cnf"
