@@ -38,10 +38,9 @@ if [ "$(ls -1 "$newcertsdir"/*.pem 2>/dev/null| wc -l)" -eq "0" ]; then
 	echo "Aucun certificat pour l'instant"
 else
 	for f in $(ls -1 "$newcertsdir"/*.pem 2>/dev/null); do
-		echo "------- ($f)"
 		tmp="${f##*/}"
-		echo "serial=${tmp%%.pem}"
-		openssl x509 -in "$f" -subject -issuer -dates -noout
+		serial="${tmp%%.pem}"
+		"$prefix"/pki cert status "$serial"
 	done
 fi
 
