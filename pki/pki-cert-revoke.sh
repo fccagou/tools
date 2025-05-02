@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -euo pipefail
+set -euxo pipefail
 
 usage () {
 	local cmd
@@ -12,11 +12,12 @@ usage () {
 
 
 # Variables de configuration
+prefix="$(dirname "$(readlink -f "$0")")"
+confloader="$prefix"/pki-config-load.sh
+
 CA_DIR="${CA_DIR:-./myCA}"
 CONFIG_FILE="${CA_DIR}/openssl.cnf"
 CRL_FILE="${CA_DIR}/crl/ca.crl"
-
-[ -f "${CONFIG_FILE}" ] || { echo "Erreur, le fichier de configuration ${CONFIG_FILE} est absent." >&2; exit 1; }
 
 
 # Paramètres d'entrée
@@ -30,17 +31,24 @@ if [ "$1" == "--help" ] || [ "$1" == "help" ]; then
 	exit 0
 fi
 
+[ -f "$confloader" ] || {
+    echo "Erreur, le fichier de chargement de configuration $confloader est absent." >&2
+	exit 1
+}
+
+source "$confloader"
+
 CERT_NAME="${1// /-}"
 
 
 # Vérification si le fichier du certificat existe
-if [ ! -f "${CERT_NAME}" ]; then
+if [ ! -f "$_certsdir"/"${CERT_NAME}".pem ]; then
     echo "Le certificat ${CERT_NAME} n'existe pas." >&2
     exit 1
 fi
 
 # Révocation du certificat
-openssl ca -config "${CONFIG_FILE}" -revoke "${CERT_NAME}" || { echo "Erreur lors de la révocation du certificat ${CERT_NAME}." >&2; exit 1; }
+openssl ca -config "${CONFIG_FILE}" -revoke "$_certsdir"/"${CERT_NAME}".pem || { echo "Erreur lors de la révocation du certificat ${CERT_NAME}." >&2; exit 1; }
 
 # Génération d'une nouvelle CRL
 openssl ca -config "${CONFIG_FILE}" -gencrl -out "${CRL_FILE}" || { echo "Erreur lors de la génération de la nouvelle CRL (${CRL_FILE})." >&2; exit 1; }
