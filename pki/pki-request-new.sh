@@ -27,7 +27,7 @@ L="${L:-Port-Vila}"
 O="${O:-"Test org"}"
 OU="${OU:-"IT of $O"}"
 BATCHMODE="${BATCHMODE:-no}"
-
+SAN="${SAN:-""}"
 
 # Paramètres d'entrée
 if [ "$#" == "0" ]; then
@@ -60,6 +60,16 @@ else
 		|| { echo "Erreur lors de la génération de la clé privée pour ${CERT_NAME}." >&2; exit 1; }
 fi
 
+if [ -z "$SAN" ]; then
+    SAN="DNS:${CERT_NAME//:*}"
+else
+	# From env, check value DNS:xxxxx, DNS:yyyy, IP:zzzz
+	SAN_CHECK="$(echo "$SAN" | xargs | sed -e 's/[;"].*//')"
+	if [ "$SAN_CHECK" != "$CHECK" ]; then
+		echo "ERROR: la valeur SAN n'est pas convenable ($SAN) (man openssl)"
+		exit 0
+	fi
+fi
 # Création de la CSR (Certificate Signing Request)
 openssl req -new \
 	-config "${CONFIG_FILE}" \
@@ -68,6 +78,7 @@ openssl req -new \
 	-subj "/C=$C/ST=$ST/L=$L/O=$O/OU=$OU/CN=${CERT_NAME}" \
 	-key "$_privatedir"/"${CERT_NAME}".key \
 	-out "$_requestdir"/"${CERT_NAME}".csr \
+	-addext "subjectAltName = $SAN" \
 	|| { echo "Erreur lors de la création de la CSR pour ${CERT_NAME}." >&2; exit 1; }
 
 # Message de fin
