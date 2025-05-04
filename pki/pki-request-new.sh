@@ -19,7 +19,7 @@ confloader="$prefix"/pki-config-load.sh
 CA_DIR="${CA_DIR:-./myCA}"
 CONFIG_FILE="${CA_DIR}/openssl.cnf"
 DAYS="${DAYS:-365}"
-CERT_TYPE=server
+CERT_TYPE="${CERT_TYPE:-server}"
 
 C="${C:-VU}"
 ST="${ST:-Efate}"
