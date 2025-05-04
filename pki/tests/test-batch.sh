@@ -28,20 +28,20 @@ pki status
 
 # The sed is needed depending of openssl version :(
 pki status \
-	| grep -E '^(------- |serial=|subject=|issuer=)' \
+	| grep -E '^(-------\(|serial=|subject=|issuer=)' \
 	| sed -e 's/ = /=/g' \
 	 > "${CA_DIR}"/test-status
 
 cat -> ${CA_DIR}/test-status-ref <<EOF_REF
-------- (${CA_DIR}/newcerts/1000.pem)
+-------(${CA_DIR}/newcerts/1000.pem)
 serial=1000
 subject=C=VU, ST=Tanna, O=Kava Inc, OU=IT blong Kava Inc, CN=host1.local
 issuer=C=VU, ST=Tanna, L=Lenakel, O=Kava Inc, OU=IT blong Kava Inc, CN=CA blong Kava Inc
-------- (${CA_DIR}/newcerts/1001.pem)
+-------(${CA_DIR}/newcerts/1001.pem)
 serial=1001
 subject=C=VU, ST=Tanna, O=Kava Inc, OU=IT blong Kava Inc, CN=host2.local
 issuer=C=VU, ST=Tanna, L=Lenakel, O=Kava Inc, OU=IT blong Kava Inc, CN=CA blong Kava Inc
-------- (${CA_DIR}/newcerts/1002.pem)
+-------(${CA_DIR}/newcerts/1002.pem)
 serial=1002
 subject=C=VU, ST=Tanna, O=Kava Inc, OU=IT blong Kava Inc, CN=host3.local
 issuer=C=VU, ST=Tanna, L=Lenakel, O=Kava Inc, OU=IT blong Kava Inc, CN=CA blong Kava Inc
