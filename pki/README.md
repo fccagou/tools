@@ -9,6 +9,8 @@ De simples scripts bash pour gérer PKI avec openssl.
 Il s'agit de scripts de tests pour manipuler openssl
 et comprendre les mécanismes de gestion d'une PKI.
 
+Note: entre temps, j'ai découvert un script shell [easyrsa](https://github.com/OpenVPN/easy-rsa) géré par OpenVPN.
+
 ## Attention
 
 La gestion des secrets n'est pas faite convenablement
@@ -102,4 +104,3 @@ Pour passer les paramètres de configuration de la pki, utiliser l'option
        --env CN="CA de Ma petit entreprise de Mayonnaise" \
 	   pki init
 ```
-
