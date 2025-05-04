@@ -384,6 +384,9 @@ extendedKeyUsage     = serverAuth
 keyUsage             = critical, digitalSignature, keyEncipherment
 subjectKeyIdentifier = hash
 
+[SAN]
+subjectAltName = @san_names
+
 EOF_CONFIG
 
 echo "Fichier de configuration créé ${CONFIG_FILE}"
