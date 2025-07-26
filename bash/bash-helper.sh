@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/bash
 #
 # vim: tabstop=4 shiftwidth=4 expandtab
 #
@@ -22,6 +22,9 @@
 
 set -euo pipefail
 
+# TODO: transformer en wrapper pour que le code ne soit pas modofié par le user
+#       Pour ça, il faut ajouter un source du code au bon endroit pour charger tout le code utilisateur
+#
 GIT=/usr/bin/git
 PGM=${PGM:-$(basename "$0")}
 
@@ -180,6 +183,62 @@ __show_progress () {
     printf -- "."
 }
 
+# ===================================================================================================
+#  Gestion de l'authentification
+# ===================================================================================================
+_AUTH_INIT_ () {
+
+    if /usr/bin/test -z "${USERLOGIN}"
+    then
+        error "Vous n'etes pas identifie !"
+        exit 3
+    fi
+    if [ -z "${AUTH_TYPE}" ] || [ "${AUTH_TYPE}" = 'kerberos' ] ; then
+        trap _AUTH_CLEAR_ EXIT
+        [ -n "${GIT_PRINCIPAL}" ] \
+            && PRINC="${GIT_PRINCIPAL}" \
+            || PRINC="${USERLOGIN}"
+
+        if [ "${PRINC%/*}" = "host" ]
+        then
+            USEKEYTAB="-k"
+            USERLOGIN=${PRINC#*/}
+        else
+            USEKEYTAB=""
+        fi
+        CACHE="/dev/shm/krb5cache_${USERLOGIN}"
+
+        if [ "${BATCH}" = "yes" ]; then
+            ${KINIT} ${USEKEYTAB} -R -c "${CACHE}" >/dev/null 2>&1
+        else
+            false
+        fi
+
+        # shellcheck disable=SC2181
+        [ "$?" == "0" ] \
+            || ${KINIT} ${USEKEYTAB} -F -c "${CACHE}" -p "${PRINC}" \
+            || ${KINIT} ${USEKEYTAB} -F -c "${CACHE}" -p "${PRINC}" \
+            || ${KINIT} ${USEKEYTAB} -F -c "${CACHE}" -p "${PRINC}" \
+            || { ${ECHO} "Le 'kinit' a echoue... "; exit 1; }
+
+        if [ -f "${CACHE}" ]; then
+            export KRB5CCNAME="FILE:${CACHE}"
+        else
+            error "Probleme: il n'y a pas de ticket!"
+            exit 3
+        fi
+    fi
+}
+
+
+_AUTH_CLEAR_ () {
+    if [ -z "${AUTH_TYPE}" ] || [ "${AUTH_TYPE}" = 'kerberos' ] ; then
+        action "Nettoyage..."
+        /usr/bin/kdestroy
+        USERLOGIN=${PRINC#*/}
+        /bin/rm -f /dev/shm/krb5cache_"${USERLOGIN}"
+    fi
+}
 
 # =============================================================================
 #  USAGE & HELP
@@ -188,59 +247,64 @@ __show_progress () {
 __usage () {
     if __function_exists usage; then
         usage
-        return 0
-    fi
-    # Default usage
-    cat <<EOF_usage_template
-La fonction usage() n'existe pas, voilà comment créer votre aide en ligne.
+        printf -- "\n"
+        printf -- "Commandes du wrapper:\n"
+        printf -- "  help             Aide détaillées\n"
+        printf -- "  options          Liste des options générales\n"
+        printf -- "  completion       Comment mettre en place la completion\n"
+    else
+       # Default usage
+       cat <<EOF_usage_template
+$PGM facilite la création de shell bash dynamique
 
- Pour avoir une aide en ligne correspondante à votre programme, vous devez ajouter
- la fonction usage(). Il est important de respecter le format donnée ci-dessous pour
- automatiser le mécanisme de completion (cf $PGM help completion).
+     $PGM implémente la partie récurrente des shell
 
- Pour ajouter l'implémentation de commande à votre script:
+     - gestion des options
+     - gestion de l'aide
+     - completion
 
- - écrire la fonction "command_votre_commande"
- - écrire la fonction "help_cmd_votre_commande" (cf: "$PGM help help")
- - écrire la fonciton "complete_cmd_votre_commande"
+     et permet d'étendre les fonctionnalités.
 
+     Le mode opératoire est simple,
 
---8<-----------------------------------------------------------------------------
-usage () {
-cat <<EOF_usage
-Sur la première ligne écrire le résumé de l'usage du programme
+     1. générer un shell avec la commande wrap (cf $PGM help wrap)
+     2. Ajouter l'implémentation de commande à votre script:
+       - écrire la fonction "command_votre_commande"
+       - écrire la fonction "help_cmd_votre_commande" (cf: "$PGM help votre_commande")
+       - écrire la fonction "complete_cmd_votre_commande
 
- Mettre ici la description et les explications plus détaiilées du programme.
- Ne laisser qu'un seul caractère en début de chaque ligne de la description.
+     Pour commencer:
+       # Générer un shell
+       $PGM wrap > monshell.sh
+       # changer les droits
+       chmod +x monshell.sh
+       # Mettre en place la completion
+       source <(monshell.sh completion bash)
+       # Tester
+       ./monshell.sh
+       # Ensuite éditez le code pour ajouters vos commandes
 
-Groupe de commandes 1:
-  commande1        Résumé de la commande 1
-  commande2        Ce texte sera utilisé dans l'aide en ligne
-  commande3        Et dans la completion
-
-Groupe de commande non implémentées:
-  mock1            Tester cette commande doit répondre qu'elle n'est pas implémentés
-
-Autres commandes:
+Commandes:
+  wrap             Comment ecrire le code qui sera étendu par ce wrapper
   help             Aide détaillées
   options          Liste des options générales
   completion       Comment mettre en place la completion
 
 Usage:
-  \$PGM [commande] [options]
+    \$PGM [commande] [options]
 
 Utiliser "\$PGM help <commande>" pour plus d'information sur la commande
-EOF_usage
---------------------------------------------------------------------------->8----
-
 EOF_usage_template
+    fi
 }
-
 
 
 __help_commande () {
     local helpfct=help_cmd_"$1"
-    if __function_exists "$helpfct"; then
+    if __function_exists __"${helpfct}"; then
+        __"$helpfct"
+        printf -- '\nUtiliser "%s options" pour connaître les options globales\n' "$PGM"
+    elif __function_exists "${helpfct}"; then
         "$helpfct"
         printf -- '\nUtiliser "%s options" pour connaître les options globales\n' "$PGM"
     else
@@ -334,7 +398,7 @@ EOF_HELP_$command
 EOF_HELP_usage
 }
 
-help_cmd_options() {
+__help_cmd_options() {
     cat <<EOF_OPTIONS
 Les options suivantes peuvent être passées à toutes les commandes
 
@@ -343,7 +407,117 @@ Les options suivantes peuvent être passées à toutes les commandes
 
     -v, --verbose=true|false:
         Affiche plus de détail dans les commandes
+
 EOF_OPTIONS
+
+    if __function_exists help_cmd_options; then
+        help_cmd_options
+    fi
+}
+
+
+
+
+help_cmd_wrap () {
+    cat <<EOF_HELP_wrap
+Génère le squelette du code wrappé
+
+Exemples:
+  # Générer le code
+  $PGM wrap > monshell.sh
+  # changer les droits
+  chmod +x monshell.sh
+  # Mettre en place la completion
+  source <(./monshell.sh completion bash)
+  # Tester
+  ./monshell.sh
+  # Ensuite éditez le code pour ajouters vos commandes
+
+Usage:
+  $PGM wrap [flags] [options]
+EOF_HELP_wrap
+}
+
+
+command_wrap () {
+
+    cat <<EOF_wrap
+#!/usr/bin/bash
+#
+# vim: tabstop=4 shiftwidth=4 expandtab
+#
+# ****************************************************************************************************
+#   Usage
+# ****************************************************************************************************
+#
+usage () {
+    cat <<EOF_usage
+\$PGM: Sur la première ligne écrire le résumé de l'usage du programme
+
+ Mettre ici la description et les explications plus détaillées du programme.
+ Ne laisser qu'un seul caractère en début de chaque ligne de la description.
+
+Groupe de commandes 1:
+  commande_x        Résumé de la commande 1
+  commande_y        Ce texte sera utilisé dans l'aide en ligne
+  commande_z        Et dans la completion
+
+Usage:
+    \$PGM [commande] [options]
+
+Utiliser "\$PGM help <commande>" pour plus d'information sur la commande
+EOF_usage
+}
+
+# ****************************************************************************************************
+#
+#     Variables du programme
+#
+#     Pour chaque variable, ecrire un commentaire sous la forme
+#
+#        # @nomdevariable: description
+#
+#     Pour mieux identifier la portée des variables respecter le formalisme suivant:
+#
+#     - portée globale, en majuscule
+#
+#        _VAR_EN_MAJUSCULE="une variable globale non valorisable dans l'env utiisateur"
+#        VAR_EN_MAJUSCULE="\${VAR_EN_MAJUSCULE:-"valeur par défaut pouvant être valorisée dans l'env"}"
+#
+#     - portée locale, en minuscule
+#
+#        var_en_minuscule="valeur initiale"
+#        _var_en_minuscule="Valeur par défaut"
+#
+# ****************************************************************************************************
+
+
+
+# ****************************************************************************************************
+#
+#     Implémentation du code des commandes supplémentaires.
+#
+#     Pour chaque nouvelle commande, créer respectivement les fonctions
+#     - command_nouvelle_commande()      : implementation du code
+#     - help_cmd_nouvelle_commande()     : pour l'aide en ligne (exmple \$0 help help
+#     - complete_cmd_nouvelle_commande() : pour traiter une completion particulière
+#
+#     et ajouter une entrée dans le code de la fonction usage()
+#
+# ****************************************************************************************************
+
+help_cmd_options () {
+    # Surcharge des options globales par défaut
+    :
+}
+
+# ****************************************************************************************************
+# MAIN
+# ****************************************************************************************************
+# shellcheck disable=SC1091
+source "$(readlink -f "$PGM")"
+EOF_wrap
+
 }
 
 # ------------------------------------------------------------------------------
@@ -373,7 +547,6 @@ __complete() {
     # Plusieurs paramètres, on doit trouver la commande pour déterminer
     # la completion à réaliser avec le dernier paramètre.
     local command=""
-    local localenv=""
     local lastparam="${@: -1}"
 
     local options=()
@@ -433,9 +606,9 @@ __complete() {
 
     elif __function_exists complete_cmd_"$command"; then
         # Completion de la commande ok, on traite la completion par commande
-        complete_cmd_"$command" "$lastparam" ${args[*]:1}
+        complete_cmd_"$command" "$lastparam" "${args[*]:1}"
     else
-        __complete_fallback "$command" "$lastparam" ${args[*]:1}
+        __complete_fallback "$command" "$lastparam" "${args[*]:1}"
         shellCompDirective="$?"
     fi
     printf -- ':%d\n' $shellCompDirective
@@ -450,6 +623,72 @@ __complete_fallback () {
     fi
 }
 
+
+__command_exists () {
+    __liste_des_commandes | grep -q "^${1}$"
+}
+
+__command_run () {
+    local c
+    c="$1"
+    if __function_exists command_"$c"; then
+        shift
+        command_"$c" "$@"
+    else
+        error "Commande non implémentée: $c"
+        info "Ecrire la fonction 'command_$c' dans '$PGM'"
+        return 1
+    fi
+}
+
+__liste_des_commandes () {
+    local filter
+    if (( $# == 0 )) || [ -z "$1" ];  then
+        filter="[a-z]"
+    else
+        filter="$1"
+    fi
+
+    __usage \
+        | grep -E "^  ${filter}"\
+        | sed 's/^  \([^ ]*\).*/\1/'
+}
+
+__complete_commandes_descriptions () {
+    local filter
+    if (( $# == 0 )) || [ -z "$1" ];  then
+        filter="[a-z]"
+    else
+        filter="$1"
+    fi
+
+    __usage \
+        | grep -E "^  ${filter}"\
+        | sed 's/^  \([^ ]*\) */\1\t/' \
+        | grep -vE "^${PGM}|PGM"
+}
+
+__complete_global_options () {
+    __help_cmd_options \
+        | grep -- '^    -[^:]*:' \
+        | tr ',' '\n' \
+        | sed 's/^ *\([^:=]*\).*$/\1=\t\n/'
+}
+
+
+__complete_commande_options() {
+    local command
+    (( $# == 0 )) && command="" || command="$1"
+
+    help_"${command}" \
+        | grep -- '^    -[^:]*:' \
+        | tr ',' '\n' \
+        | sed 's/^ *\([^:=]*\).*$/\1=/'
+}
+
+# =============================================================================
+#  COMMANDES par défaut
+# =============================================================================
 
 complete_cmd_help () {
     local lastparam
@@ -473,6 +712,14 @@ complete_cmd_help () {
     fi
 }
 
+# Exemples pour le template
+command_commande1 () {
+    echo "Commande 1"
+}
+
+command_commande2 () {
+    echo "Commande 2"
+}
 
 complete_cmd_subverbs () {
 
@@ -491,7 +738,7 @@ complete_cmd_subverbs () {
         verb="${args[*]:0}"
 
         if [ "$verb" == "verb1" ] || [ "$verb" == "verb2" ]; then
-            __complete_fallback "subverbs" "$lastparam" ${args[*]:1}
+            __complete_fallback "subverbs" "$lastparam" "${args[*]:1}"
         elif [[ "verb1" == "${args[*]:0}"* ]]; then
             printf -- "verb1\n"
         elif [[ "verb2" == "${args[*]:0}"* ]]; then
@@ -502,60 +749,6 @@ complete_cmd_subverbs () {
     fi
 
 }
-
-__command_exists () {
-    __liste_des_commandes | grep -q "^${1}$"
-}
-
-__command_run () {
-    local c
-    c="$1"
-    if __function_exists command_"$c"; then
-        shift
-        command_"$c" "$@"
-    else
-        error "Fonction non implémentée: $c"
-        return 1
-    fi
-}
-
-__liste_des_commandes () {
-    local filter
-    (( $# == 0 )) && filter="" || filter="$1"
-
-    __usage \
-        | grep "^  ${filter}"\
-        | sed 's/^  \([^ ]*\).*/\1/'
-}
-
-__complete_commandes_descriptions () {
-    local filter
-    (( $# == 0 )) && filter="" || filter="$1"
-
-    __usage \
-        | grep "^  ${filter}"\
-        | sed 's/^  \([^ ]*\) */\1\t/' \
-        | grep -vE "^${PGM}|PGM"
-}
-
-__complete_global_options () {
-    help_cmd_options \
-        | grep -- '^    -[^:]*:' \
-        | tr ',' '\n' \
-        | sed 's/^ *\([^:=]*\).*$/\1=\t\n/'
-}
-
-
-__complete_commande_options() {
-    local command
-    (( $# == 0 )) && command="" || command="$1"
-
-    help_"${command}" \
-        | grep -- '^    -[^:]*:' \
-        | tr ',' '\n' \
-        | sed 's/^ *\([^:=]*\).*$/\1=/'
-}
-
 
 
 command_completion () {
@@ -920,13 +1113,64 @@ fi
 EOF_COMPLETE_CMD
 }
 
+# ----------------------------------------------------------------------------------------
+# Main
+# ----------------------------------------------------------------------------------------
+__main () {
+    # Lecture des options
+    if [ $# == 0 ] ; then
+        __usage
+        exit 0
+    fi
+
+    ACTION="${1}"
+    shift
+
+    case "${ACTION}" in
+        '__complete')
+            __complete "$@"
+            exit 0
+            ;;
+        'options')
+            __help_cmd_options
+            exit 0
+            ;;
+        '--help'|'-h')
+            __usage
+            exit 0
+            ;;
+        'help')
+            if (( $# == 0 )); then
+                __usage
+                exit 0
+            else
+                if __command_exists "$1"; then
+                    __help_commande "$1"
+                else
+                    error "Commande inconnue: $1"
+                    __usage
+                    exit 1
+                fi
+            fi
+            ;;
+        *)
+            if __command_exists "$ACTION"; then
+                __command_run "$ACTION" "$@"
+            else
+                error "Commande inexistante $ACTION"
+                __usage
+                exit 1
+            fi
+            ;;
+    esac
+}
 
 # ------------------------------------------------------------------------------
 #  VARIABLES INITIALISATION
 # ------------------------------------------------------------------------------
 
 global_conf_file="${global_conf_file:-/etc/"$PGM".conf}"
-
+user_conf_file=""
 # Mode verbeux.
 verbose_env="${VERBOSE:-0}"
 verbose_param=""
@@ -936,7 +1180,7 @@ while (( $# != 0 )) && [[ "$1" == -* ]]; do
     case "$1" in
         --verbose=*|-v=*)
             o="${1//*=}"
-            if  _check_boolean "$o" >/dev/null ]; then
+            if  _check_boolean "$o" >/dev/null; then
                 verbose_param="$(_check_boolean "$o")"
             else
                 error "l'option $1 doit avoir une valeur booléenne"
@@ -952,7 +1196,7 @@ while (( $# != 0 )) && [[ "$1" == -* ]]; do
                 o=""
             fi
 
-            if  _check_boolean "$o" >/dev/null ]; then
+            if  _check_boolean "$o" >/dev/null; then
                 verbose_param="$(_check_boolean "$o")"
             else
                 error "l'option $1 doit avoir une valeur booléenne"
@@ -984,9 +1228,11 @@ while (( $# != 0 )) && [[ "$1" == -* ]]; do
             fi
             ;;
         *)
-            error "Option inconnue: $1"
-            __usage
-            exit 1
+            if ! __function_exists "parse_options" || ! parse_options "$1" ; then
+                error "Option inconnue: $1"
+                __usage
+                exit 1
+            fi
             ;;
     esac
     shift
@@ -1012,6 +1258,7 @@ then
     # shellcheck disable=SC1090
     source "${user_conf_file}"
 fi
+
 
 if [ -n "${verbose_param}" ]; then
     VERBOSE="${verbose_param}"
@@ -1047,109 +1294,16 @@ then
     RESTORE=""
 fi
 
-#-------------------------------
-# Variables du programme
-#-------------------------------
-
-# @_VAR_EN_MAJUSCULE: Variable préfixée par _ si globale au shell mais pas modifiable par l'environnement
-_VAR_EN_MAJUSCULE="une variable globale"
-# @VAR_EN_MAJUSCULE: Si modifiable par environnement
-VAR_EN_MAJUSCULE="${VAR_EN_MAJUSCULE:-"valeur par défaut"}"
-# @var_en_minuscule: variable utilisée dans le contexte d'une fonction
-var_en_minuscule="valeur initiale"
-
-# @_var_en_minuscule: Variable volatile utilisée dans le contexte d'une fonction ex _tmp, _a
-_var_en_minuscule="Valeur par défaut"
 
 
 
-
-
-# ===================================================================================================
-#  Gestion de l'authentification
-# ===================================================================================================
-_AUTH_INIT_ () {
-
-    if /usr/bin/test -z "${USERLOGIN}"
-    then
-        error "Vous n'etes pas identifie !"
-        exit 3
-    fi
-    if [ -z "${AUTH_TYPE}" ] || [ "${AUTH_TYPE}" = 'kerberos' ] ; then
-        trap _AUTH_CLEAR_ EXIT
-        [ -n "${GIT_PRINCIPAL}" ] \
-            && PRINC="${GIT_PRINCIPAL}" \
-            || PRINC="${USERLOGIN}"
-
-        if [ "${PRINC%/*}" = "host" ]
-        then
-            USEKEYTAB="-k"
-            USERLOGIN=${PRINC#*/}
-        else
-            USEKEYTAB=""
-        fi
-        CACHE="/tmp/krb5puppet_${USERLOGIN}"
-
-        if [ "${BATCH}" = "yes" ]; then
-            ${KINIT} ${USEKEYTAB} -R -c "${CACHE}" >/dev/null 2>&1
-        else
-            false
-        fi
-
-        # shellcheck disable=SC2181
-        [ "$?" == "0" ] \
-            || ${KINIT} ${USEKEYTAB} -F -c "${CACHE}" -p "${PRINC}" \
-            || ${KINIT} ${USEKEYTAB} -F -c "${CACHE}" -p "${PRINC}" \
-            || ${KINIT} ${USEKEYTAB} -F -c "${CACHE}" -p "${PRINC}" \
-            || { ${ECHO} "Le 'kinit' a echoue... "; exit 1; }
-
-        if [ -f "${CACHE}" ]; then
-            export KRB5CCNAME="FILE:${CACHE}"
-        else
-            error "Probleme: il n'y a pas de ticket!"
-            exit 3
-        fi
-    fi
-}
-
-
-_AUTH_CLEAR_ () {
-    if [ -z "${AUTH_TYPE}" ] || [ "${AUTH_TYPE}" = 'kerberos' ] ; then
-        action "Nettoyage..."
-        /usr/bin/kdestroy
-        USERLOGIN=${PRINC#*/}
-        /bin/rm -f /tmp/krb5puppet_"${USERLOGIN}"
-    fi
-}
-
-
-
-# ===================================================================================================
-#  Actions possibles
-# ===================================================================================================
-
-# ---------------------------------------------------------------------------------------
-#  CREATION ENV
-# ---------------------------------------------------------------------------------------
-
-command_commande1 () {
-    echo "Commande 1"
-}
-
-
-command_commande2 () {
-    echo "Commande 2"
-}
-
-
-# ===================================================================================================
-#  MAIN
-# ===================================================================================================
 # ----------------------------------------------------------------------------------------
 # Analyse des parametres
 # ----------------------------------------------------------------------------------------
-# Exemple de fcontion.
 # Définir une fonction par paramètre
+
+# ---8<---------------------------------------------------------
+# Exemples par défaut qu'il est possible de supprimer.
 #
 check_param1 () {
     local param
@@ -1165,61 +1319,24 @@ check_param1 () {
     # shellcheck disable=SC2001
     tmp="$(echo "$param" | sed -e 's/[^A-Za-z0-9_\-]/_/g')"
 
-    [ "$envname" = "$tmp" ] || {
-        error "le nom de l'environnement ne doit contenir que des lettres (MAJ ou min), des chiffres ou les caracteres '_' et '-' "
+    [ "$param" = "$tmp" ] || {
+        error "le nom du paramètre  ne doit contenir que des lettres (MAJ ou min), des chiffres ou les caracteres '_' et '-' "
         exit 1
     }
 }
+# -------------------------------------------------------->8----
 
 
-# ----------------------------------------------------------------------------------------
-# Main
-# ----------------------------------------------------------------------------------------
 
-# Lecture des options
-if [ $# == 0 ] ; then
-    __usage
-    exit 0
-fi
+# ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+# ADDONS END
+# ====================================================================================================
 
-ACTION="${1}"
-shift
 
-case "${ACTION}" in
-    '__complete')
-        __complete "$@"
-        exit 0
-        ;;
-    'options')
-        help_cmd_options
-        exit 0
-        ;;
-    '--help'|'-h')
-        help
-        exit 0
-    ;;
-    'help')
-        if (( $# == 0 )); then
-            __usage
-            exit 0
-        else
-            if __command_exists "$1"; then
-                help_commande "$1"
-            else
-                error "Commande inconnue: $1"
-                __usage
-                exit 1
-            fi
-        fi
-        ;;
-    *)
-        if __command_exists "$ACTION"; then
-            shift
-            __command_run "$ACTION" "$@"
-        else
-            error "Commande inexistante $ACTION"
-            __usage
-            exit 1
-        fi
-        ;;
-esac
+
+# ===================================================================================================
+#  MAIN
+# ===================================================================================================
+__main "$@"
+
+
