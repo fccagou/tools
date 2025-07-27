@@ -755,13 +755,15 @@ complete_cmd_subverbs () {
 
 command_completion () {
     local alias_only
-    alias_only=false
+    alias_only=0
 
     while (( $# != 0 )); do
         case "$1" in
             --alias-only=*)
                 alias_only="${1//*=}"
-                if ! _check_boolean "${alias_only}"; then
+                if _check_boolean "${alias_only}" >/dev/null; then
+                    alias_only="$(_check_boolean "${alias_only}")"
+                else
                     erreur "alias_only: valeur booleen attendue"
                     info "$(_check_boolean help)"
                     exit 1
