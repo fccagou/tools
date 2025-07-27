@@ -325,10 +325,8 @@ Affiche le code de completion pour bash.
  Lire les exemples ci-dessous pour sa mise en oeuvre.
 
  Le mécanisme de completion est automatisé à partir du contenu affiché par la fonction usage()
- Pour ajouter une completion particulière à une commande, il faut ajouter la fonction "complete_cmd_votre_commande"
- dans votre code en prenant exemple sur les fonctions existantes:
-
-$(grep '^complete_cmd' "$0" | cut -d'(' -f1 | awk '{print " - "$0 }')
+ Pour ajouter une completion particulière à une commande, il faut ajouter la fonction
+ "complete_cmd_votre_commande" dans votre code en prenant exemple sur les fonctions existantes.
 
 
 Exemples:
@@ -350,6 +348,10 @@ Exemples:
   $PGM completion bash > ~/.${PGM}_completion
   printf -- "# $PGM shell completion\nsource '$HOME/.${PGM}_completion'" >> $HOME/.bash_profile
   source $HOME/.bash_profile
+
+Options:
+    --alias-only=false|[true]:
+        Ne renvoie pas tout le code mais juste l'association avec la commande
 
 Usage:
   $PGM completion SHELL [options]
@@ -752,6 +754,28 @@ complete_cmd_subverbs () {
 
 
 command_completion () {
+    local alias_only
+    alias_only=false
+
+    while (( $# != 0 )); do
+        case "$1" in
+            --alias-only=*)
+                alias_only="${1//*=}"
+                if ! _check_boolean "${alias_only}"; then
+                    erreur "alias_only: valeur booleen attendue"
+                    info "$(_check_boolean help)"
+                    exit 1
+                fi
+                ;;
+        *)
+            error "Parametre inconnu: $1"
+            exit 1
+            ;;
+        esac
+        shift
+    done
+
+    if [ "${alias_only}" == "0" ]; then
     cat <<'EOF_COMPLETION'
 #
 # Copyright 2016 The kubernetesnetes Authors.
@@ -768,10 +792,17 @@ command_completion () {
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-# bash completion V2 for commonshell                              -*- shell-script -*-
+# bash completion V2 for commonshell
 #
-# * 2025: FC, only replace kubectl by commonshell.
+# * 2025: FC, replace kubectl by commonshell and declare only once the functions
 #
+#                              -*- shell-script -*-
+
+
+
+# In case of multiple shell using this completion, only declare function once
+if ! declare -F __commonshell_debug >/dev/null; then
+
 __commonshell_debug()
 {
     if [[ -n ${BASH_COMP_DEBUG_FILE-} ]]; then
@@ -1102,9 +1133,13 @@ __start_commonshell()
     __commonshell_process_completion_results
 }
 
+# -----------------------------------------------------------------------------------------------------------
+# End of conditional declaration test at the top of the code
+fi
 EOF_COMPLETION
 
-cat <<EOF_COMPLETE_CMD
+    fi # Fin de alias_only
+    cat <<EOF_COMPLETE_CMD
 if [[ \$(type -t compopt) = "builtin" ]]; then
     complete -o default -F __start_commonshell $PGM
 else
