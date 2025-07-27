@@ -582,7 +582,7 @@ __complete() {
         local v="${lastparam//*=}"
 
         shellCompDirective=$shellCompDirectiveNoSpace
-        __complete_global_options | grep -- "^${o}"
+        __complete_global_options | grep -- "^${o}" || :
         if [ -n "$command" ]; then
             __complete_commande_options "$command"
             printf -- ':%d\n' $shellCompDirective
@@ -680,8 +680,8 @@ __complete_commande_options() {
     local command
     (( $# == 0 )) && command="" || command="$1"
 
-    help_"${command}" \
-        | grep -- '^    -[^:]*:' \
+    help_cmd_"${command}" \
+        | grep -E -- '^    -[^:]*:' \
         | tr ',' '\n' \
         | sed 's/^ *\([^:=]*\).*$/\1=/'
 }
