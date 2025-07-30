@@ -764,7 +764,7 @@ command_completion () {
                 if _check_boolean "${alias_only}" >/dev/null; then
                     alias_only="$(_check_boolean "${alias_only}")"
                 else
-                    erreur "alias_only: valeur booleen attendue"
+                    error "alias_only: valeur booleen attendue"
                     info "$(_check_boolean help)"
                     exit 1
                 fi
