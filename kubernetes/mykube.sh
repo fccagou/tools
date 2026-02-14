@@ -7,10 +7,9 @@ set -euo pipefail
 LIBVIRT_DEFAULT_URI="${LIBVIRT_DEFAULT_URI:-system}"
 export LIBVIRT_DEFAULT_URI
 
-
 VIRT_NETWORK_NAME="${VIRT_NETWORK_NAME:-kube}"
 
-
+KUBE_CONTEXT="${KUBE_CONTEXT:-$(kubectl config current-context)}"
 KUBE_HOSTS="${KUBE_HOSTS:-$(LANG=C virsh net-dhcp-leases --network kube | awk '{print $6 }' | grep -vE '^(IP|)$')}"
 
 _VIRSH_FITER="${KUBE_HOSTS// /|}"
@@ -23,6 +22,7 @@ header() {
     echo ""
     echo "------[MYKUBE]------------------------------"
     echo ""
+    echo "   KUBE_CONTEXT=${KUBE_CONTEXT}"
     echo "   VIRT_NETWORK_NAME=${VIRT_NETWORK_NAME}"
     echo "   LIBVIRT_DEFAULT_URI=${LIBVIRT_DEFAULT_URI}"
     echo ""
@@ -55,7 +55,15 @@ cluster_down () {
 cluster_status () {
     header "status"
     virsh list --all | grep -E "${_VIRSH_FITER}"
+
+    echo ""
+    echo "----(KUBE) --------------------------"
+    echo ""
+    kubectl --context "${KUBE_CONTEXT}" get nodes
 }
+
+
+
 
 if (( $# == 0 )); then
     cluster_status
