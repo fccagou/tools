@@ -31,7 +31,7 @@ header() {
 }
 
 usage() {
-    echo "usage: $0 up|down|status|help"
+    echo "usage: $0 up|down|status|cleanup|help"
     echo ""
 }
 
@@ -62,7 +62,14 @@ cluster_status () {
     kubectl --context "${KUBE_CONTEXT}" get nodes
 }
 
-
+cluster_cleanup () {
+    kubectl get pods --all-namespaces \
+        | grep -E 'Evicted|Error|Completed|ContainerStatusUnknown' \
+        | awk '{ print $1" "$2 }' \
+        | while read n p; do
+            kubectl --namespace "$n" delete pod "$p"
+          done
+}
 
 
 if (( $# == 0 )); then
@@ -75,6 +82,7 @@ while (( $# > 0 )); do
         up) cluster_up ;;
         down) cluster_down ;;
         status) cluster_status ;;
+        cleanup) cluster_cleanup ;;
         help|-h|--help)
             usage
             exit 0
